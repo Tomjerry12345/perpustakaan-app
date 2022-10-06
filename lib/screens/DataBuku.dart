@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -30,14 +32,15 @@ class _databukuState extends State<databuku> {
   String kategori = "";
   String barcode = "";
   DateTime selectedDate = DateTime.now();
-  File? image;
+  Uint8List image = Uint8List(8);
+  File? tmpImage;
 
   Future<void> _pickImage(Function setImage) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
-      final imgTmp = File(image.path);
-      setImage(imgTmp);
+      final imgTmp = await image.readAsBytes();
+      setImage(File(image.path), imgTmp);
     } on PlatformException catch (e) {
       print("Failed pick image");
     }
@@ -60,23 +63,48 @@ class _databukuState extends State<databuku> {
     return selectedDate;
   }
 
-  Future editUser(BuildContext context, Function setLoad) async {
+  Future addBooks(BuildContext context, Function setLoad) async {
     setLoad(true);
     try {
-      final docUser = FirebaseFirestore.instance.collection("books");
-      // final json = {
-      //   "email": email,
-      //   "nama": nama,
-      //   "no_rekening": noRekening,
-      //   "alamat": alamat,
-      //   "no_hp": noHp,
-      //   "updated_at": DateTime.now(),
-      // };
+      var snapshot = await FirebaseStorage.instance
+          .ref()
+          .child("images")
+          .child('${DateTime.now()}-${judul}-${barcode}.jpg')
+          .putData(image!);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
 
-      // await docUser.update(json);
+      final docUser = FirebaseFirestore.instance.collection("books");
+      final json = {
+        "barcode": barcode,
+        "isFavorit": "0",
+        "isRecomended": "0",
+        "halaman": halaman,
+        "image": downloadUrl,
+        "judul_buku": judul,
+        "kategori": kategori,
+        "penerbit": penerbit,
+        "pengarang": pengarang,
+        "rak": rak,
+        "sinopsis": sinopsis,
+        "tanggal": selectedDate
+      };
+
+      await docUser.add(json);
 
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
+      setState(() {
+        judul = "";
+        pengarang = "";
+        penerbit = "";
+        rak = "";
+        halaman = "";
+        sinopsis = "";
+        kategori = "";
+        barcode = "";
+        image = Uint8List(8);
+        tmpImage = null;
+      });
     } on FirebaseException catch (e) {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
@@ -325,12 +353,17 @@ class _databukuState extends State<databuku> {
                                                               ImagePick(
                                                                   "Gambar", () {
                                                                 _pickImage(
-                                                                    (final img) {
+                                                                    (final img,
+                                                                        final img1) {
                                                                   setState(() {
-                                                                    image = img;
+                                                                    image =
+                                                                        img1;
+                                                                    tmpImage =
+                                                                        img;
                                                                   });
                                                                 });
-                                                              }, image),
+                                                              }, image,
+                                                                  tmpImage),
                                                             ],
                                                           ),
                                                           SizedBox(
@@ -373,7 +406,7 @@ class _databukuState extends State<databuku> {
                                                             ),
                                                             onPressed: !_loading
                                                                 ? () {
-                                                                    editUser(
+                                                                    addBooks(
                                                                         context,
                                                                         (bool
                                                                             val) {
@@ -443,14 +476,22 @@ class _databukuState extends State<databuku> {
                                     DataCell(Text(data['penerbit'])),
                                     DataCell(Text(data['kategori'])),
                                     DataCell(Text(data['rak'])),
-                                    DataCell(FittedBox(
-                                      fit: BoxFit.fitHeight,
+                                    DataCell(Container(
+                                      constraints: BoxConstraints(
+                                        maxWidth: 50,
+                                      ),
                                       child: Text(
                                         data['sinopsis'],
                                       ),
                                     )),
                                     DataCell(Text(data['halaman'])),
-                                    DataCell(Text("102Comments")),
+                                    DataCell(Container(
+                                      child: Image.network(
+                                        data["image"],
+                                        width: 100,
+                                        height: 100,
+                                      ),
+                                    )),
                                   ]);
                                 })),
                           ),
@@ -508,7 +549,8 @@ class _databukuState extends State<databuku> {
     );
   }
 
-  Container ImagePick(String? label, VoidCallback? onPick, File? img) {
+  Container ImagePick(
+      String? label, VoidCallback? onPick, Uint8List? img, File? tmpImg) {
     return Container(
       margin: EdgeInsets.only(right: 20),
       width: 300,
@@ -523,13 +565,13 @@ class _databukuState extends State<databuku> {
           SizedBox(
             height: 8,
           ),
-          img != null
+          tmpImage != null
               ? Container(
-                  child: Image.file(
-                    img,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.contain,
+                  child: Image.memory(
+                    img!,
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.fill,
                   ),
                 )
               : InkWell(
