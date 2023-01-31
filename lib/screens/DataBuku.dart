@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -72,7 +73,7 @@ class _databukuState extends State<databuku> {
           .ref()
           .child("images")
           .child('${DateTime.now()}-${judul}-${barcode}.jpg')
-          .putData(image!);
+          .putData(image);
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
       final doc = FirebaseFirestore.instance.collection("books");
@@ -123,7 +124,7 @@ class _databukuState extends State<databuku> {
             .ref()
             .child("images")
             .child('${DateTime.now()}-${judul}-${barcode}.jpg')
-            .putData(image!);
+            .putData(image);
         downloadUrl = await snapshot.ref.getDownloadURL();
       }
 
