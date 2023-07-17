@@ -1,0 +1,31 @@
+name: perpustakaan_mobile
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  hexcolor: ^3.0.1
+  firebase_core: ^2.15.0
+  cloud_firestore: ^4.8.3
+  firebase_auth: ^4.7.0
+  intl: ^0.17.0
+  pandabar: ^0.1.2
+  flutter_barcode_scanner: ^2.0.0
+  flutter_local_notifications: ^13.0.0
+  timezone: ^0.9.1
+  printing: ^5.10.4
+  pdf: ^3.10.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
