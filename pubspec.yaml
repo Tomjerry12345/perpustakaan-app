@@ -35,13 +35,14 @@ dependencies:
   cupertino_icons: ^1.0.2
   image_picker: ^0.8.5+3
   flutter_lints: ^2.0.0
-  firebase_core: ^1.24.0
-  cloud_firestore: ^3.5.0
-  firebase_auth: ^3.11.0
-  firebase_storage: ^10.3.10
+  firebase_core: ^2.15.0
+  cloud_firestore: ^4.8.3
+  firebase_auth: ^4.7.0
+  firebase_storage: ^11.2.5
   flutter_datetime_picker: ^1.5.1
   intl: ^0.17.0
   image_picker_web: ^2.1.1
+  qr_flutter: ^4.0.0
 
 dev_dependencies:
   flutter_test:

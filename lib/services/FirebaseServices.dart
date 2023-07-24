@@ -8,8 +8,10 @@ class FirebaseServices {
   final _auth = FirebaseAuth.instance;
 
   void add(String path, data) {
-    _db.collection(path).add(data).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    _db
+        .collection(path)
+        .add(data)
+        .then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAll(String path) {
@@ -20,8 +22,7 @@ class FirebaseServices {
     return _db.collection(path).snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> query(
-      String path, List<ModelQuery> query) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> query(String path, List<ModelQuery> query) {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
     query.forEach((e) {
@@ -31,13 +32,23 @@ class FirebaseServices {
     return collection.snapshots();
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> queryFuture(String path, List<ModelQuery> query) {
+    Query<Map<String, dynamic>> collection = _db.collection(path);
+
+    query.forEach((e) {
+      collection = collection.where(e.key, isEqualTo: e.value);
+    });
+
+    return collection.get();
+  }
+
   Future<void> update(String path, String id, data) async {
     return _db
         .collection(path)
         .doc(id)
         .update(data)
         .then((value) => print("sukses"))
-        .catchError((error) => print("Failed to delete user: $error"));
+        .catchError((error) => print("Failed to update user: $error"));
   }
 
   void delete(String path, String id) {

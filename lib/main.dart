@@ -1,13 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/dashboard_screen.dart';
-import 'package:web_dashboard_app_tut/screens/profile.dart';
-import 'package:web_dashboard_app_tut/screens/peminjaman.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:web_dashboard_app_tut/utils/global_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      options: FirebaseOptions(
+      options: const FirebaseOptions(
           apiKey: "AIzaSyDDUC9yClvRQ5A-SgogIO9pge6zHtQ6-yM",
           authDomain: "perpustakaan-ccad6.firebaseapp.com",
           projectId: "perpustakaan-ccad6",
@@ -24,6 +23,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false, home: DashboardScreen());
+      debugShowCheckedModeBanner: false,
+      home: DashboardScreen(),
+      navigatorKey: navigatorKey,
+    );
   }
 }

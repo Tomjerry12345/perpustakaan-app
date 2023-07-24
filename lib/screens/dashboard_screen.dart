@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/DataAnggota.dart';
-import 'package:web_dashboard_app_tut/screens/DataBuku.dart';
-import 'package:web_dashboard_app_tut/screens/home.dart';
-import 'package:web_dashboard_app_tut/screens/profile.dart';
+import 'package:web_dashboard_app_tut/screens/data_buku.dart';
 import 'package:web_dashboard_app_tut/screens/peminjaman.dart';
 import 'package:web_dashboard_app_tut/screens/pengembalian.dart';
+import 'package:web_dashboard_app_tut/screens/qr_code.dart';
 import 'package:web_dashboard_app_tut/widget/gambar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -74,8 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 extended: isExpanded,
                 backgroundColor: Colors.blue.shade700,
-                unselectedIconTheme:
-                    IconThemeData(color: Colors.white, opacity: 1),
+                unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
                 unselectedLabelTextStyle: TextStyle(
                   color: Colors.white,
                 ),
@@ -87,8 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 },
                 destinations: [
                   NavigationRailDestination(
-                    icon: Icon(Icons.home),
-                    label: Text("Home"),
+                    icon: Icon(Icons.qr_code),
+                    label: Text("Qr Code"),
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.book),
@@ -98,10 +94,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     icon: Icon(Icons.library_books),
                     label: Text("Peminjaman"),
                   ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.person),
-                    label: Text("Profile"),
-                  ),
+                  // NavigationRailDestination(
+                  //   icon: Icon(Icons.person),
+                  //   label: Text("Profile"),
+                  // ),
                   NavigationRailDestination(
                     icon: Icon(Icons.library_books),
                     label: Text("Pengembalian"),
@@ -114,16 +110,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 selectedIndex: index),
           ),
           index == 0
-              ? home()
+              ? Home()
               : index == 1
-                  ? databuku()
+                  ? DataBuku()
                   : index == 2
-                      ? peminjaman()
+                      ? Peminjaman()
                       : index == 3
-                          ? Profile()
-                          : index == 4
-                              ? pengembalian()
-                              : dataanggota()
+                          ? pengembalian()
+                          : dataanggota()
         ],
       ),
     );
