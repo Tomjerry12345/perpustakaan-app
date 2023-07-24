@@ -4,6 +4,10 @@ import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/peminjaman/section/perpanjangan/perpanjangan.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/screen_utils.dart';
+import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
+
+import '../../../utils/position.dart';
 
 class Peminjaman extends StatefulWidget {
   const Peminjaman({Key? key}) : super(key: key);
@@ -47,148 +51,112 @@ class _PeminjamanState extends State<Peminjaman> {
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
     final firebaseServices = FirebaseServices();
     return Container(
-        margin: EdgeInsets.all(10),
-        height: 295,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue, width: 3),
-          borderRadius: BorderRadius.circular(7),
-          color: Colors.white,
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Wrap(spacing: 8.0, direction: Axis.horizontal, children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: Row(
-                    children: [
-                      Image.network(
-                        data["image"],
-                        height: 150,
-                        width: 150,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: 5),
-                            child: Wrap(
-                              spacing: 10,
-                              direction: Axis.vertical,
-                              children: [
-                                Container(
-                                  width: 150,
-                                  child: Text(
-                                    "Nama peminjam: ${data['nama_peminjam']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 200,
-                                  child: Text(
-                                    "Judul buku: ${data['judul_buku']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 200,
-                                  child: Text(
-                                    "Tanggal peminjaman: ${data['tanggal_peminjaman']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 200,
-                                  child: Text(
-                                    "Tanggal pengembalian: ${data['tanggal_pengembalian']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-
-                                // Text(
-                                //   data['barcode'],
-                                //   style: TextStyle(
-                                //     fontSize: 15,
-                                //     color: Colors.black,
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+      margin: EdgeInsets.all(10),
+      height: 0.35.h,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.blue, width: 3),
+        borderRadius: BorderRadius.circular(7),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.network(
+                data["image"],
+                height: 0.2.h,
+                width: 0.2.h,
+              ),
+              V(8),
+              ElevatedButton(
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
+                child: Text("Perpanjang"),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: ((context) => Perpanjangan(
+                                data: data,
+                              ))));
+                },
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              V(20),
+              TextWidget(
+                "Judul buku",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['judul_buku'],
+                    color: Colors.white,
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      width: 140,
-                      height: 70,
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
-                        child: Text("Perpanjang"),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => Perpanjangan(
-                                        data: data,
-                                      ))));
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      width: 160,
-                      height: 70,
-                      padding: EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.red),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
-                        child: Text("Pengembalian"),
-                        onPressed: () {
-                          print("data: ${data.id}");
-                          final listData = <String, dynamic>{
-                            "nama_peminjam": data['nama_peminjam'],
-                            "judul_buku": data['judul_buku'],
-                            "image": data["image"]
-                          };
-
-                          firebaseServices.add("pengembalian", listData);
-                          firebaseServices.delete("peminjaman", data.id);
-                          Utils.showSnackBar("Berhasil", Colors.green);
-                        },
-                      ),
-                    ),
-                  ],
+              ),
+              V(8),
+              TextWidget(
+                "Pengarang",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['judul_buku'],
+                    color: Colors.white,
+                  ),
                 ),
-              ]))
-        ]));
+              ),
+              V(8),
+              TextWidget(
+                "Tanggal peminjaman",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['tanggal_peminjaman'],
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              V(8),
+              TextWidget(
+                "Tanggal pengembalian",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['tanggal_pengembalian'],
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

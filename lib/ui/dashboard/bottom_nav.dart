@@ -10,6 +10,7 @@ import 'package:perpustakaan_mobile/ui/dashboard/home/home.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/peminjaman/peminjaman.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/pengembalian/pengembalian.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/show_utils.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -20,59 +21,96 @@ class _BottomNavState extends State<BottomNav> {
   final currentUser = FirebaseAuth.instance.currentUser;
   String page = 'Home';
 
-  Future<void> scan() async {
+  void onScan(BuildContext context) {
+    dialogShow(
+        context: context,
+        widget: SimpleDialog(
+          // <-- SEE HERE
+          title: const Text('Pilih Menu'),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                procesScan("masuk");
+                dialogClose(context);
+              },
+              child: const Text('Scan masuk'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                procesScan("peminjaman");
+                dialogClose(context);
+              },
+              child: const Text('Peminjaman'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                procesScan("pengembalian");
+              },
+              child: const Text('Pengembalian'),
+            ),
+          ],
+        ));
+  }
+
+  Future<void> procesScan(String type) async {
     String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes =
           await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
 
       if (barcodeScanRes != "-1") {
-        var books = await FirebaseFirestore.instance
-            .collection("books")
-            .where("barcode", isEqualTo: barcodeScanRes)
-            .get();
-
-        var users = await FirebaseFirestore.instance
-            .collection("users")
-            .where("email", isEqualTo: currentUser!.email)
-            .get();
-        var user = users.docs[0];
-
-        if (books.size > 0) {
-          var book = books.docs[0];
-          DateTime tanggal_peminjaman = DateTime.now();
-          DateTime tanggal_pengembalian = tanggal_peminjaman.add(Duration(days: 14));
-
-          final doc = FirebaseFirestore.instance.collection("peminjaman");
-
-          final json = {
-            "email": currentUser!.email,
-            "nama_peminjam": user["nama"],
-            "tanggal_peminjaman": tanggal_peminjaman,
-            "tanggal_pengembalian": tanggal_pengembalian,
-            "created_at": tanggal_peminjaman,
-            "judul_buku": book["judul_buku"],
-            "pengarang": book['pengarang'],
-            "barcode": book['barcode'],
-            "image": book['image'],
-            "sinopsis": book['sinopsis'],
-            "halaman": book['halaman'],
-            "rak": book['rak'],
-            "penerbit": book['penerbit'],
-            "kategori": book['kategori'],
-            "status": "active"
-          };
-
-          await doc.add(json);
-
-          Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
-        } else {
-          Utils.showSnackBar("Buku tidak ada dalam database", Colors.red);
-        }
+        if (type == "masuk") {
+        } else if (type == "peminjaman") {
+          _onPeminjaman(barcodeScanRes);
+        } else if (type == "pengembalian") {}
       }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
+    }
+  }
+
+  void _onPeminjaman(String barcodeScanRes) async {
+    var books = await FirebaseFirestore.instance
+        .collection("books")
+        .where("barcode", isEqualTo: barcodeScanRes)
+        .get();
+
+    var users = await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: currentUser!.email)
+        .get();
+    var user = users.docs[0];
+
+    if (books.size > 0) {
+      var book = books.docs[0];
+      DateTime tanggalPeminjaman = DateTime.now();
+      DateTime tanggalPengembalian = tanggalPeminjaman.add(const Duration(days: 14));
+
+      final doc = FirebaseFirestore.instance.collection("peminjaman");
+
+      final json = {
+        "email": currentUser!.email,
+        "nama_peminjam": user["nama"],
+        "tanggal_peminjaman": tanggalPeminjaman,
+        "tanggal_pengembalian": tanggalPengembalian,
+        "created_at": tanggalPeminjaman,
+        "judul_buku": book["judul_buku"],
+        "pengarang": book['pengarang'],
+        "barcode": book['barcode'],
+        "image": book['image'],
+        "sinopsis": book['sinopsis'],
+        "halaman": book['halaman'],
+        "rak": book['rak'],
+        "penerbit": book['penerbit'],
+        "kategori": book['kategori'],
+        "status": "active"
+      };
+
+      await doc.add(json);
+
+      Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
+    } else {
+      Utils.showSnackBar("Buku tidak ada dalam database", Colors.red);
     }
   }
 
@@ -98,7 +136,7 @@ class _BottomNavState extends State<BottomNav> {
           });
         },
         onFabButtonPressed: () {
-          scan();
+          onScan(context);
         },
         fabIcon: Icon(
           Icons.qr_code,
