@@ -37,12 +37,12 @@ class _DataBukuState extends State<DataBuku> {
               style: TextStyle(color: Colors.white),
             ),
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {},
-            ),
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //     icon: Icon(Icons.search),
+          //     onPressed: () {},
+          //   ),
+          // ],
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -180,38 +180,38 @@ class _DataBukuState extends State<DataBuku> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 15),
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(3),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(vertical: 20),
-                                    ),
-                                    child: Text("Pinjam Buku"),
-                                    onPressed: () {
-                                      print("click");
-                                      final time = Time();
+                                // Container(
+                                //   margin: EdgeInsets.symmetric(vertical: 15),
+                                //   width: double.infinity,
+                                //   padding: EdgeInsets.all(3),
+                                //   child: ElevatedButton(
+                                //     style: ElevatedButton.styleFrom(
+                                //       padding: EdgeInsets.symmetric(vertical: 20),
+                                //     ),
+                                //     child: Text("Pinjam Buku"),
+                                //     onPressed: () {
+                                //       print("click");
+                                //       final time = Time();
 
-                                      var getDate = time.getDateByRange(14);
+                                //       var getDate = time.getDateByRange(14);
 
-                                      final tanggalPengembalian =
-                                          "${time.getYear()}-${getDate[1]}-${getDate[0]}";
+                                //       final tanggalPengembalian =
+                                //           "${time.getYear()}-${getDate[1]}-${getDate[0]}";
 
-                                      final data = <String, dynamic>{
-                                        "nama_peminjam": firebaseServices.getCurrentUser()?.email,
-                                        "judul_buku": widget.data!["judul_buku"],
-                                        "tanggal_peminjaman": time.getTimeNow(),
-                                        "tanggal_pengembalian": tanggalPengembalian,
-                                        "image": widget.data!["image"]
-                                      };
+                                //       final data = <String, dynamic>{
+                                //         "nama_peminjam": firebaseServices.getCurrentUser()?.email,
+                                //         "judul_buku": widget.data!["judul_buku"],
+                                //         "tanggal_peminjaman": time.getTimeNow(),
+                                //         "tanggal_pengembalian": tanggalPengembalian,
+                                //         "image": widget.data!["image"]
+                                //       };
 
-                                      firebaseServices.add("peminjaman", data);
+                                //       firebaseServices.add("peminjaman", data);
 
-                                      Utils.showSnackBar("Berhasil", Colors.green);
-                                    },
-                                  ),
-                                ),
+                                //       Utils.showSnackBar("Berhasil", Colors.green);
+                                //     },
+                                //   ),
+                                // ),
                               ],
                             ),
                           ],

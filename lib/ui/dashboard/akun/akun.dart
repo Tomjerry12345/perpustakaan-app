@@ -1,14 +1,37 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:pdf/widgets.dart' as pw;
+import 'package:perpustakaan_mobile/model/ModelQuery.dart';
+import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/kartu_perpus/kartu_perpus.dart';
+import 'package:perpustakaan_mobile/utils/Utils.dart';
 
-class Akun extends StatelessWidget {
+class Akun extends StatefulWidget {
   const Akun({Key? key}) : super(key: key);
 
   @override
+  State<Akun> createState() => _AkunState();
+}
+
+class _AkunState extends State<Akun> {
+  final fs = FirebaseServices();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
+  // void getData() {
+
+  // }
+
+  @override
   Widget build(BuildContext context) {
-    void displayPdf() async {
+    User? user = fs.getCurrentUser();
+
+    void displayPdf(data) async {
       final doc = pw.Document();
 
       doc.addPage(pw.Page(
@@ -46,7 +69,7 @@ class Akun extends StatelessWidget {
                         mainAxisAlignment: pw.MainAxisAlignment.center,
                         children: [
                           pw.Text(
-                            "SMP NEGERI 6 BULUKUMBA",
+                            "No.Anggota ${data["no_anggota"]}",
                             style: pw.TextStyle(
                               fontSize: 12,
                             ),
@@ -72,19 +95,19 @@ class Akun extends StatelessWidget {
                           crossAxisAlignment: pw.CrossAxisAlignment.start,
                           mainAxisAlignment: pw.MainAxisAlignment.start,
                           children: [
-                            pw.Text("No.Anggota : 555"),
+                            pw.Text("Nama : ${data["nama"]}"),
                             pw.SizedBox(
                               height: 8,
                             ),
-                            pw.Text("Nama : Selvi Angrgreani"),
+                            pw.Text("Pekerjaan : ${data["pekerjaan"]}"),
                             pw.SizedBox(
                               height: 8,
                             ),
-                            pw.Text("Kelas : 2"),
+                            pw.Text("No hp : ${data["hp"]}"),
                             pw.SizedBox(
                               height: 8,
                             ),
-                            pw.Text("TTL : Bulukumba"),
+                            pw.Text("Alamat : ${data["alamat"]}"),
                           ],
                         ),
                       )
@@ -103,126 +126,179 @@ class Akun extends StatelessWidget {
     }
 
     return Scaffold(
-        body: Container(
-            padding: EdgeInsets.only(left: 16, top: 25, right: 16),
-            child: ListView(
-              children: [
-                Text(
-                  "Profile",
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(
-                  height: 32,
-                ),
-                Center(
-                    child: Stack(
-                  children: [
-                    CircleAvatar(
-                      radius: 45,
-                      backgroundColor: Colors.blue,
-                      child: Text("P", style: TextStyle(fontSize: 24)),
-                      // child: Container(
-                      //   width: 200,
-                      //   height: 200,
-                      //   color: Colors.blue,
-                      // ),
-                    ),
-                  ],
-                )),
-                SizedBox(
-                  height: 18,
-                ),
-                Center(
-                  child: Text("Selvi", style: TextStyle(fontSize: 24)),
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-                Center(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      displayPdf();
-                    },
-                    child: Text("Lihat kartu perpustakaan"),
-                  ),
-                ),
-                SizedBox(
-                  height: 18,
-                ),
-                ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                    width: 200,
-                    height: 308,
-                    color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        appBar: AppBar(
+          leading: InkWell(
+            child: new Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Center(
+            child: Text(
+              'Profile',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Utils.showSnackBar("Berhasil logout.", Colors.red);
+              },
+            ),
+          ],
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                  begin: FractionalOffset.bottomLeft,
+                  end: FractionalOffset.bottomRight),
+            ),
+          ),
+        ),
+        body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: fs.query("users", [ModelQuery(key: "email", value: user!.email)]),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final docs = snapshot.data!.docs[0];
+                final data = docs.data();
+                print(data);
+                return Container(
+                    padding: EdgeInsets.only(left: 30, top: 20, right: 30),
+                    child: ListView(
                       children: [
-                        Data(
-                          title: "Nama Lengkap",
-                          value: "Selvi anggreani",
-                          x: 8,
+                        // Text(
+                        //   "Profile",
+                        //   style: TextStyle(
+                        //     fontSize: 20,
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 32,
+                        // ),
+                        Center(
+                            child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 45,
+                              backgroundColor: Colors.blue,
+                              child: Text(data["nama"][0], style: TextStyle(fontSize: 24)),
+                            ),
+                          ],
+                        )),
+                        SizedBox(
+                          height: 18,
+                        ),
+                        Center(
+                          child: Text(data["nama"], style: TextStyle(fontSize: 24)),
                         ),
                         SizedBox(
-                          height: 16,
+                          height: 18,
                         ),
-                        Data(
-                          title: "Alamat",
-                          value: "Selvi anggreani",
-                          x: 74,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Data(
-                          title: "No.Hp",
-                          value: "085753845575",
-                          x: 84,
+                        Center(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              displayPdf(data);
+                            },
+                            child: Text("Lihat kartu perpustakaan"),
+                          ),
                         ),
                         SizedBox(
-                          height: 16,
+                          height: 18,
                         ),
-                        Data(
-                          title: "Pekerjaan",
-                          value: "Nolep",
-                          x: 56,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Data(
-                          title: "Ibu Kandung",
-                          value: "Test",
-                          x: 34,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Data(
-                          title: "No.Hp Ibu",
-                          value: "0865754346876",
-                          x: 34,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Data(
-                          title: "Alamat Ibu",
-                          value: "test",
-                          x: 34,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
+                        ClipRRect(
+                          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                            width: 200,
+                            height: 304,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                                  begin: FractionalOffset.bottomLeft,
+                                  end: FractionalOffset.bottomRight),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Data(
+                                  title: "No.anggota",
+                                  value: data["no_anggota"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "Email",
+                                  value: data["email"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "Alamat",
+                                  value: data["alamat"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "No.Hp",
+                                  value: data["hp"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "Pekerjaan",
+                                  value: data["pekerjaan"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "Ibu Kandung",
+                                  value: data["ibu_kandung"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "No.Hp Ibu",
+                                  value: data["no_hp_ibu_kandung"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Data(
+                                  title: "Alamat Ibu",
+                                  value: data["alamat_ibu_kandung"],
+                                  x: 16,
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
                       ],
-                    ),
-                  ),
-                )
-              ],
-            )));
+                    ));
+              }
+
+              return Center(child: CircularProgressIndicator());
+            }));
   }
 
   Row Data({String title = "", String value = "", double x = 0.0}) {

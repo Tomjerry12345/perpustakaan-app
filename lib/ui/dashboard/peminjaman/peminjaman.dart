@@ -27,7 +27,18 @@ class _PeminjamanState extends State<Peminjaman> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Peminjaman"),
+          title: Text(
+            'Peminjaman',
+            style: TextStyle(color: Colors.white),
+          ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                  begin: FractionalOffset.bottomLeft,
+                  end: FractionalOffset.bottomRight),
+            ),
+          ),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: db.query("peminjaman", query),

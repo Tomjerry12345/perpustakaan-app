@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:perpustakaan_mobile/model/ModelQuery.dart';
+import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/services/NotificationServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/data-buku/data_buku.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/home/section/kategori/kategori.dart';
@@ -18,6 +20,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  final fs = FirebaseServices();
 
   @override
   Widget build(BuildContext context) {
@@ -95,136 +99,136 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20, left: 36, right: 36),
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: Offset(0, 10),
-                              blurRadius: 50,
-                              color: Colors.blue.withOpacity(0.23),
-                            ),
-                          ],
-                        ),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const Kategori()),
-                              );
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.dashboard,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  'Kategori',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Warna.warnabiru1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const StokBuku()),
-                              );
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.article,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  'Stok Buku',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Warna.warnabiru1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const terlaris()),
-                              );
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.favorite,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  'Favorit',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Warna.warnabiru1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              FirebaseAuth.instance.signOut();
-                              Utils.showSnackBar("Berhasil logout.", Colors.red);
-                            },
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Warna.warnabiru1,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ]),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.only(top: 20, left: 36, right: 36),
+                      //   height: 100,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     boxShadow: [
+                      //       BoxShadow(
+                      //         offset: Offset(0, 10),
+                      //         blurRadius: 50,
+                      //         color: Colors.blue.withOpacity(0.23),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const Kategori()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.dashboard,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Kategori',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const StokBuku()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.article,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Stok Buku',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const terlaris()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.favorite,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Favorit',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         FirebaseAuth.instance.signOut();
+                      //         Utils.showSnackBar("Berhasil logout.", Colors.red);
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.logout,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Logout',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ]),
+                      // ),
                     ],
                   ),
                 ],
               ),
             ),
-            ElevatedButton(
-              child: Text("test notif 1"),
-              onPressed: (() {
-                print("notif....");
-                NotificationServices.showNotification(
-                    title: "Luffy", body: "hello guys", payload: "luffy");
-                NotificationServices.showNotification(
-                    id: 1, title: "test", body: "testing....", payload: "test");
-              }),
-            ),
+            // ElevatedButton(
+            //   child: Text("test notif 1"),
+            //   onPressed: (() {
+            //     print("notif....");
+            //     NotificationServices.showNotification(
+            //         title: "Luffy", body: "hello guys", payload: "luffy");
+            //     NotificationServices.showNotification(
+            //         id: 1, title: "test", body: "testing....", payload: "test");
+            //   }),
+            // ),
             Container(
                 margin: EdgeInsets.all(20),
                 width: double.infinity,
@@ -232,7 +236,7 @@ class _HomeState extends State<Home> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Rekomendasi',
+                      'Buku',
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 16,
@@ -241,8 +245,9 @@ class _HomeState extends State<Home> {
                   ],
                 )),
             StreamBuilder<QuerySnapshot>(
-                stream:
-                    firestore.collection("books").where("isRecomended", isEqualTo: "1").snapshots(),
+                // stream:
+                //     firestore.collection("books").where("isRecomended", isEqualTo: "1").snapshots(),
+                stream: fs.getAllStream("books"),
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? Center(

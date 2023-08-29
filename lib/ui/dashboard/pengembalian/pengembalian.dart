@@ -16,7 +16,18 @@ class _PengembalianState extends State<Pengembalian> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Riwayat Pengembalian"),
+          title: Text(
+            'Pengembalian',
+            style: TextStyle(color: Colors.white),
+          ),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                  begin: FractionalOffset.bottomLeft,
+                  end: FractionalOffset.bottomRight),
+            ),
+          ),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: frebaseServices.getAllStream("pengembalian"),
@@ -38,7 +49,6 @@ class _PengembalianState extends State<Pengembalian> {
   }
 
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
-    final firebaseServices = FirebaseServices();
     return Container(
         margin: EdgeInsets.all(10),
         height: 150,

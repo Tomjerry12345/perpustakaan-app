@@ -1,0 +1,10 @@
+version: v0.0.1 ✅ ❌ 🔥
+
+- perpanjangan di lakukan dengan scan barcode admin ❌
+- perbaiki kartu perpus ✅
+- perbaiki bagian akun ✅
+- untuk home nya yang tampil itu adalah list buku saja ❌
+- perbaiki notif 1 hari sebelum perpanjangan ❌
+- menu logout pindahkan ke bagian akun ❌
+- filter kategori buat dropdown
+
