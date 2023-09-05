@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
 import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
 
-import '../utils/log_utils.dart';
-
 class Peminjaman extends StatefulWidget {
   const Peminjaman({Key? key}) : super(key: key);
 
@@ -46,7 +44,6 @@ class _PeminjamanState extends State<Peminjaman> {
 
     for (var item in data) {
       Map<String, dynamic> d = item.data() as Map<String, dynamic>;
-      log("d", v: d);
       String namaPeminjam = d["nama_peminjam"];
       if (!groupedData.containsKey(namaPeminjam)) {
         groupedData[namaPeminjam] = [d.cast<String, String>()];
@@ -63,8 +60,8 @@ class _PeminjamanState extends State<Peminjaman> {
       rows.add(
         DataRow(cells: [
           DataCell(Text(item['judul_buku']!)),
-          DataCell(Text(item['tanggal_peminjaman']!)),
-          DataCell(Text(item['tanggal_pengembalian']!)),
+          DataCell(Text(item['pengarang']!)),
+          DataCell(Text(item['rak']!)),
         ]),
       );
     }
@@ -98,8 +95,8 @@ class _PeminjamanState extends State<Peminjaman> {
                             child: DataTable(
                               columns: [
                                 DataColumn(label: Text('Judul Buku')),
-                                DataColumn(label: Text('Tanggal Peminjaman')),
-                                DataColumn(label: Text('Tanggal Pengembalian')),
+                                DataColumn(label: Text('Pengarang')),
+                                DataColumn(label: Text('Rak')),
                               ],
                               rows: _buildDataTableRows(peminjamData),
                             ),

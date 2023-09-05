@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/DataAnggota.dart';
-import 'package:web_dashboard_app_tut/screens/data_buku.dart';
-import 'package:web_dashboard_app_tut/screens/peminjaman.dart';
-import 'package:web_dashboard_app_tut/screens/pengembalian.dart';
-import 'package:web_dashboard_app_tut/screens/qr_code.dart';
+import 'package:web_dashboard_app_tut/screens/data_anggota/data_anggota.dart';
+import 'package:web_dashboard_app_tut/screens/data_buku/data_buku.dart';
+import 'package:web_dashboard_app_tut/screens/peminjaman/peminjaman.dart';
+import 'package:web_dashboard_app_tut/screens/pengembalian/pengembalian.dart';
+import 'package:web_dashboard_app_tut/screens/scan/scan.dart';
 import 'package:web_dashboard_app_tut/widget/gambar.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 destinations: [
                   NavigationRailDestination(
                     icon: Icon(Icons.qr_code),
-                    label: Text("Qr Code"),
+                    label: Text("Scan"),
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.book),
@@ -110,14 +110,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 selectedIndex: index),
           ),
           index == 0
-              ? Home()
+              ? Scan()
               : index == 1
                   ? DataBuku()
                   : index == 2
                       ? Peminjaman()
                       : index == 3
                           ? pengembalian()
-                          : dataanggota()
+                          : DataAnggota()
         ],
       ),
     );

@@ -8,18 +8,18 @@ import 'package:web_dashboard_app_tut/utils/snackbar_utils.dart';
 import 'package:web_dashboard_app_tut/widget/dialog/dialog_widget.dart';
 import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
 
-import '../model/ModelQuery.dart';
-import '../widget/text/text_widget.dart';
-import 'detail_peminjaman.dart';
+import '../../model/ModelQuery.dart';
+import '../../widget/text/text_widget.dart';
+import '../peminjaman/section/detail_peminjaman.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Scan extends StatefulWidget {
+  const Scan({Key? key}) : super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Scan> createState() => _ScanState();
 }
 
-class _HomeState extends State<Home> {
+class _ScanState extends State<Scan> {
   final fs = FirebaseServices();
 
   Future<void> typeMasuk(context, id) async {
@@ -86,37 +86,31 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: SingleChildScrollView(
-        child: Expanded(
-          child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: fs.getAllStream("barcode"),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final code = snapshot.data!.docs[0].data()["code"];
+      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: fs.getAllStream("barcode"),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final code = snapshot.data!.docs[0].data()["code"];
 
-                if (code == "default") {
-                  return widgetMain(code);
-                }
+            if (code == "default") {
+              return widgetMain(code);
+            }
 
-                final split = code.toString().split("-");
-                final type = split[0];
-                final id = split[1];
+            final split = code.toString().split("-");
+            final type = split[0];
+            final id = split[1];
 
-                if (type == "masuk") {
-                  typeMasuk(context, id);
-                }
+            if (type == "masuk") {
+              typeMasuk(context, id);
+            } else if (type == "peminjaman") {
+              return DetailPeminjaman(id: id);
+            }
 
-                if (type == "pengembalian") {
-                  return DetailPeminjaman(id: id);
-                }
+            return widgetMain(code);
+          }
 
-                return widgetMain(code);
-              }
-
-              return const Center(child: CircularProgressIndicator());
-            },
-          ),
-        ),
+          return Expanded(child: Center(child: CircularProgressIndicator()));
+        },
       ),
     );
   }
