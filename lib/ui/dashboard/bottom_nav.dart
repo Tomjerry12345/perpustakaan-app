@@ -33,14 +33,21 @@ class _BottomNavState extends State<BottomNav> {
                 procesScan("masuk");
                 dialogClose(context);
               },
-              child: const Text('Scan masuk'),
+              child: const Text('Scan Masuk'),
             ),
             SimpleDialogOption(
               onPressed: () {
-                procesScan("peminjaman");
+                procesScan("Pinjam Buku");
                 dialogClose(context);
               },
-              child: const Text('Peminjaman'),
+              child: const Text('pinjam_buku'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                procesScan("Peminjaman");
+                dialogClose(context);
+              },
+              child: const Text('peminjaman'),
             ),
             SimpleDialogOption(
               onPressed: () {
@@ -60,8 +67,9 @@ class _BottomNavState extends State<BottomNav> {
 
       if (barcodeScanRes != "-1") {
         if (type == "masuk") {
+        } else if (type == "pinjam_buku") {
+          _onPinjamBuku(barcodeScanRes);
         } else if (type == "peminjaman") {
-          _onPeminjaman(barcodeScanRes);
         } else if (type == "pengembalian") {}
       }
     } on PlatformException {
@@ -69,7 +77,7 @@ class _BottomNavState extends State<BottomNav> {
     }
   }
 
-  void _onPeminjaman(String barcodeScanRes) async {
+  void _onPinjamBuku(String barcodeScanRes) async {
     var books = await FirebaseFirestore.instance
         .collection("books")
         .where("barcode", isEqualTo: barcodeScanRes)
@@ -123,7 +131,7 @@ class _BottomNavState extends State<BottomNav> {
         buttonData: [
           PandaBarButtonData(id: 'Home', icon: Icons.home, title: 'Home'),
           PandaBarButtonData(id: 'Peminjaman', icon: Icons.book_online, title: 'Peminjaman'),
-          PandaBarButtonData(id: 'Pengembalian', icon: Icons.book_sharp, title: 'Riwayat'),
+          PandaBarButtonData(id: 'Pengembalian', icon: Icons.book_sharp, title: 'Pengembalian'),
           PandaBarButtonData(
             id: 'Akun',
             icon: Icons.account_box,

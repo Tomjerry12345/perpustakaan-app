@@ -23,7 +23,7 @@ class _PeminjamanState extends State<Peminjaman> {
   Widget build(BuildContext context) {
     final currentUser = db.getCurrentUser();
 
-    final query = [ModelQuery(key: "nama_peminjam", value: currentUser?.email)];
+    final query = [ModelQuery(key: "email", value: currentUser?.email)];
 
     return Scaffold(
         appBar: AppBar(
@@ -60,10 +60,10 @@ class _PeminjamanState extends State<Peminjaman> {
   }
 
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
-    final firebaseServices = FirebaseServices();
     return Container(
       margin: EdgeInsets.all(10),
-      height: 0.35.h,
+      padding: EdgeInsets.only(bottom: 10),
+      // height: 0.40.h,
       width: double.infinity,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.blue, width: 3),
@@ -73,34 +73,48 @@ class _PeminjamanState extends State<Peminjaman> {
       child: Row(
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              V(20),
               Image.network(
                 data["image"],
                 height: 0.2.h,
                 width: 0.2.h,
               ),
-              V(8),
-              ElevatedButton(
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
-                child: Text("Perpanjang"),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => Perpanjangan(
-                                data: data,
-                              ))));
-                },
+              V(16),
+              Container(
+                // width: 0.34.w,
+                color: Colors.red,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['konfirmasi'] ? "Konfirmasi" : "Belum konfirmasi",
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
               ),
+              // ElevatedButton(
+              //   style: ButtonStyle(
+              //       shape: MaterialStateProperty.all(
+              //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
+              //   child: Text("Perpanjang"),
+              //   onPressed: () {
+              //     Navigator.push(
+              //         context,
+              //         MaterialPageRoute(
+              //             builder: ((context) => Perpanjangan(
+              //                   data: data,
+              //                 ))));
+              //   },
+              // ),
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              V(20),
+              // V(20),
               TextWidget(
                 "Judul buku",
                 fontWeight: FontWeight.bold,
@@ -134,7 +148,7 @@ class _PeminjamanState extends State<Peminjaman> {
               ),
               V(8),
               TextWidget(
-                "Tanggal peminjaman",
+                "Nama peminjam",
                 fontWeight: FontWeight.bold,
               ),
               Container(
@@ -143,27 +157,52 @@ class _PeminjamanState extends State<Peminjaman> {
                 child: Container(
                   margin: EdgeInsets.all(8),
                   child: TextWidget(
-                    data['tanggal_peminjaman'],
+                    data['nama_peminjam'],
                     color: Colors.white,
                   ),
                 ),
               ),
               V(8),
-              TextWidget(
-                "Tanggal pengembalian",
-                fontWeight: FontWeight.bold,
-              ),
-              Container(
-                width: 0.5.w,
-                color: Colors.grey,
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  child: TextWidget(
-                    data['tanggal_pengembalian'],
-                    color: Colors.white,
-                  ),
-                ),
-              )
+              data['konfirmasi']
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextWidget(
+                          "Tanggal peminjaman",
+                          fontWeight: FontWeight.bold,
+                        ),
+                        Container(
+                          width: 0.5.w,
+                          color: Colors.blue,
+                          child: Container(
+                            margin: EdgeInsets.all(8),
+                            child: TextWidget(
+                              // data['tanggal_peminjaman'],
+                              "test",
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        V(8),
+                        TextWidget(
+                          "Tanggal pengembalian",
+                          fontWeight: FontWeight.bold,
+                        ),
+                        Container(
+                          width: 0.5.w,
+                          color: Colors.yellow,
+                          child: Container(
+                            margin: EdgeInsets.all(8),
+                            child: TextWidget(
+                              // data['tanggal_pengembalian'],
+                              "test",
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : Container()
             ],
           )
         ],

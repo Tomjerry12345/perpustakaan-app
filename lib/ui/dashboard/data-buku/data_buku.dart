@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 
+import '../../../model/ModelQuery.dart';
 import '../../../utils/Utils.dart';
+import '../../../utils/navigate_utils.dart';
 
 class DataBuku extends StatefulWidget {
   final DocumentSnapshot? data;
@@ -180,38 +182,51 @@ class _DataBukuState extends State<DataBuku> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                   ),
                                 ),
-                                // Container(
-                                //   margin: EdgeInsets.symmetric(vertical: 15),
-                                //   width: double.infinity,
-                                //   padding: EdgeInsets.all(3),
-                                //   child: ElevatedButton(
-                                //     style: ElevatedButton.styleFrom(
-                                //       padding: EdgeInsets.symmetric(vertical: 20),
-                                //     ),
-                                //     child: Text("Pinjam Buku"),
-                                //     onPressed: () {
-                                //       print("click");
-                                //       final time = Time();
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(3),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                    ),
+                                    child: Text("Pinjam Buku"),
+                                    onPressed: () async {
+                                      // final time = Time();
 
-                                //       var getDate = time.getDateByRange(14);
+                                      // var getDate = time.getDateByRange(14);
 
-                                //       final tanggalPengembalian =
-                                //           "${time.getYear()}-${getDate[1]}-${getDate[0]}";
+                                      // final tanggalPengembalian =
+                                      //     "${time.getYear()}-${getDate[1]}-${getDate[0]}";
 
-                                //       final data = <String, dynamic>{
-                                //         "nama_peminjam": firebaseServices.getCurrentUser()?.email,
-                                //         "judul_buku": widget.data!["judul_buku"],
-                                //         "tanggal_peminjaman": time.getTimeNow(),
-                                //         "tanggal_pengembalian": tanggalPengembalian,
-                                //         "image": widget.data!["image"]
-                                //       };
+                                      final qUsers = await firebaseServices.queryFuture("users", [
+                                        ModelQuery(
+                                            key: "email",
+                                            value: firebaseServices.getCurrentUser()?.email)
+                                      ]);
+                                      final dataUser = qUsers.docs[0].data();
+                                      final data = <String, dynamic>{
+                                        "nama_peminjam": dataUser["nama"],
+                                        "email": dataUser["email"],
+                                        "judul_buku": widget.data!["judul_buku"],
+                                        "pengarang": widget.data!["pengarang"],
+                                        "image": widget.data!["image"],
+                                        "rak": widget.data!["rak"],
+                                        "konfirmasi": false
+                                        // "tanggal_peminjaman": time.getTimeNow(),
+                                        // "tanggal_pengembalian": tanggalPengembalian,
+                                      };
 
-                                //       firebaseServices.add("peminjaman", data);
+                                      print(data);
 
-                                //       Utils.showSnackBar("Berhasil", Colors.green);
-                                //     },
-                                //   ),
-                                // ),
+                                      firebaseServices.add("peminjaman", data);
+
+                                      Utils.showSnackBar("Berhasil", Colors.green);
+
+                                      navigatePop();
+                                    },
+                                  ),
+                                ),
                               ],
                             ),
                           ],
