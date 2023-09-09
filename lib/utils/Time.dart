@@ -61,7 +61,7 @@ class Time {
 
   int getJumlahHariDate(int year, int month, int date) {
     DateTime currentDate = DateTime.now();
-    // DateTime currentDate = DateTime(2023, 9, 15);
+    // DateTime currentDate = DateTime(2023, 9, 25);
     DateTime targetDate = DateTime(year, month, date);
     Duration difference = targetDate.difference(currentDate);
     return difference.inDays;

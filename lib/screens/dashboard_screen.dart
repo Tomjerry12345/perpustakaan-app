@@ -116,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   : index == 2
                       ? Peminjaman()
                       : index == 3
-                          ? pengembalian()
+                          ? Pengembalian()
                           : DataAnggota()
         ],
       ),

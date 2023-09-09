@@ -10,7 +10,7 @@ import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
 
 import '../../model/ModelQuery.dart';
 import '../../widget/text/text_widget.dart';
-import '../peminjaman/section/detail_peminjaman.dart';
+import 'section/scan_peminjaman.dart';
 
 class Scan extends StatefulWidget {
   const Scan({Key? key}) : super(key: key);
@@ -103,7 +103,7 @@ class _ScanState extends State<Scan> {
             if (type == "masuk") {
               typeMasuk(context, id);
             } else if (type == "peminjaman") {
-              return DetailPeminjaman(id: id);
+              return ScanPeminjaman(id: id);
             }
 
             return widgetMain(code);

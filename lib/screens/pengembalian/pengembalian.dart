@@ -2,84 +2,113 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
 import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
+import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
 
-class pengembalian extends StatefulWidget {
-  const pengembalian({Key? key}) : super(key: key);
+import 'section/detail_pengembalian.dart';
+
+class Pengembalian extends StatefulWidget {
+  const Pengembalian({Key? key}) : super(key: key);
 
   @override
-  State<pengembalian> createState() => _pengembalianState();
+  State<Pengembalian> createState() => _PengembalianState();
 }
 
-class _pengembalianState extends State<pengembalian> {
-  final firebaseServices = FirebaseServices();
+class _PengembalianState extends State<Pengembalian> {
+  final fs = FirebaseServices();
+
+  var isClick = false;
+  var nama = "";
+  var email = "";
+
+  List<Map<String, dynamic>> listData = [];
+
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    getData();
+  }
+
+  void onClickTap(bool clicked) {
+    setState(() {
+      isClick = clicked;
+    });
+  }
+
+  Future<void> getData() async {
+    final getUsers = await fs.getAll("users");
+    final docUsers = getUsers.docs;
+
+    List<Map<String, dynamic>> lData = [];
+
+    for (var users in docUsers) {
+      final dataUsers = users.data();
+      final usersEmail = dataUsers["email"];
+
+      final pengembalian =
+          await fs.queryFuture("pengembalian", [ModelQuery(key: "email", value: usersEmail)]);
+      final sumPengembalian = pengembalian.size;
+
+      Map<String, dynamic> peminjamanMap = {
+        'jumlah_pengembalian': sumPengembalian,
+      };
+
+      dataUsers.addAll(peminjamanMap);
+
+      lData.add(dataUsers);
+    }
+
+    lData.sort((a, b) => b['jumlah_pengembalian'].compareTo(a['jumlah_pengembalian']));
+
+    setState(() {
+      listData = lData;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: firebaseServices.getAllStream("pengembalian"),
-        builder: (context, snapshot) {
-          return snapshot.hasData
-              ? Expanded(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, top: 20, bottom: 40),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Pengembalian",
-                              style: TextStyle(
-                                  fontSize: 30, fontWeight: FontWeight.w600),
+    return Expanded(
+      child: Column(children: [
+        HeaderWidget(
+          title: !isClick ? "Pengembalian" : nama,
+          onBackPressed: isClick
+              ? () {
+                  setState(() {
+                    onClickTap(false);
+                  });
+                }
+              : null,
+        ),
+        Expanded(
+            child: !isClick
+                ? listData.length > 0
+                    ? ListView.builder(
+                        itemCount: listData.length,
+                        itemBuilder: (context, index) {
+                          final data = listData[index];
+
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                onClickTap(true);
+                                setState(() {
+                                  nama = data["nama"];
+                                  email = data["email"];
+                                });
+                              },
+                              title: Text(data["nama"]),
+                              subtitle:
+                                  Text("Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
+                              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right)),
                             ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  DataTable(
-                                      headingRowColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) => Colors.blue.shade200),
-                                      columns: [
-                                        DataColumn(label: Text("ID")),
-                                        DataColumn(label: Text("Peminjam")),
-                                        DataColumn(label: Text("Judul Buku")),
-                                        DataColumn(label: Text("Nomor Buku")),
-                                        DataColumn(
-                                            label: Text("Tanggal Peminjaman")),
-                                        DataColumn(
-                                            label: Text("Tanggal Peminjaman")),
-                                      ],
-                                      rows: snapshot.data!.docs
-                                          .map((e) => DataRow(cells: [
-                                                DataCell(Text("0")),
-                                              ]))
-                                          .toList()),
-                                  //Now let's set the pagination
-                                  SizedBox(
-                                    height: 40.0,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container();
-        });
+                          );
+                        },
+                      )
+                    : Center(child: CircularProgressIndicator())
+                : DetailPengembalian(id: email, onGetData: getData))
+      ]),
+    );
   }
 }

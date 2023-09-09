@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
+import 'package:web_dashboard_app_tut/screens/peminjaman/section/detail_peminjaman.dart';
 import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
 import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
 
@@ -11,104 +12,97 @@ class Peminjaman extends StatefulWidget {
 }
 
 class _PeminjamanState extends State<Peminjaman> {
-  final firebaseServices = FirebaseServices();
+  final fs = FirebaseServices();
 
-  // final List<Map<String, String>> data = [
-  //   {
-  //     "nama_peminjam": "Amrul",
-  //     "judul_buku": "One piece",
-  //     "tanggal_peminjaman": "20/11/2023",
-  //     "tanggal_pengembalian": "21/11/2023"
-  //   },
-  //   {
-  //     "nama_peminjam": "Amrul",
-  //     "judul_buku": "One piece",
-  //     "tanggal_peminjaman": "23/11/2023",
-  //     "tanggal_pengembalian": "24/11/2023"
-  //   },
-  //   {
-  //     "nama_peminjam": "Andri",
-  //     "judul_buku": "One piece",
-  //     "tanggal_peminjaman": "25/11/2023",
-  //     "tanggal_pengembalian": "26/11/2023"
-  //   }
-  // ];
+  var isClick = false;
+  var nama = "";
+  var email = "";
 
-  Map<String, List<Map<String, String>>> groupDataByPeminjam(
-      List<QueryDocumentSnapshot<Object?>>? data) {
-    Map<String, List<Map<String, String>>> groupedData = {};
+  List<Map<String, dynamic>> listData = [];
 
-    if (data == null) {
-      return groupedData; // Jika data null, langsung kembalikan groupedData kosong
-    }
-
-    for (var item in data) {
-      Map<String, dynamic> d = item.data() as Map<String, dynamic>;
-      String namaPeminjam = d["nama_peminjam"];
-      if (!groupedData.containsKey(namaPeminjam)) {
-        groupedData[namaPeminjam] = [d.cast<String, String>()];
-      } else {
-        groupedData[namaPeminjam]!.add(d.cast<String, String>());
-      }
-    }
-    return groupedData;
+  @override
+  // ignore: must_call_super
+  initState() {
+    // ignore: avoid_print
+    getData();
   }
 
-  List<DataRow> _buildDataTableRows(List<Map<String, String>> peminjamData) {
-    List<DataRow> rows = [];
-    for (var item in peminjamData) {
-      rows.add(
-        DataRow(cells: [
-          DataCell(Text(item['judul_buku']!)),
-          DataCell(Text(item['pengarang']!)),
-          DataCell(Text(item['rak']!)),
-        ]),
-      );
+  void onClickTap(bool clicked) {
+    setState(() {
+      isClick = clicked;
+    });
+  }
+
+  Future<void> getData() async {
+    final getUsers = await fs.getAll("users");
+    final docUsers = getUsers.docs;
+
+    List<Map<String, dynamic>> lData = [];
+
+    for (var users in docUsers) {
+      final dataUsers = users.data();
+      final usersEmail = dataUsers["email"];
+
+      final peminjaman =
+          await fs.queryFuture("peminjaman", [ModelQuery(key: "email", value: usersEmail)]);
+      final sumPeminjaman = peminjaman.size;
+
+      Map<String, dynamic> peminjamanMap = {
+        'jumlah_peminjaman': sumPeminjaman,
+      };
+
+      dataUsers.addAll(peminjamanMap);
+
+      lData.add(dataUsers);
     }
-    return rows;
+
+    lData.sort((a, b) => b['jumlah_peminjaman'].compareTo(a['jumlah_peminjaman']));
+
+    setState(() {
+      listData = lData;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(children: [
-        HeaderWidget(title: "Peminjaman"),
-        Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-              stream: firebaseServices.getAllStream("peminjaman"),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final snap = snapshot.data;
-                  final data = snap?.docs;
-                  Map<String, List<Map<String, String>>> groupedData = groupDataByPeminjam(data);
-                  return ListView.builder(
-                    itemCount: groupedData.length,
-                    itemBuilder: (context, index) {
-                      String namaPeminjam = groupedData.keys.elementAt(index);
-                      List<Map<String, String>> peminjamData = groupedData[namaPeminjam]!;
-                      return ExpansionTile(
-                        backgroundColor: Colors.blue,
-                        title: Text(namaPeminjam),
-                        children: [
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Text('Judul Buku')),
-                                DataColumn(label: Text('Pengarang')),
-                                DataColumn(label: Text('Rak')),
-                              ],
-                              rows: _buildDataTableRows(peminjamData),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+        HeaderWidget(
+          title: !isClick ? "Peminjaman" : nama,
+          onBackPressed: isClick
+              ? () {
+                  setState(() {
+                    onClickTap(false);
+                  });
                 }
-                return Expanded(child: const Center(child: CircularProgressIndicator()));
-              }),
-        )
+              : null,
+        ),
+        Expanded(
+            child: !isClick
+                ? listData.length > 0
+                    ? ListView.builder(
+                        itemCount: listData.length,
+                        itemBuilder: (context, index) {
+                          final data = listData[index];
+
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                onClickTap(true);
+                                setState(() {
+                                  nama = data["nama"];
+                                  email = data["email"];
+                                });
+                              },
+                              title: Text(data["nama"]),
+                              subtitle: Text("Jumlah peminjaman : ${data["jumlah_peminjaman"]}"),
+                              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right)),
+                            ),
+                          );
+                        },
+                      )
+                    : Center(child: CircularProgressIndicator())
+                : DetailPeminjaman(id: email))
       ]),
     );
   }
