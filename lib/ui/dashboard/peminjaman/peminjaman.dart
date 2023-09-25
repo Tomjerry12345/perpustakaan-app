@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
-import 'package:perpustakaan_mobile/ui/dashboard/peminjaman/section/perpanjangan/perpanjangan.dart';
-import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/screen_utils.dart';
 import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
 
@@ -60,6 +59,30 @@ class _PeminjamanState extends State<Peminjaman> {
   }
 
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
+    int sisaHariNow = 0;
+    int denda = 0;
+    final time = Time();
+    bool isTenggat = false;
+
+    if (data['konfirmasi']) {
+      final tanggalPeminjaman = data['tanggal_pengembalian'].toString().split("-");
+      final datePeminjaman = int.parse(tanggalPeminjaman[2]);
+      final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
+      final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
+
+      sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+
+      if (sisaHariNow == 0) {
+        sisaHariNow = 1;
+        isTenggat = true;
+        denda = sisaHariNow * 1000;
+      } else if (sisaHariNow < 0) {
+        sisaHariNow = sisaHariNow.abs();
+        isTenggat = true;
+        denda = sisaHariNow * 1000;
+      }
+    }
+
     return Container(
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.only(bottom: 10),
@@ -84,7 +107,7 @@ class _PeminjamanState extends State<Peminjaman> {
               V(16),
               Container(
                 // width: 0.34.w,
-                color: Colors.red,
+                color: data['konfirmasi'] ? Colors.green : Colors.red,
                 child: Container(
                   margin: EdgeInsets.all(8),
                   child: TextWidget(
@@ -94,20 +117,6 @@ class _PeminjamanState extends State<Peminjaman> {
                   ),
                 ),
               ),
-              // ElevatedButton(
-              //   style: ButtonStyle(
-              //       shape: MaterialStateProperty.all(
-              //           RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
-              //   child: Text("Perpanjang"),
-              //   onPressed: () {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: ((context) => Perpanjangan(
-              //                   data: data,
-              //                 ))));
-              //   },
-              // ),
             ],
           ),
           Column(
@@ -168,38 +177,48 @@ class _PeminjamanState extends State<Peminjaman> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextWidget(
-                          "Tanggal peminjaman",
+                          "Sisa hari",
                           fontWeight: FontWeight.bold,
                         ),
                         Container(
                           width: 0.5.w,
-                          color: Colors.blue,
+                          color: sisaHariNow <= 3
+                              ? Colors.yellow
+                              : sisaHariNow < 0
+                                  ? Colors.red
+                                  : Colors.blue,
                           child: Container(
                             margin: EdgeInsets.all(8),
                             child: TextWidget(
                               // data['tanggal_peminjaman'],
-                              "test",
+                              !isTenggat ? "$sisaHariNow Hari" : "Lewat $sisaHariNow Hari",
                               color: Colors.white,
                             ),
                           ),
                         ),
                         V(8),
-                        TextWidget(
-                          "Tanggal pengembalian",
-                          fontWeight: FontWeight.bold,
-                        ),
-                        Container(
-                          width: 0.5.w,
-                          color: Colors.yellow,
-                          child: Container(
-                            margin: EdgeInsets.all(8),
-                            child: TextWidget(
-                              // data['tanggal_pengembalian'],
-                              "test",
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
+                        denda > 0
+                            ? Column(
+                                children: [
+                                  TextWidget(
+                                    "Denda",
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  Container(
+                                    width: 0.5.w,
+                                    color: Colors.blue,
+                                    child: Container(
+                                      margin: EdgeInsets.all(8),
+                                      child: TextWidget(
+                                        // data['tanggal_peminjaman'],
+                                        "$denda",
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container()
                       ],
                     )
                   : Container()

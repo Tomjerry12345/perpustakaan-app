@@ -58,4 +58,12 @@ class Time {
     final d2 = getLastDateInMonth() + range;
     return d1.toInt() - d2.toInt();
   }
+
+  int getJumlahHariDate(int year, int month, int date) {
+    DateTime currentDate = DateTime.now();
+    // DateTime currentDate = DateTime(2023, 9, 25);
+    DateTime targetDate = DateTime(year, month, date);
+    Duration difference = targetDate.difference(currentDate);
+    return difference.inDays;
+  }
 }

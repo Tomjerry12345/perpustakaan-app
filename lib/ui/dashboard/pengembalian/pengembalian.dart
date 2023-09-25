@@ -1,6 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
+import 'package:perpustakaan_mobile/utils/Time.dart';
+import 'package:perpustakaan_mobile/utils/screen_utils.dart';
+import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
+
+import '../../../utils/position.dart';
 
 class Pengembalian extends StatefulWidget {
   const Pengembalian({Key? key}) : super(key: key);
@@ -10,10 +16,14 @@ class Pengembalian extends StatefulWidget {
 }
 
 class _PengembalianState extends State<Pengembalian> {
-  final frebaseServices = FirebaseServices();
+  FirebaseServices db = FirebaseServices();
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = db.getCurrentUser();
+
+    final query = [ModelQuery(key: "email", value: currentUser?.email)];
+
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -30,7 +40,7 @@ class _PengembalianState extends State<Pengembalian> {
           ),
         ),
         body: StreamBuilder<QuerySnapshot>(
-            stream: frebaseServices.getAllStream("pengembalian"),
+            stream: db.query("pengembalian", query),
             builder: ((context, snapshot) {
               return snapshot.hasData
                   ? SafeArea(
@@ -50,99 +60,138 @@ class _PengembalianState extends State<Pengembalian> {
 
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
     return Container(
-        margin: EdgeInsets.all(10),
-        height: 150,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue, width: 3),
-          borderRadius: BorderRadius.circular(7),
-          color: Colors.white,
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Wrap(spacing: 8.0, direction: Axis.horizontal, children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      Image.network(
-                        data["image"],
-                        height: 100,
-                      ),
-                      Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(bottom: 10, left: 20),
-                            child: Wrap(
-                              spacing: 10,
-                              direction: Axis.vertical,
-                              children: [
-                                Container(
-                                  width: 150,
-                                  child: Text(
-                                    "Nama peminjam: ${data['nama_peminjam']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: 200,
-                                  child: Text(
-                                    "Judul buku: ${data['judul_buku']}",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(bottom: 10),
+      // height: 0.40.h,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.blue, width: 3),
+        borderRadius: BorderRadius.circular(7),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              V(20),
+              Image.network(
+                data["image"],
+                height: 0.2.h,
+                width: 0.2.h,
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // V(20),
+              TextWidget(
+                "Judul buku",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['judul_buku'],
+                    color: Colors.white,
                   ),
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     Container(
-                //       margin: EdgeInsets.only(top: 10),
-                //       width: 180,
-                //       height: 70,
-                //       padding: EdgeInsets.all(15),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.circular(40),
-                //       ),
-                //       child: ElevatedButton(
-                //         style: ButtonStyle(
-                //             backgroundColor:
-                //                 MaterialStateProperty.all(Colors.red),
-                //             shape: MaterialStateProperty.all(
-                //                 RoundedRectangleBorder(
-                //                     borderRadius:
-                //                         BorderRadius.circular(50)))),
-                //         child: Text("Kembalikan Buku"),
-                //         onPressed: () {
-                //           // print("data: ${data.id}");
-                //           // final listData = <String, dynamic>{
-                //           //   "nama_peminjam": data['nama_peminjam'],
-                //           //   "judul_buku": data['judul_buku'],
-                //           //   "image": data["image"]
-                //           // };
-
-                //           // firebaseServices.add("pengembalian", listData);
-                //           // firebaseServices.delete("peminjaman", data.id);
-                //           // Utils.showSnackBar("Berhasil", Colors.green);
-                //         },
-                //       ),
-                //     ),
-                //   ],
-                // ),
-              ]))
-        ]));
+              ),
+              V(8),
+              TextWidget(
+                "Pengarang",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['judul_buku'],
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              V(8),
+              TextWidget(
+                "Nama peminjam",
+                fontWeight: FontWeight.bold,
+              ),
+              Container(
+                width: 0.5.w,
+                color: Colors.grey,
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  child: TextWidget(
+                    data['nama_peminjam'],
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              V(8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    "Tanggal Peminjaman",
+                    fontWeight: FontWeight.bold,
+                  ),
+                  Container(
+                    width: 0.5.w,
+                    color: Colors.blue,
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: TextWidget(
+                        data['tanggal_peminjaman'],
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  V(8),
+                  TextWidget(
+                    "Tanggal Pengembalian",
+                    fontWeight: FontWeight.bold,
+                  ),
+                  Container(
+                    width: 0.5.w,
+                    color: Colors.blue,
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: TextWidget(
+                        data['tanggal_pengembalian'],
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  V(8),
+                  TextWidget(
+                    "Denda",
+                    fontWeight: FontWeight.bold,
+                  ),
+                  Container(
+                    width: 0.5.w,
+                    color: Colors.blue,
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      child: TextWidget(
+                        // data['tanggal_peminjaman'],
+                        data["denda"] > 0 ? "Rp. $data['denda']" : "-",
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
