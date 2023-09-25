@@ -213,8 +213,6 @@ class _DataBukuState extends State<DataBuku> {
                                         "image": widget.data!["image"],
                                         "rak": widget.data!["rak"],
                                         "konfirmasi": false
-                                        // "tanggal_peminjaman": time.getTimeNow(),
-                                        // "tanggal_pengembalian": tanggalPengembalian,
                                       };
 
                                       print(data);

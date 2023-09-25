@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/akun.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/home/home.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/peminjaman/peminjaman.dart';
@@ -20,6 +21,8 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   final currentUser = FirebaseAuth.instance.currentUser;
   String page = 'Home';
+
+  final fs = FirebaseServices();
 
   void onScan(BuildContext context) {
     dialogShow(
@@ -37,23 +40,17 @@ class _BottomNavState extends State<BottomNav> {
             ),
             SimpleDialogOption(
               onPressed: () {
-                procesScan("Pinjam Buku");
+                procesScan("pinjam_buku");
                 dialogClose(context);
               },
-              child: const Text('pinjam_buku'),
+              child: const Text('Pinjam Buku'),
             ),
             SimpleDialogOption(
               onPressed: () {
-                procesScan("Peminjaman");
+                procesScan("verifikasi");
                 dialogClose(context);
               },
-              child: const Text('peminjaman'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {
-                procesScan("pengembalian");
-              },
-              child: const Text('Pengembalian'),
+              child: const Text('Verifikasi'),
             ),
           ],
         ));
@@ -69,8 +66,9 @@ class _BottomNavState extends State<BottomNav> {
         if (type == "masuk") {
         } else if (type == "pinjam_buku") {
           _onPinjamBuku(barcodeScanRes);
-        } else if (type == "peminjaman") {
-        } else if (type == "pengembalian") {}
+        } else if (type == "verifikasi") {
+          _onPinjam(barcodeScanRes);
+        }
       }
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -91,27 +89,34 @@ class _BottomNavState extends State<BottomNav> {
 
     if (books.size > 0) {
       var book = books.docs[0];
-      DateTime tanggalPeminjaman = DateTime.now();
-      DateTime tanggalPengembalian = tanggalPeminjaman.add(const Duration(days: 14));
+      // DateTime tanggalPeminjaman = DateTime.now();
+      // DateTime tanggalPengembalian = tanggalPeminjaman.add(const Duration(days: 14));
 
       final doc = FirebaseFirestore.instance.collection("peminjaman");
 
       final json = {
-        "email": currentUser!.email,
         "nama_peminjam": user["nama"],
-        "tanggal_peminjaman": tanggalPeminjaman,
-        "tanggal_pengembalian": tanggalPengembalian,
-        "created_at": tanggalPeminjaman,
+        "email": currentUser!.email,
         "judul_buku": book["judul_buku"],
-        "pengarang": book['pengarang'],
-        "barcode": book['barcode'],
-        "image": book['image'],
-        "sinopsis": book['sinopsis'],
-        "halaman": book['halaman'],
-        "rak": book['rak'],
-        "penerbit": book['penerbit'],
-        "kategori": book['kategori'],
-        "status": "active"
+        "pengarang": book["pengarang"],
+        "image": book["image"],
+        "rak": book["rak"],
+        "konfirmasi": false
+        // "email": currentUser!.email,
+        // "nama_peminjam": user["nama"],
+        // "tanggal_peminjaman": tanggalPeminjaman,
+        // "tanggal_pengembalian": tanggalPengembalian,
+        // "created_at": tanggalPeminjaman,
+        // "judul_buku": book["judul_buku"],
+        // "pengarang": book['pengarang'],
+        // "barcode": book['barcode'],
+        // "image": book['image'],
+        // "sinopsis": book['sinopsis'],
+        // "halaman": book['halaman'],
+        // "rak": book['rak'],
+        // "penerbit": book['penerbit'],
+        // "kategori": book['kategori'],
+        // "status": "active"
       };
 
       await doc.add(json);
@@ -119,6 +124,12 @@ class _BottomNavState extends State<BottomNav> {
       Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
     } else {
       Utils.showSnackBar("Buku tidak ada dalam database", Colors.red);
+    }
+  }
+
+  Future<void> _onPinjam(String barcodeScanRes) async {
+    if (barcodeScanRes == "default") {
+      await fs.update("barcode", "code", {"code": "peminjaman-${currentUser!.email}"});
     }
   }
 
