@@ -1,14 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/services/NotificationServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/data-buku/data_buku.dart';
-import 'package:perpustakaan_mobile/ui/dashboard/home/section/kategori/kategori.dart';
-import 'package:perpustakaan_mobile/ui/dashboard/home/section/stok_buku/stok_buku.dart';
-import 'package:perpustakaan_mobile/ui/dashboard/home/section/terlaris/terlaris.dart';
-import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 
 class Home extends StatefulWidget {
@@ -22,6 +18,42 @@ class _HomeState extends State<Home> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final fs = FirebaseServices();
+
+  @override
+  initState() {
+    super.initState();
+    onNotification();
+  }
+
+  Future<void> onNotification() async {
+    final user = fs.getCurrentUser();
+    final time = Time();
+    final res = await fs.queryFuture("peminjaman", [ModelQuery(key: "email", value: user?.email)]);
+
+    if (res.size > 0) {
+      res.docs.forEach((e) {
+        final data = e.data();
+
+        if (data['konfirmasi']) {
+          final tanggalPeminjaman = data['tanggal_pengembalian'].toString().split("-");
+          final datePeminjaman = int.parse(tanggalPeminjaman[2]);
+          final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
+          final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
+
+          int sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+
+          if (sisaHariNow > 0 && sisaHariNow <= 3) {
+            NotificationServices.showNotification(
+                id: 1,
+                title: "Pemberitahuan",
+                body:
+                    "Sisa $sisaHariNow hari untuk pengembalian buku.Silahkan lakukan perpanjangan!!!",
+                payload: "test");
+          }
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,16 +251,6 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            // ElevatedButton(
-            //   child: Text("test notif 1"),
-            //   onPressed: (() {
-            //     print("notif....");
-            //     NotificationServices.showNotification(
-            //         title: "Luffy", body: "hello guys", payload: "luffy");
-            //     NotificationServices.showNotification(
-            //         id: 1, title: "test", body: "testing....", payload: "test");
-            //   }),
-            // ),
             Container(
                 margin: EdgeInsets.all(20),
                 width: double.infinity,
