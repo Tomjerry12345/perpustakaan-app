@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/main.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/generated_utils.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
 
@@ -176,7 +177,8 @@ class _RegistrasiState extends State<Registrasi> {
         "alamat_ibu_kandung": alamatIbuKandungController.text.trim(),
         "no_hp_ibu_kandung": noHpIbuKandungController.text.trim(),
         "email": emailController.text.trim(),
-        "created_at": DateTime.now()
+        "created_at": DateTime.now(),
+        "no_anggota": generateRandomString(8)
       };
 
       await docUser.set(json);

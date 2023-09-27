@@ -105,7 +105,7 @@ class _HomeState extends State<Home> {
                           runSpacing: 4.0,
                           direction: Axis.horizontal,
                           children: <Widget>[
-                            Container(height: 60, width: 60, child: Image.asset("aset/logo2.png")),
+                            Container(height: 50, width: 50, child: Image.asset("assets/images/logo.png")),
                             Wrap(
                               spacing: 5,
                               direction: Axis.vertical,

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
-import 'package:perpustakaan_mobile/utils/Time.dart';
+import 'package:perpustakaan_mobile/utils/position.dart';
 
 import '../../../model/ModelQuery.dart';
 import '../../../utils/Utils.dart';
@@ -171,13 +171,10 @@ class _DataBukuState extends State<DataBuku> {
                                     ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(height: 20),
+                                
                                 Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                   ),
@@ -188,17 +185,26 @@ class _DataBukuState extends State<DataBuku> {
                                   padding: EdgeInsets.all(3),
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green,
+                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                    ),
+                                    child: Text("Baca buku"),
+                                    onPressed: () async {
+                                      
+                                    },
+                                  ),
+                                ),
+                                // V(8),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(3),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
                                       padding: EdgeInsets.symmetric(vertical: 20),
                                     ),
                                     child: Text("Pinjam Buku"),
                                     onPressed: () async {
-                                      // final time = Time();
-
-                                      // var getDate = time.getDateByRange(14);
-
-                                      // final tanggalPengembalian =
-                                      //     "${time.getYear()}-${getDate[1]}-${getDate[0]}";
-
                                       final qUsers = await firebaseServices.queryFuture("users", [
                                         ModelQuery(
                                             key: "email",

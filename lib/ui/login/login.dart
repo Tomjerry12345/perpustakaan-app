@@ -28,26 +28,28 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              margin: EdgeInsets.only(top: 30),
+              // margin: EdgeInsets.only(top: 80),
               width: double.infinity,
               height: 100,
-              child: Image.asset("aset/logo.png"),
+              child: Image.asset("assets/images/logo.png"),
             ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            SizedBox(height: 20,),
+            Center(
               child: Text(
-                "LOGIN",
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: HexColor("#017DC3"),
+                  "LOGIN",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: HexColor("#017DC3"),
+                  ),
                 ),
-              ),
             ),
             SizedBox(
               height: 20,

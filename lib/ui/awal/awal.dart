@@ -34,7 +34,7 @@ class _AwalState extends State<Awal> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "aset/logo.png",
+              "assets/images/logo.png",
               width: 150,
               height: 100,
             ),
