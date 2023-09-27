@@ -56,6 +56,7 @@ class _DataAnggotaState extends State<DataAnggota> {
                               rows: List<DataRow>.generate(snapshot.data!.docs.length, (index) {
                                 DocumentSnapshot data = snapshot.data!.docs[index];
 
+
                                 return DataRow(cells: [
                                   DataCell(Text(data['no_anggota'])),
                                   DataCell(Text(data['nama'])),
