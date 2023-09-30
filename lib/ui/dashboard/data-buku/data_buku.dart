@@ -221,7 +221,9 @@ class _DataBukuState extends State<DataBuku> {
                                     ),
                                     child: Text("Baca buku"),
                                     onPressed: () async {
-                                      navigatePush(ViewPdf());
+                                      navigatePush(ViewPdf(
+                                        path: widget.data!["buku"],
+                                      ));
                                       // createFileOfPdfUrl().then((f) {
                                       //   print("path ${f.path}");
                                       //   navigatePush(ViewPdf(

@@ -147,12 +147,12 @@ class _HomeState extends State<Home> {
                         ),
                       ),
 
-                      ElevatedButton(
-                        onPressed: () {
-                          openTalkBackSettings();
-                        },
-                        child: Text('Aktifkan TalkBack'),
-                      )
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     openTalkBackSettings();
+                      //   },
+                      //   child: Text('Aktifkan TalkBack'),
+                      // )
 
                       // Container(
                       //   margin: EdgeInsets.only(top: 20, left: 36, right: 36),

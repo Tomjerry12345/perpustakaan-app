@@ -11,7 +11,7 @@ class ViewPdf extends StatelessWidget {
     return Scaffold(
         body: Container(
             child: SfPdfViewer.network(
-      'https://www.pearsonhighered.com/assets/samplechapter/0/3/2/1/0321537114.pdf',
+      path!,
       pageLayoutMode: PdfPageLayoutMode.single,
     )));
   }
