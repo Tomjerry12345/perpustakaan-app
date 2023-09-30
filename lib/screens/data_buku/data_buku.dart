@@ -211,7 +211,10 @@ class _DataBukuState extends State<DataBuku> {
   }
 
   void _pickPDF(Function setFile) async {
-    FilePickerResult? result = await FilePickerWeb.platform.pickFiles();
+    FilePickerResult? result = await FilePickerWeb.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
     if (result != null) {
       Uint8List? fileBytes = result.files.first.bytes;
       String fileName = result.files.first.name;
