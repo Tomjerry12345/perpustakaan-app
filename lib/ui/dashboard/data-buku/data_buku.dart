@@ -1,8 +1,14 @@
+import 'dart:io';
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
-import 'package:perpustakaan_mobile/utils/position.dart';
+import 'package:perpustakaan_mobile/ui/dashboard/data-buku/section/view-pdf/view_pdf.dart';
+
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../model/ModelQuery.dart';
 import '../../../utils/Utils.dart';
@@ -19,6 +25,31 @@ class DataBuku extends StatefulWidget {
 
 class _DataBukuState extends State<DataBuku> {
   final firebaseServices = FirebaseServices();
+
+  Future<File> createFileOfPdfUrl() async {
+    Completer<File> completer = Completer();
+    print("Start download file from internet!");
+    try {
+      // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
+      // final url = "https://pdfkit.org/docs/guide.pdf";
+      final url = "http://www.pdf995.com/samples/pdf.pdf";
+      final filename = url.substring(url.lastIndexOf("/") + 1);
+      var request = await HttpClient().getUrl(Uri.parse(url));
+      var response = await request.close();
+      var bytes = await consolidateHttpClientResponseBytes(response);
+      var dir = await getApplicationDocumentsDirectory();
+      print("Download files");
+      print("${dir.path}/$filename");
+      File file = File("${dir.path}/$filename");
+
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file!');
+    }
+
+    return completer.future;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +202,7 @@ class _DataBukuState extends State<DataBuku> {
                                     ],
                                   ),
                                 ),
-                                
+
                                 Container(
                                   width: double.infinity,
                                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -190,7 +221,13 @@ class _DataBukuState extends State<DataBuku> {
                                     ),
                                     child: Text("Baca buku"),
                                     onPressed: () async {
-                                      
+                                      navigatePush(ViewPdf());
+                                      // createFileOfPdfUrl().then((f) {
+                                      //   print("path ${f.path}");
+                                      //   navigatePush(ViewPdf(
+                                      //     path: f.path,
+                                      //   ));
+                                      // });
                                     },
                                   ),
                                 ),

@@ -6,6 +6,7 @@ import 'package:perpustakaan_mobile/services/NotificationServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/data-buku/data_buku.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -52,6 +53,17 @@ class _HomeState extends State<Home> {
           }
         }
       });
+    }
+  }
+
+  Future<void> openTalkBackSettings() async {
+    const url = 'package:com.google.android.marvin.talkback/com.android.settings.DisplaySettings';
+    // ignore: deprecated_member_use
+    if (await canLaunch(url)) {
+      // ignore: deprecated_member_use
+      await launch(url);
+    } else {
+      throw 'Tidak dapat membuka pengaturan TalkBack';
     }
   }
 
@@ -105,7 +117,10 @@ class _HomeState extends State<Home> {
                           runSpacing: 4.0,
                           direction: Axis.horizontal,
                           children: <Widget>[
-                            Container(height: 50, width: 50, child: Image.asset("assets/images/logo.png")),
+                            Container(
+                                height: 50,
+                                width: 50,
+                                child: Image.asset("assets/images/logo.png")),
                             Wrap(
                               spacing: 5,
                               direction: Axis.vertical,
@@ -131,6 +146,14 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
+
+                      ElevatedButton(
+                        onPressed: () {
+                          openTalkBackSettings();
+                        },
+                        child: Text('Aktifkan TalkBack'),
+                      )
+
                       // Container(
                       //   margin: EdgeInsets.only(top: 20, left: 36, right: 36),
                       //   height: 100,
