@@ -1,10 +1,14 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/_internal/file_picker_web.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:web_dashboard_app_tut/utils/position.dart';
 
 class DataBuku extends StatefulWidget {
   const DataBuku({Key? key}) : super(key: key);
@@ -32,6 +36,7 @@ class _DataBukuState extends State<DataBuku> {
   File? tmpImage;
   bool isPicked = false;
   String image1 = "";
+  Map<String, dynamic> _pdfFile = {"fileBytes": null, "fileName": ""};
 
   Future<void> _pickImage(Function setImage) async {
     try {
@@ -71,6 +76,13 @@ class _DataBukuState extends State<DataBuku> {
           .putData(image);
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
+      var snapshotBuku = await FirebaseStorage.instance
+          .ref()
+          .child("buku")
+          .child(_pdfFile["fileName"])
+          .putData(_pdfFile["fileBytes"]);
+      var downloadUrlBuku = await snapshotBuku.ref.getDownloadURL();
+
       final doc = FirebaseFirestore.instance.collection("books");
       final json = {
         "barcode": barcode,
@@ -78,6 +90,7 @@ class _DataBukuState extends State<DataBuku> {
         "isRecomended": "0",
         "halaman": halaman,
         "image": downloadUrl,
+        "buku": downloadUrlBuku,
         "judul_buku": judul,
         "kategori": kategori,
         "penerbit": penerbit,
@@ -197,6 +210,18 @@ class _DataBukuState extends State<DataBuku> {
     }
   }
 
+  void _pickPDF(Function setFile) async {
+    FilePickerResult? result = await FilePickerWeb.platform.pickFiles();
+    if (result != null) {
+      Uint8List? fileBytes = result.files.first.bytes;
+      String fileName = result.files.first.name;
+
+      print(fileName);
+
+      setFile({"fileBytes": fileBytes, "fileName": fileName});
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -307,13 +332,6 @@ class _DataBukuState extends State<DataBuku> {
                                                                         penerbit = value;
                                                                       });
                                                                     }),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                Row(
-                                                                  children: [
                                                                     TextInput(
                                                                         "Barcode", false, barcode,
                                                                         (String value) {
@@ -321,6 +339,13 @@ class _DataBukuState extends State<DataBuku> {
                                                                         barcode = value;
                                                                       });
                                                                     }),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                Row(
+                                                                  children: [
                                                                     TextInput(
                                                                         "Kategori", false, kategori,
                                                                         (String value) {
@@ -335,15 +360,6 @@ class _DataBukuState extends State<DataBuku> {
                                                                         halaman = value;
                                                                       });
                                                                     }),
-                                                                  ],
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                Row(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment.start,
-                                                                  children: [
                                                                     TextInput("Rak", false, rak,
                                                                         (String value) {
                                                                       setState(() {
@@ -357,6 +373,17 @@ class _DataBukuState extends State<DataBuku> {
                                                                         sinopsis = value;
                                                                       });
                                                                     }),
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment.center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment.center,
+                                                                  children: [
                                                                     ImagePick("Gambar", () {
                                                                       _pickImage(
                                                                           (final img, final img1) {
@@ -368,6 +395,13 @@ class _DataBukuState extends State<DataBuku> {
                                                                       });
                                                                     }, image, tmpImage, 'add',
                                                                         isPicked, image1),
+                                                                    PdfPick("Tambah Buku", () {
+                                                                      _pickPDF((final file) {
+                                                                        setState(() {
+                                                                          _pdfFile = file;
+                                                                        });
+                                                                      });
+                                                                    }, "tambah", _pdfFile)
                                                                   ],
                                                                 ),
                                                                 SizedBox(
@@ -498,7 +532,6 @@ class _DataBukuState extends State<DataBuku> {
                                       ),
                                     )),
                                     DataCell(Text(data['halaman'])),
-                                    // DataCell(Text(data['halaman'])),
                                     DataCell(Container(
                                       child: Image.network(
                                         data["image"],
@@ -970,7 +1003,7 @@ class _DataBukuState extends State<DataBuku> {
   Container TextInput(String? label, bool? multiline, String? value, Function? onChanged) {
     return Container(
       margin: EdgeInsets.only(right: 20),
-      width: 300,
+      width: 250,
       child: Column(
         children: [
           Row(
@@ -1006,16 +1039,11 @@ class _DataBukuState extends State<DataBuku> {
       margin: EdgeInsets.only(right: 20),
       width: 300,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(label!),
-            ],
-          ),
-          SizedBox(
-            height: 8,
-          ),
+          Text(label!),
+          V(8),
           type == 'edit'
               ? isPicked
                   ? InkWell(
@@ -1064,4 +1092,31 @@ class _DataBukuState extends State<DataBuku> {
       ),
     );
   }
+}
+
+Container PdfPick(String? label, VoidCallback? onPick, String? type, Map<String, dynamic> pdfFile) {
+  return Container(
+    margin: EdgeInsets.only(right: 20),
+    width: 300,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(label!),
+        V(8),
+        InkWell(
+          onTap: onPick,
+          child: Container(
+            height: 100,
+            width: 100,
+            color: Colors.grey,
+            padding: EdgeInsets.all(8),
+            child: pdfFile["fileName"] == ""
+                ? Icon(Icons.assignment_add)
+                : Center(child: Text(pdfFile["fileName"])),
+          ),
+        )
+      ],
+    ),
+  );
 }
