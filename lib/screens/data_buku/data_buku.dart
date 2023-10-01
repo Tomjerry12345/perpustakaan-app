@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,13 +66,17 @@ class _DataBukuState extends State<DataBuku> {
   }
 
   Future addBooks(BuildContext context, Function setLoad) async {
+    SettableMetadata metadata = SettableMetadata(
+      contentType: 'image/jpg'
+    );
+
     setLoad(true);
     try {
       var snapshot = await FirebaseStorage.instance
           .ref()
           .child("images")
           .child('${DateTime.now()}-${judul}-${barcode}.jpg')
-          .putData(image);
+          .putData(image, metadata);
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
       var snapshotBuku = await FirebaseStorage.instance
@@ -1006,7 +1009,7 @@ class _DataBukuState extends State<DataBuku> {
   Container TextInput(String? label, bool? multiline, String? value, Function? onChanged) {
     return Container(
       margin: EdgeInsets.only(right: 20),
-      width: 250,
+      width: 230,
       child: Column(
         children: [
           Row(
