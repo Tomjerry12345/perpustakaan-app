@@ -186,9 +186,11 @@ class _AkunState extends State<Akun> {
                             CircleAvatar(
                               radius: 45,
                               backgroundColor: Colors.blue,
-                              child: data["image"] != null
-                                  ? Image.network(data["image"])
-                                  : Text(data["nama"][0], style: TextStyle(fontSize: 24)),
+                              backgroundImage:
+                                  data["image"] != null ? NetworkImage(data["image"]) : null,
+                              child: data["image"] == null
+                                  ? Text(data["nama"][0], style: TextStyle(fontSize: 24))
+                                  : null,
                             ),
                           ],
                         )),

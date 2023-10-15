@@ -111,7 +111,7 @@ class _DataBukuState extends State<DataBuku> {
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.print),
+                                Icon(Icons.menu_book),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -120,7 +120,7 @@ class _DataBukuState extends State<DataBuku> {
                             ),
                             Row(
                               children: [
-                                Icon(Icons.print),
+                                Icon(Icons.person),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -129,7 +129,7 @@ class _DataBukuState extends State<DataBuku> {
                             ),
                             Row(
                               children: [
-                                Icon(Icons.print),
+                                Icon(Icons.qr_code),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -223,13 +223,8 @@ class _DataBukuState extends State<DataBuku> {
                                     onPressed: () async {
                                       navigatePush(ViewPdf(
                                         path: widget.data!["buku"],
+                                        judul: widget.data!["judul_buku"],
                                       ));
-                                      // createFileOfPdfUrl().then((f) {
-                                      //   print("path ${f.path}");
-                                      //   navigatePush(ViewPdf(
-                                      //     path: f.path,
-                                      //   ));
-                                      // });
                                     },
                                   ),
                                 ),

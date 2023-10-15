@@ -21,9 +21,9 @@ class _FormCustomState extends State<FormCustom> {
     return TextField(
       controller: widget.controller,
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.lock,
-            // color: HexColor("#C3C6C3"),
-            color: Colors.blue),
+        // prefixIcon: Icon(Icons.lock,
+        //     // color: HexColor("#C3C6C3"),
+        //     color: Colors.blue),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.blue,

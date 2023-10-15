@@ -73,243 +73,248 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: Column(children: <Widget>[
-          Container(
-            child: Stack(
-              children: [
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xff0096ff), Color(0xff6610f2)],
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(children: <Widget>[
+            Container(
+              child: Stack(
+                children: [
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                      ),
                     ),
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 20, left: 50, right: 50),
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade200,
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: TextField(
-                        onChanged: (value) {
-                          print(value);
-                          setState(() {
-                            search = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          contentPadding: EdgeInsets.symmetric(vertical: 0),
-                          border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20, left: 50, right: 50),
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade200,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: TextField(
+                          onChanged: (value) {
+                            print(value);
+                            setState(() {
+                              search = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Search",
+                            contentPadding: EdgeInsets.symmetric(vertical: 0),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
+                            prefixIcon: Icon(Icons.search),
                           ),
-                          prefixIcon: Icon(Icons.search),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 40, left: 50),
-                      child: Wrap(
-                        spacing: 8.0,
-                        runSpacing: 4.0,
-                        direction: Axis.horizontal,
-                        children: <Widget>[
-                          Container(
-                              height: 50, width: 50, child: Image.asset("assets/images/logo.png")),
-                          Wrap(
-                            spacing: 5,
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                'Perpustakaan Wilayah',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Warna.warnaputi,
+                      Container(
+                        margin: EdgeInsets.only(top: 40, left: 50),
+                        child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          direction: Axis.horizontal,
+                          children: <Widget>[
+                            Container(
+                                height: 50,
+                                width: 50,
+                                child: Image.asset("assets/images/logo.png")),
+                            Wrap(
+                              spacing: 5,
+                              direction: Axis.vertical,
+                              children: [
+                                Text(
+                                  'Perpustakaan Wilayah',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Warna.warnaputi,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Sulawesi Selatan',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Warna.warnaputi,
-                                ),
-                              )
-                            ],
-                          )
-                        ],
+                                Text(
+                                  'Sulawesi Selatan',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Warna.warnaputi,
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
 
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     openTalkBackSettings();
-                    //   },
-                    //   child: Text('Aktifkan TalkBack'),
-                    // )
+                      // ElevatedButton(
+                      //   onPressed: () {
+                      //     openTalkBackSettings();
+                      //   },
+                      //   child: Text('Aktifkan TalkBack'),
+                      // )
 
-                    // Container(
-                    //   margin: EdgeInsets.only(top: 20, left: 36, right: 36),
-                    //   height: 100,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     borderRadius: BorderRadius.circular(20),
-                    //     boxShadow: [
-                    //       BoxShadow(
-                    //         offset: Offset(0, 10),
-                    //         blurRadius: 50,
-                    //         color: Colors.blue.withOpacity(0.23),
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const Kategori()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.dashboard,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Kategori',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const StokBuku()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.article,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Stok Buku',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const terlaris()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.favorite,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Favorit',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         FirebaseAuth.instance.signOut();
-                    //         Utils.showSnackBar("Berhasil logout.", Colors.red);
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.logout,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Logout',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     )
-                    //   ]),
-                    // ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.all(20),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Buku',
-                    style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 16,
-                    ),
+                      // Container(
+                      //   margin: EdgeInsets.only(top: 20, left: 36, right: 36),
+                      //   height: 100,
+                      //   decoration: BoxDecoration(
+                      //     color: Colors.white,
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     boxShadow: [
+                      //       BoxShadow(
+                      //         offset: Offset(0, 10),
+                      //         blurRadius: 50,
+                      //         color: Colors.blue.withOpacity(0.23),
+                      //       ),
+                      //     ],
+                      //   ),
+                      //   child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const Kategori()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.dashboard,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Kategori',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const StokBuku()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.article,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Stok Buku',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(builder: (context) => const terlaris()),
+                      //         );
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.favorite,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Favorit',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         FirebaseAuth.instance.signOut();
+                      //         Utils.showSnackBar("Berhasil logout.", Colors.red);
+                      //       },
+                      //       child: Column(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Icon(
+                      //             Icons.logout,
+                      //             size: 30,
+                      //             color: Colors.blue,
+                      //           ),
+                      //           Text(
+                      //             'Logout',
+                      //             style: TextStyle(
+                      //               fontSize: 15,
+                      //               color: Warna.warnabiru1,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     )
+                      //   ]),
+                      // ),
+                    ],
                   ),
                 ],
-              )),
-          StreamBuilder<QuerySnapshot>(
-              // stream:
-              //     firestore.collection("books").where("isRecomended", isEqualTo: "1").snapshots(),
-              // stream: fs.getAllStream("books"),
-              stream: search != ""
-                  ? firestore.collection("books").where("judul_buku", isEqualTo: search).snapshots()
-                  : fs.getAllStream("books"),
-              builder: (context, snapshot) {
-                return !snapshot.hasData
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: GridView.builder(
+              ),
+            ),
+            Container(
+                margin: EdgeInsets.all(20),
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Buku',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )),
+            StreamBuilder<QuerySnapshot>(
+                // stream:
+                //     firestore.collection("books").where("isRecomended", isEqualTo: "1").snapshots(),
+                // stream: fs.getAllStream("books"),
+                stream: search != ""
+                    ? firestore
+                        .collection("books")
+                        .where("judul_buku", isGreaterThanOrEqualTo: search)
+                        .snapshots()
+                    : fs.getAllStream("books"),
+                builder: (context, snapshot) {
+                  return !snapshot.hasData
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : GridView.builder(
                           physics: const ScrollPhysics(),
-                          primary: true,
+                          // primary: true,
                           shrinkWrap: true,
                           itemCount: snapshot.data!.docs.length,
                           itemBuilder: ((context, index) {
@@ -320,10 +325,10 @@ class _HomeState extends State<Home> {
                             maxCrossAxisExtent: 150,
                             childAspectRatio: MediaQuery.of(context).size.height / 1360,
                           ),
-                        ),
-                      );
-              }),
-        ]),
+                        );
+                }),
+          ]),
+        ),
       ),
     );
   }
