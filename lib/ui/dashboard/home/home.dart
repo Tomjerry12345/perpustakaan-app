@@ -20,6 +20,8 @@ class _HomeState extends State<Home> {
 
   final fs = FirebaseServices();
 
+  String search = "";
+
   @override
   initState() {
     super.initState();
@@ -71,8 +73,9 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: SafeArea(
           child: Column(children: <Widget>[
             Container(
               child: Stack(
@@ -96,7 +99,12 @@ class _HomeState extends State<Home> {
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: TextField(
-                          onChanged: (value) {},
+                          onChanged: (value) {
+                            print(value);
+                            setState(() {
+                              search = value;
+                            });
+                          },
                           decoration: InputDecoration(
                             hintText: "Search",
                             contentPadding: EdgeInsets.symmetric(vertical: 0),
@@ -292,26 +300,30 @@ class _HomeState extends State<Home> {
             StreamBuilder<QuerySnapshot>(
                 // stream:
                 //     firestore.collection("books").where("isRecomended", isEqualTo: "1").snapshots(),
-                stream: fs.getAllStream("books"),
+                // stream: fs.getAllStream("books"),
+                stream: search != ""
+                    ? firestore
+                        .collection("books")
+                        .where("judul_buku", isGreaterThanOrEqualTo: search)
+                        .snapshots()
+                    : fs.getAllStream("books"),
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      : Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: GridView.builder(
-                            primary: true,
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: ((context, index) {
-                              DocumentSnapshot data = snapshot.data!.docs[index];
-                              return CardBook(data, context);
-                            }),
-                            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                              maxCrossAxisExtent: 150,
-                              childAspectRatio: MediaQuery.of(context).size.height / 1360,
-                            ),
+                      : GridView.builder(
+                          physics: const ScrollPhysics(),
+                          // primary: true,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: ((context, index) {
+                            DocumentSnapshot data = snapshot.data!.docs[index];
+                            return CardBook(data, context);
+                          }),
+                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 150,
+                            childAspectRatio: MediaQuery.of(context).size.height / 1360,
                           ),
                         );
                 }),

@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../model/ModelQuery.dart';
 
@@ -8,8 +12,10 @@ class FirebaseServices {
   final _auth = FirebaseAuth.instance;
 
   void add(String path, data) {
-    _db.collection(path).add(data).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    _db
+        .collection(path)
+        .add(data)
+        .then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAll(String path) {
@@ -20,8 +26,7 @@ class FirebaseServices {
     return _db.collection(path).snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> query(
-      String path, List<ModelQuery> query) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> query(String path, List<ModelQuery> query) {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
     query.forEach((e) {
@@ -62,5 +67,13 @@ class FirebaseServices {
 
   User? getCurrentUser() {
     return _auth.currentUser;
+  }
+
+  Future uploadFile(File file, String type) async {
+    String fileName = basename(file.path);
+    final firebaseStorageRef = FirebaseStorage.instance.ref().child('$type/$fileName');
+    final uploadTask = await firebaseStorageRef.putFile(file);
+    final taskSnapshot = uploadTask.ref.getDownloadURL();
+    return taskSnapshot;
   }
 }

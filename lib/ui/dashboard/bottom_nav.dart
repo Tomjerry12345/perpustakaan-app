@@ -31,13 +31,13 @@ class _BottomNavState extends State<BottomNav> {
           // <-- SEE HERE
           title: const Text('Pilih Menu'),
           children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {
-                procesScan("masuk");
-                dialogClose(context);
-              },
-              child: const Text('Scan Masuk'),
-            ),
+            // SimpleDialogOption(
+            //   onPressed: () {
+            //     procesScan("masuk");
+            //     dialogClose(context);
+            //   },
+            //   child: const Text('Scan Masuk'),
+            // ),
             SimpleDialogOption(
               onPressed: () {
                 procesScan("pinjam_buku");

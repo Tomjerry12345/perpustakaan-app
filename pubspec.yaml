@@ -25,6 +25,8 @@ dependencies:
   path_provider: ^2.1.1
   url_launcher: ^6.1.14
   syncfusion_flutter_pdfviewer: ^20.4.54
+  image_picker: ^0.8.7+5
+  firebase_storage: ^11.2.8
 
 dev_dependencies:
   flutter_test:

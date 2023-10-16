@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/main.dart';
+import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/generated_utils.dart';
+import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
+import 'package:perpustakaan_mobile/widget/avatar/avatar_component.dart';
 import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
 
 class Registrasi extends StatefulWidget {
@@ -26,6 +31,10 @@ class _RegistrasiState extends State<Registrasi> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  File? getImage;
+
+  final fs = FirebaseServices();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +51,18 @@ class _RegistrasiState extends State<Registrasi> {
       SizedBox(
         height: 36,
       ),
+      Center(
+          child: AvatarComponent(
+        "https://www.seekpng.com/png/detail/17-176376_person-free-download-and-person-icon-png.png",
+        icon: Icons.camera,
+        colorIconBg: Colors.grey,
+        onGetImage: (image) {
+          setState(() {
+            getImage = image;
+          });
+        },
+      )),
+      V(32),
       FormCustom(
         text: "nama",
         controller: namaController,
@@ -161,6 +182,9 @@ class _RegistrasiState extends State<Registrasi> {
     );
 
     try {
+      if (getImage == null) throw ArgumentError("image belum di pilih");
+      final urlFile = await fs.uploadFile(getImage!, "profile");
+
       final res = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
@@ -178,7 +202,8 @@ class _RegistrasiState extends State<Registrasi> {
         "no_hp_ibu_kandung": noHpIbuKandungController.text.trim(),
         "email": emailController.text.trim(),
         "created_at": DateTime.now(),
-        "no_anggota": generateRandomString(8)
+        "no_anggota": generateRandomString(8),
+        "image": urlFile,
       };
 
       await docUser.set(json);
