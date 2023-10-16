@@ -7,6 +7,7 @@ import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/kartu_perpus/kartu_perpus.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:printing/printing.dart';
 
 class Akun extends StatefulWidget {
   const Akun({Key? key}) : super(key: key);
@@ -34,6 +35,9 @@ class _AkunState extends State<Akun> {
     void displayPdf(data) async {
       final doc = pw.Document();
 
+      final provider = await flutterImageProvider(NetworkImage(
+        data["image"]));
+
       doc.addPage(pw.Page(
           pageFormat: pdf.PdfPageFormat.a4,
           build: (pw.Context context) {
@@ -56,6 +60,7 @@ class _AkunState extends State<Akun> {
                             width: 50,
                             color: pdf.PdfColor(0.8, 0.9, 1),
                           ),
+                          
                           pw.SizedBox(
                             width: 8,
                           ),
@@ -87,8 +92,10 @@ class _AkunState extends State<Akun> {
                       pw.Container(
                         width: 70,
                         height: 100,
-                        color: pdf.PdfColor(0.9, 0, 0.1),
+                        // color: pdf.PdfColor(0.9, 0, 0.1),
+                        child: pw.Image(provider),
                       ),
+                      pw.Container(width: 16),
                       pw.Padding(
                         padding: const pw.EdgeInsets.all(8.0),
                         child: pw.Column(
