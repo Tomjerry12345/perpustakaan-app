@@ -111,7 +111,7 @@ class _DataBukuState extends State<DataBuku> {
                           children: [
                             Row(
                               children: [
-                                Icon(Icons.print),
+                                Icon(Icons.book),
                                 SizedBox(
                                   width: 5,
                                 ),
@@ -129,7 +129,7 @@ class _DataBukuState extends State<DataBuku> {
                             ),
                             Row(
                               children: [
-                                Icon(Icons.print),
+                                Icon(Icons.barcode_reader),
                                 SizedBox(
                                   width: 5,
                                 ),
