@@ -245,23 +245,34 @@ class _DataBukuState extends State<DataBuku> {
                                             value: firebaseServices.getCurrentUser()?.email)
                                       ]);
                                       final dataUser = qUsers.docs[0].data();
-                                      final data = <String, dynamic>{
-                                        "nama_peminjam": dataUser["nama"],
-                                        "email": dataUser["email"],
-                                        "judul_buku": widget.data!["judul_buku"],
-                                        "pengarang": widget.data!["pengarang"],
-                                        "image": widget.data!["image"],
-                                        "rak": widget.data!["rak"],
-                                        "konfirmasi": false
-                                      };
 
-                                      print(data);
+                                      final dataPeminjaman = await firebaseServices.queryFuture(
+                                          "peminjaman",
+                                          [ModelQuery(key: "email", value: dataUser["email"])]);
 
-                                      firebaseServices.add("peminjaman", data);
+                                      final sizeDataPeminjaman = dataPeminjaman.size;
 
-                                      Utils.showSnackBar("Berhasil", Colors.green);
+                                      if (sizeDataPeminjaman < 3) {
+                                        final data = <String, dynamic>{
+                                          "nama_peminjam": dataUser["nama"],
+                                          "email": dataUser["email"],
+                                          "judul_buku": widget.data!["judul_buku"],
+                                          "pengarang": widget.data!["pengarang"],
+                                          "image": widget.data!["image"],
+                                          "rak": widget.data!["rak"],
+                                          "konfirmasi": false
+                                        };
 
-                                      navigatePop();
+                                        firebaseServices.add("peminjaman", data);
+
+                                        Utils.showSnackBar("Berhasil", Colors.green);
+
+                                        navigatePop();
+                                      } else {
+                                        Utils.showSnackBar(
+                                            "Batas peminjaman buku tidak boleh lebih dari 3",
+                                            Colors.red);
+                                      }
                                     },
                                   ),
                                 ),

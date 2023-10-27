@@ -37,6 +37,7 @@ class _RegistrasiState extends State<Registrasi> {
 
   @override
   Widget build(BuildContext context) {
+    print("test");
     return Scaffold(
         body: ListView(padding: const EdgeInsets.all(8), children: <Widget>[
       Container(
@@ -84,10 +85,7 @@ class _RegistrasiState extends State<Registrasi> {
       SizedBox(
         height: 12,
       ),
-      FormCustom(
-        text: "no.hp",
-        controller: hpController,
-      ),
+      FormCustom(text: "no.hp", controller: hpController, inputType: TextInputType.number),
       SizedBox(
         height: 12,
       ),
@@ -105,13 +103,18 @@ class _RegistrasiState extends State<Registrasi> {
       SizedBox(
         height: 12,
       ),
-      FormCustom(text: "no.hp ibu kandung", controller: noHpIbuKandungController),
+      FormCustom(
+        text: "no.hp ibu kandung",
+        controller: noHpIbuKandungController,
+        inputType: TextInputType.number,
+      ),
       SizedBox(
         height: 12,
       ),
       FormCustom(
         text: "email",
         controller: emailController,
+        inputType: TextInputType.emailAddress,
       ),
       SizedBox(
         height: 12,
@@ -173,17 +176,15 @@ class _RegistrasiState extends State<Registrasi> {
   }
 
   Future signUp() async {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
     try {
       if (getImage == null) throw ArgumentError("image belum di pilih");
-      final urlFile = await fs.uploadFile(getImage!, "profile");
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
 
       final res = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
@@ -191,6 +192,9 @@ class _RegistrasiState extends State<Registrasi> {
       );
 
       final docUser = FirebaseFirestore.instance.collection("users").doc(res.user!.uid);
+
+      final urlFile = await fs.uploadFile(getImage!, "profile");
+
       final json = {
         "uid": res.user!.uid,
         "nama": namaController.text.trim(),
@@ -210,9 +214,15 @@ class _RegistrasiState extends State<Registrasi> {
 
       Utils.showSnackBar("Berhasil Daftar.", Colors.green);
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
-    } on FirebaseAuthException catch (e) {
-      Navigator.of(context, rootNavigator: true).pop('dialog');
-      Utils.showSnackBar(e.message, Colors.red);
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        print('Kode Kesalahan: ${e.code}');
+        print('Pesan Kesalahan: ${e.message}');
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        Utils.showSnackBar(e.message, Colors.red);
+      } else {
+        Utils.showSnackBar(e.toString(), Colors.red);
+      }
     }
   }
 }

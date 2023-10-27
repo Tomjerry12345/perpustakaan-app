@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/screen_utils.dart';
+import 'package:perpustakaan_mobile/utils/show_utils.dart';
+import 'package:perpustakaan_mobile/widget/button/button_component.dart';
 import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
+import 'package:perpustakaan_mobile/widget/textfield/textfield_component.dart';
 
 import '../../../utils/position.dart';
 
@@ -17,6 +21,50 @@ class Peminjaman extends StatefulWidget {
 
 class _PeminjamanState extends State<Peminjaman> {
   FirebaseServices db = FirebaseServices();
+  final time = Time();
+
+  final hariController = TextEditingController();
+
+  Future<void> onPerpanjangan(id, int day) async {
+    var getDate = time.getDateByRange(day);
+
+    final tanggalPengembalian = "${time.getYear()}-${getDate[1]}-${getDate[0]}";
+
+    await db.update("peminjaman", id, {
+      "tanggal_peminjaman": time.getTimeNow(),
+      "tanggal_pengembalian": tanggalPengembalian,
+    });
+  }
+
+  void onClickPerpanjangan(BuildContext context, id) {
+    dialogShowCustomContent(
+        context: context,
+        title: TextWidget("Perpanjangan"),
+        content: Container(
+          height: 70,
+          child: Column(
+            children: [
+              TextfieldComponent(
+                label: "Input Hari",
+                inputType: TextInputType.number,
+                controller: hariController,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          ButtonElevatedComponent(
+            "Konfirmasi",
+            onPressed: () {
+              final day = int.parse(hariController.text);
+              onPerpanjangan(id, day);
+              hariController.clear();
+              dialogClose(context);
+              showToast("Berhasil perpanjangan", Colors.green);
+            },
+          )
+        ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +97,7 @@ class _PeminjamanState extends State<Peminjaman> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: ((context, index) {
                         DocumentSnapshot data = snapshot.data!.docs[index];
+
                         return ItemCard(data, context);
                       }),
                     )))
@@ -82,6 +131,8 @@ class _PeminjamanState extends State<Peminjaman> {
         denda = sisaHariNow * 1000;
       }
     }
+
+    print(data);
 
     return Container(
       margin: EdgeInsets.all(10),
@@ -117,6 +168,16 @@ class _PeminjamanState extends State<Peminjaman> {
                   ),
                 ),
               ),
+              V(16),
+              data["konfirmasi"]! && sisaHariNow < 7
+                  ? Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            onClickPerpanjangan(context, data.id);
+                          },
+                          child: Text("Perpanjangan")),
+                    )
+                  : Container(),
             ],
           ),
           Column(

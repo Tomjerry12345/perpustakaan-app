@@ -139,6 +139,7 @@ class _LoginState extends State<Login> {
                     ),
                     TextButton(
                       onPressed: () {
+                        print("test");
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const Registrasi()),

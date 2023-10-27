@@ -4,10 +4,12 @@ import 'package:hexcolor/hexcolor.dart';
 class FormCustom extends StatefulWidget {
   final String text;
   final TextEditingController? controller;
+  final TextInputType inputType;
 
   const FormCustom({
     Key? key,
     required this.text,
+    this.inputType = TextInputType.text,
     this.controller,
   }) : super(key: key);
 
@@ -20,6 +22,7 @@ class _FormCustomState extends State<FormCustom> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      keyboardType: widget.inputType,
       decoration: InputDecoration(
         // prefixIcon: Icon(Icons.lock,
         //     // color: HexColor("#C3C6C3"),
