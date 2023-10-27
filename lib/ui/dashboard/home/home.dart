@@ -356,7 +356,7 @@ class _HomeState extends State<Home> {
                       children: <Widget>[
                         Image.network(
                           data["image"],
-                          height: 150,
+                          height: 140,
                           width: 150,
                         ),
                         SizedBox(
