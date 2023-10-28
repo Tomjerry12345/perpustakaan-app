@@ -22,6 +22,10 @@ class FirebaseServices {
     return _db.collection(path).get();
   }
 
+  Future<DocumentSnapshot<Map<String, dynamic>>> getSpecifict(String path, String doc) {
+    return _db.collection(path).doc(doc).get();
+  }
+
   Stream<QuerySnapshot<Map<String, dynamic>>> getAllStream(String path) {
     return _db.collection(path).snapshots();
   }

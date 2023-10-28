@@ -9,9 +9,10 @@ import 'package:perpustakaan_mobile/ui/dashboard/data-buku/section/view-pdf/view
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:perpustakaan_mobile/utils/Time.dart';
+import 'package:perpustakaan_mobile/utils/Utils.dart';
 
 import '../../../model/ModelQuery.dart';
-import '../../../utils/Utils.dart';
 import '../../../utils/navigate_utils.dart';
 
 class DataBuku extends StatefulWidget {
@@ -25,6 +26,47 @@ class DataBuku extends StatefulWidget {
 
 class _DataBukuState extends State<DataBuku> {
   final firebaseServices = FirebaseServices();
+  int? sisaPeminjaman;
+
+  @override
+  initState() {
+    super.initState();
+    getSisaPeminjaman();
+  }
+
+  Future<void> getSisaPeminjaman() async {
+    print("test");
+    final time = Time();
+    final dataPeminjaman = await firebaseServices.queryFuture(
+        "peminjaman", [ModelQuery(key: "email", value: firebaseServices.getCurrentUser()?.email)]);
+
+    for (final dataP in dataPeminjaman.docs) {
+      final dt = dataP.data();
+      print(dt);
+      print(widget.data!["barcode"]);
+      if (dt["barcode"] == widget.data!["barcode"]) {
+        if (dt['konfirmasi']) {
+          final tanggalPeminjaman = dt['tanggal_pengembalian'].toString().split("-");
+          final datePeminjaman = int.parse(tanggalPeminjaman[2]);
+          final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
+          final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
+
+          int sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+
+          if (sisaHariNow == 0) {
+            sisaHariNow = 1;
+          } else if (sisaHariNow < 0) {
+            sisaHariNow = sisaHariNow.abs();
+          }
+          print(sisaHariNow);
+          setState(() {
+            sisaPeminjaman = sisaHariNow;
+          });
+        }
+        break;
+      }
+    }
+  }
 
   Future<File> createFileOfPdfUrl() async {
     Completer<File> completer = Completer();
@@ -216,15 +258,18 @@ class _DataBukuState extends State<DataBuku> {
                                   padding: EdgeInsets.all(3),
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor:
+                                          sisaPeminjaman == null ? Colors.green : Colors.pink,
                                       padding: EdgeInsets.symmetric(vertical: 20),
                                     ),
-                                    child: Text("Baca buku"),
+                                    child: Text(sisaPeminjaman == null
+                                        ? "Ringkasan Buku"
+                                        : "Sisa peminjaman: $sisaPeminjaman Hari"),
                                     onPressed: () async {
                                       navigatePush(ViewPdf(
-                                        path: widget.data!["buku"],
-                                        judul: widget.data!["judul_buku"],
-                                      ));
+                                          path: widget.data!["buku"],
+                                          judul: widget.data!["judul_buku"],
+                                          isPinjam: sisaPeminjaman != null));
                                     },
                                   ),
                                 ),
@@ -250,28 +295,43 @@ class _DataBukuState extends State<DataBuku> {
                                           "peminjaman",
                                           [ModelQuery(key: "email", value: dataUser["email"])]);
 
-                                      final sizeDataPeminjaman = dataPeminjaman.size;
+                                      bool isDuplicated = false;
 
-                                      if (sizeDataPeminjaman < 3) {
-                                        final data = <String, dynamic>{
-                                          "nama_peminjam": dataUser["nama"],
-                                          "email": dataUser["email"],
-                                          "judul_buku": widget.data!["judul_buku"],
-                                          "pengarang": widget.data!["pengarang"],
-                                          "image": widget.data!["image"],
-                                          "rak": widget.data!["rak"],
-                                          "konfirmasi": false
-                                        };
+                                      for (final dataP in dataPeminjaman.docs) {
+                                        final dt = dataP.data();
+                                        if (dt["barcode"] == widget.data!["barcode"]) {
+                                          isDuplicated = true;
+                                          break;
+                                        }
+                                      }
 
-                                        firebaseServices.add("peminjaman", data);
+                                      if (!isDuplicated) {
+                                        final sizeDataPeminjaman = dataPeminjaman.size;
 
-                                        Utils.showSnackBar("Berhasil", Colors.green);
+                                        if (sizeDataPeminjaman < 3) {
+                                          final data = <String, dynamic>{
+                                            "nama_peminjam": dataUser["nama"],
+                                            "email": dataUser["email"],
+                                            "judul_buku": widget.data!["judul_buku"],
+                                            "pengarang": widget.data!["pengarang"],
+                                            "image": widget.data!["image"],
+                                            "rak": widget.data!["rak"],
+                                            "konfirmasi": false,
+                                            "barcode": widget.data!["barcode"]
+                                          };
 
-                                        navigatePop();
+                                          firebaseServices.add("peminjaman", data);
+
+                                          Utils.showSnackBar("Berhasil", Colors.green);
+
+                                          navigatePop();
+                                        } else {
+                                          Utils.showSnackBar(
+                                              "Batas peminjaman buku tidak boleh lebih dari 3",
+                                              Colors.red);
+                                        }
                                       } else {
-                                        Utils.showSnackBar(
-                                            "Batas peminjaman buku tidak boleh lebih dari 3",
-                                            Colors.red);
+                                        Utils.showSnackBar("Buku sudah di pinjam", Colors.red);
                                       }
                                     },
                                   ),
