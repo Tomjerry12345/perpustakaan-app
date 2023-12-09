@@ -95,17 +95,17 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 8,
               ),
-              Container(
-                width: double.infinity,
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  child: Text("lupa Password ?"),
-                  style: TextButton.styleFrom(
-                    primary: Colors.blue,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
+              // Container(
+              //   width: double.infinity,
+              //   alignment: Alignment.centerRight,
+              //   child: TextButton(
+              //     child: Text("lupa Password ?"),
+              //     style: TextButton.styleFrom(
+              //       primary: Colors.blue,
+              //     ),
+              //     onPressed: () {},
+              //   ),
+              // ),
               SizedBox(
                 height: 20,
               ),

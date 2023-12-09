@@ -57,10 +57,14 @@ class _PeminjamanState extends State<Peminjaman> {
             "Konfirmasi",
             onPressed: () {
               final day = int.parse(hariController.text);
-              onPerpanjangan(id, day);
-              hariController.clear();
-              dialogClose(context);
-              showToast("Berhasil perpanjangan", Colors.green);
+              if (day <= 14) {
+                onPerpanjangan(id, day);
+                hariController.clear();
+                dialogClose(context);
+                showToast("Berhasil perpanjangan", Colors.green);
+              } else {
+                showToast("Perpanjangan tidak boleh dari 14 hari", Colors.red);
+              }
             },
           )
         ]);
@@ -113,26 +117,36 @@ class _PeminjamanState extends State<Peminjaman> {
     final time = Time();
     bool isTenggat = false;
 
+    void deletePeminjamanOnline() {
+      if (data["type_peminjaman"] == "online") {
+        db.delete("peminjaman", data.id);
+      }
+    }
+
     if (data['konfirmasi']) {
-      final tanggalPeminjaman = data['tanggal_pengembalian'].toString().split("-");
+      final tanggalPeminjaman =
+          data['tanggal_pengembalian'].toString().split("-");
       final datePeminjaman = int.parse(tanggalPeminjaman[2]);
       final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
       final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
 
-      sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+      sisaHariNow = time.getJumlahHariDate(
+          yearPeminjaman, monthPeminjaman, datePeminjaman);
 
       if (sisaHariNow == 0) {
         sisaHariNow = 1;
         isTenggat = true;
         denda = sisaHariNow * 1000;
+        deletePeminjamanOnline();
       } else if (sisaHariNow < 0) {
+        if (data["type_peminjaman"] == "online")
+          db.delete("peminjaman", data.id);
         sisaHariNow = sisaHariNow.abs();
         isTenggat = true;
         denda = sisaHariNow * 1000;
+        deletePeminjamanOnline();
       }
     }
-
-    print(data);
 
     return Container(
       margin: EdgeInsets.all(10),
@@ -252,13 +266,15 @@ class _PeminjamanState extends State<Peminjaman> {
                             margin: EdgeInsets.all(8),
                             child: TextWidget(
                               // data['tanggal_peminjaman'],
-                              !isTenggat ? "$sisaHariNow Hari" : "Lewat $sisaHariNow Hari",
+                              !isTenggat
+                                  ? "$sisaHariNow Hari"
+                                  : "Lewat $sisaHariNow Hari",
                               color: Colors.white,
                             ),
                           ),
                         ),
                         V(8),
-                        denda > 0
+                        denda > 0 && data['type_peminjaman'] == "offline"
                             ? Column(
                                 children: [
                                   TextWidget(

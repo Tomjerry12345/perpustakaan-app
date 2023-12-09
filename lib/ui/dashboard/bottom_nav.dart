@@ -101,7 +101,8 @@ class _BottomNavState extends State<BottomNav> {
         "pengarang": book["pengarang"],
         "image": book["image"],
         "rak": book["rak"],
-        "konfirmasi": false
+        "konfirmasi": false,
+        "type_peminjaman": "offline",
         // "email": currentUser!.email,
         // "nama_peminjam": user["nama"],
         // "tanggal_peminjaman": tanggalPeminjaman,

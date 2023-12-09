@@ -35,15 +35,12 @@ class _DataBukuState extends State<DataBuku> {
   }
 
   Future<void> getSisaPeminjaman() async {
-    print("test");
     final time = Time();
     final dataPeminjaman = await firebaseServices.queryFuture(
         "peminjaman", [ModelQuery(key: "email", value: firebaseServices.getCurrentUser()?.email)]);
 
     for (final dataP in dataPeminjaman.docs) {
       final dt = dataP.data();
-      print(dt);
-      print(widget.data!["barcode"]);
       if (dt["barcode"] == widget.data!["barcode"]) {
         if (dt['konfirmasi']) {
           final tanggalPeminjaman = dt['tanggal_pengembalian'].toString().split("-");
@@ -317,6 +314,7 @@ class _DataBukuState extends State<DataBuku> {
                                             "image": widget.data!["image"],
                                             "rak": widget.data!["rak"],
                                             "konfirmasi": false,
+                                            "type_peminjaman": "online",
                                             "barcode": widget.data!["barcode"]
                                           };
 
