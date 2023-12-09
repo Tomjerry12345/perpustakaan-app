@@ -24,7 +24,8 @@ class DataBuku extends StatefulWidget {
 class _DataBukuState extends State<DataBuku> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String search = "";
-  late TextEditingController searchController = TextEditingController(text: search);
+  late TextEditingController searchController =
+      TextEditingController(text: search);
 
   bool _loading = false;
   String judul = "";
@@ -83,6 +84,8 @@ class _DataBukuState extends State<DataBuku> {
   }
 
   Future addBooks(BuildContext context, Function setLoad) async {
+    SettableMetadata metadata = SettableMetadata(contentType: 'image/jpg');
+
     setLoad(true);
     try {
       // var snapshot = await FirebaseStorage.instance
@@ -244,7 +247,10 @@ class _DataBukuState extends State<DataBuku> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: search != ""
-            ? firestore.collection("books").where("judul_buku", isEqualTo: search).snapshots()
+            ? firestore
+                .collection("books")
+                .where("judul_buku", isEqualTo: search)
+                .snapshots()
             : firestore.collection("books").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -253,14 +259,16 @@ class _DataBukuState extends State<DataBuku> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 10),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 30, bottom: 10),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             "Data Buku",
-                            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -275,7 +283,8 @@ class _DataBukuState extends State<DataBuku> {
                           Container(
                             height: 40,
                             decoration: BoxDecoration(
-                                color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
                             child: ElevatedButton(
                                 child: Text('Tambah Buku'),
                                 style: ElevatedButton.styleFrom(
@@ -285,76 +294,114 @@ class _DataBukuState extends State<DataBuku> {
                                   showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return StatefulBuilder(builder: (BuildContext context,
-                                            void Function(void Function()) setState) {
+                                        return StatefulBuilder(builder:
+                                            (BuildContext context,
+                                                void Function(void Function())
+                                                    setState) {
                                           return Dialog(
-                                              insetPadding: EdgeInsets.symmetric(horizontal: 150),
+                                              insetPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 150),
                                               child: Stack(
                                                 children: [
                                                   Container(
                                                       width: double.infinity,
                                                       height: 600,
-                                                      padding: EdgeInsets.all(20),
+                                                      padding:
+                                                          EdgeInsets.all(20),
                                                       child: Column(
                                                         children: [
                                                           Container(
                                                             child: Row(
                                                               mainAxisAlignment:
-                                                                  MainAxisAlignment.spaceBetween,
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
                                                               children: [
                                                                 Icon(
                                                                   Icons.close,
-                                                                  color: Colors.white,
+                                                                  color: Colors
+                                                                      .white,
                                                                 ),
                                                                 Text(
                                                                   "Tambah Buku",
                                                                   style: TextStyle(
-                                                                      fontSize: 20,
-                                                                      fontWeight: FontWeight.w700),
+                                                                      fontSize:
+                                                                          20,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700),
                                                                 ),
                                                                 InkWell(
-                                                                    child: Icon(Icons.close),
+                                                                    child: Icon(
+                                                                        Icons
+                                                                            .close),
                                                                     onTap: () {
-                                                                      Navigator.of(context)
-                                                                          .pop('dialog');
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop(
+                                                                              'dialog');
                                                                     }),
                                                               ],
                                                             ),
                                                           ),
                                                           Container(
-                                                            margin:
-                                                                EdgeInsets.symmetric(vertical: 30),
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        30),
                                                             child: Column(
                                                               children: [
                                                                 Row(
                                                                   crossAxisAlignment:
-                                                                      CrossAxisAlignment.start,
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [
                                                                     TextInput(
-                                                                        "Judul Buku", false, judul,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        judul = value;
-                                                                      });
-                                                                    }),
-                                                                    TextInput("Pengarang", false,
-                                                                        pengarang, (String value) {
-                                                                      setState(() {
-                                                                        pengarang = value;
-                                                                      });
-                                                                    }),
-                                                                    TextInput(
-                                                                        "Penerbit", false, penerbit,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        penerbit = value;
+                                                                        "Judul Buku",
+                                                                        false,
+                                                                        judul,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        judul =
+                                                                            value;
                                                                       });
                                                                     }),
                                                                     TextInput(
-                                                                        "Barcode", false, barcode,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        barcode = value;
+                                                                        "Pengarang",
+                                                                        false,
+                                                                        pengarang,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        pengarang =
+                                                                            value;
+                                                                      });
+                                                                    }),
+                                                                    TextInput(
+                                                                        "Penerbit",
+                                                                        false,
+                                                                        penerbit,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        penerbit =
+                                                                            value;
+                                                                      });
+                                                                    }),
+                                                                    TextInput(
+                                                                        "Barcode",
+                                                                        false,
+                                                                        barcode,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        barcode =
+                                                                            value;
                                                                       });
                                                                     }),
                                                                   ],
@@ -365,30 +412,51 @@ class _DataBukuState extends State<DataBuku> {
                                                                 Row(
                                                                   children: [
                                                                     TextInput(
-                                                                        "Kategori", false, kategori,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        kategori = value;
+                                                                        "Kategori",
+                                                                        false,
+                                                                        kategori,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        kategori =
+                                                                            value;
                                                                       });
                                                                     }),
                                                                     TextInput(
-                                                                        "Halaman", false, halaman,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        halaman = value;
-                                                                      });
-                                                                    }),
-                                                                    TextInput("Rak", false, rak,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        rak = value;
+                                                                        "Halaman",
+                                                                        false,
+                                                                        halaman,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        halaman =
+                                                                            value;
                                                                       });
                                                                     }),
                                                                     TextInput(
-                                                                        "Sinopsis", true, sinopsis,
-                                                                        (String value) {
-                                                                      setState(() {
-                                                                        sinopsis = value;
+                                                                        "Rak",
+                                                                        false,
+                                                                        rak,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        rak =
+                                                                            value;
+                                                                      });
+                                                                    }),
+                                                                    TextInput(
+                                                                        "Sinopsis",
+                                                                        true,
+                                                                        sinopsis,
+                                                                        (String
+                                                                            value) {
+                                                                      setState(
+                                                                          () {
+                                                                        sinopsis =
+                                                                            value;
                                                                       });
                                                                     }),
                                                                   ],
@@ -398,28 +466,47 @@ class _DataBukuState extends State<DataBuku> {
                                                                 ),
                                                                 Row(
                                                                   crossAxisAlignment:
-                                                                      CrossAxisAlignment.center,
+                                                                      CrossAxisAlignment
+                                                                          .center,
                                                                   mainAxisAlignment:
-                                                                      MainAxisAlignment.center,
+                                                                      MainAxisAlignment
+                                                                          .center,
                                                                   children: [
-                                                                    ImagePick("Gambar", () {
+                                                                    ImagePick(
+                                                                        "Gambar",
+                                                                        () {
                                                                       _pickImage(
-                                                                          (final img, final img1) {
-                                                                        setState(() {
-                                                                          image = img1;
-                                                                          tmpImage = img;
-                                                                          isPicked = true;
+                                                                          (final img,
+                                                                              final img1) {
+                                                                        setState(
+                                                                            () {
+                                                                          image =
+                                                                              img1;
+                                                                          tmpImage =
+                                                                              img;
+                                                                          isPicked =
+                                                                              true;
                                                                         });
                                                                       });
-                                                                    }, image, tmpImage, 'add',
-                                                                        isPicked, image1),
-                                                                    PdfPick("Tambah Buku", () {
-                                                                      _pickPDF((final file) {
-                                                                        setState(() {
-                                                                          _pdfFile = file;
+                                                                    },
+                                                                        image,
+                                                                        tmpImage,
+                                                                        'add',
+                                                                        isPicked,
+                                                                        image1),
+                                                                    PdfPick(
+                                                                        "Tambah Buku",
+                                                                        () {
+                                                                      _pickPDF(
+                                                                          (final file) {
+                                                                        setState(
+                                                                            () {
+                                                                          _pdfFile =
+                                                                              file;
                                                                         });
                                                                       });
-                                                                    }, "tambah", _pdfFile)
+                                                                    }, "tambah",
+                                                                        _pdfFile)
                                                                   ],
                                                                 ),
                                                                 SizedBox(
@@ -427,7 +514,8 @@ class _DataBukuState extends State<DataBuku> {
                                                                 ),
                                                                 Row(
                                                                   crossAxisAlignment:
-                                                                      CrossAxisAlignment.start,
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   children: [],
                                                                 ),
                                                                 SizedBox(
@@ -439,31 +527,39 @@ class _DataBukuState extends State<DataBuku> {
                                                           Container(
                                                             child: Row(
                                                               mainAxisAlignment:
-                                                                  MainAxisAlignment.center,
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 ElevatedButton(
-                                                                  style: ElevatedButton.styleFrom(
-                                                                    primary: Colors.green,
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                    primary: Colors
+                                                                        .green,
                                                                     padding: EdgeInsets.symmetric(
-                                                                        vertical: 20,
-                                                                        horizontal: 50),
+                                                                        vertical:
+                                                                            20,
+                                                                        horizontal:
+                                                                            50),
                                                                     textStyle: const TextStyle(
-                                                                        fontSize: 16),
+                                                                        fontSize:
+                                                                            16),
                                                                   ),
-                                                                  onPressed: !_loading
-                                                                      ? () {
-                                                                          addBooks(context,
-                                                                              (bool val) {
-                                                                            setState(() {
-                                                                              _loading = val;
-                                                                            });
-                                                                          });
-                                                                        }
-                                                                      : null,
+                                                                  onPressed:
+                                                                      !_loading
+                                                                          ? () {
+                                                                              addBooks(context, (bool val) {
+                                                                                setState(() {
+                                                                                  _loading = val;
+                                                                                });
+                                                                              });
+                                                                            }
+                                                                          : null,
                                                                   child: _loading
                                                                       ? const CircularProgressIndicator(
-                                                                          strokeWidth: 2.0,
-                                                                          color: Colors.white,
+                                                                          strokeWidth:
+                                                                              2.0,
+                                                                          color:
+                                                                              Colors.white,
                                                                         )
                                                                       : const Text("Submit"),
                                                                 ),
@@ -482,7 +578,8 @@ class _DataBukuState extends State<DataBuku> {
                             height: 40,
                             width: 250,
                             decoration: BoxDecoration(
-                                color: Colors.white, borderRadius: BorderRadius.circular(5)),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
                             child: Center(
                                 child: TextField(
                               decoration: InputDecoration(
@@ -508,7 +605,8 @@ class _DataBukuState extends State<DataBuku> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 15),
+                      padding: EdgeInsets.only(
+                          left: 10, right: 10, bottom: 40, top: 15),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -516,8 +614,9 @@ class _DataBukuState extends State<DataBuku> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: DataTable(
-                                headingRowColor: MaterialStateProperty.resolveWith(
-                                    (states) => Colors.blue.shade200),
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.blue.shade200),
                                 columns: [
                                   DataColumn(label: Text("No.")),
                                   DataColumn(label: Text("Judul Buku")),
@@ -530,8 +629,10 @@ class _DataBukuState extends State<DataBuku> {
                                   DataColumn(label: Text("Gambar")),
                                   DataColumn(label: Text("Aksi")),
                                 ],
-                                rows: List<DataRow>.generate(snapshot.data!.docs.length, (index) {
-                                  DocumentSnapshot data = snapshot.data!.docs[index];
+                                rows: List<DataRow>.generate(
+                                    snapshot.data!.docs.length, (index) {
+                                  DocumentSnapshot data =
+                                      snapshot.data!.docs[index];
                                   final number = index + 1;
 
                                   return DataRow(cells: [
@@ -580,79 +681,78 @@ class _DataBukuState extends State<DataBuku> {
                                             });
                                             showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
-                                                  return StatefulBuilder(builder:
-                                                      (BuildContext context,
-                                                          void Function(void Function()) setState) {
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return StatefulBuilder(
+                                                      builder: (BuildContext
+                                                              context,
+                                                          void Function(
+                                                                  void
+                                                                      Function())
+                                                              setState) {
                                                     return Dialog(
-                                                        insetPadding:
-                                                            EdgeInsets.symmetric(horizontal: 150),
+                                                        insetPadding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    150),
                                                         child: Stack(
                                                           children: [
                                                             Container(
-                                                                width: double.infinity,
+                                                                width: double
+                                                                    .infinity,
                                                                 height: 600,
-                                                                padding: EdgeInsets.all(20),
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            20),
                                                                 child: Column(
                                                                   children: [
                                                                     Container(
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .spaceBetween,
+                                                                            MainAxisAlignment.spaceBetween,
                                                                         children: [
                                                                           Icon(
                                                                             Icons.close,
-                                                                            color: Colors.white,
+                                                                            color:
+                                                                                Colors.white,
                                                                           ),
                                                                           Text(
                                                                             "Edit Buku",
-                                                                            style: TextStyle(
-                                                                                fontSize: 20,
-                                                                                fontWeight:
-                                                                                    FontWeight
-                                                                                        .w700),
+                                                                            style:
+                                                                                TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                                                                           ),
                                                                           InkWell(
-                                                                              child:
-                                                                                  Icon(Icons.close),
+                                                                              child: Icon(Icons.close),
                                                                               onTap: () {
-                                                                                Navigator.of(
-                                                                                        context)
-                                                                                    .pop('dialog');
+                                                                                Navigator.of(context).pop('dialog');
                                                                               }),
                                                                         ],
                                                                       ),
                                                                     ),
                                                                     Container(
                                                                       margin: EdgeInsets.symmetric(
-                                                                          vertical: 30),
-                                                                      child: Column(
+                                                                          vertical:
+                                                                              30),
+                                                                      child:
+                                                                          Column(
                                                                         children: [
                                                                           Row(
                                                                             crossAxisAlignment:
-                                                                                CrossAxisAlignment
-                                                                                    .start,
+                                                                                CrossAxisAlignment.start,
                                                                             children: [
-                                                                              TextInput(
-                                                                                  "Judul Buku",
-                                                                                  false,
-                                                                                  judul,
-                                                                                  (String value) {
+                                                                              TextInput("Judul Buku", false, judul, (String value) {
                                                                                 setState(() {
                                                                                   judul = value;
                                                                                 });
                                                                               }),
-                                                                              TextInput("Pengarang",
-                                                                                  false, pengarang,
-                                                                                  (String value) {
+                                                                              TextInput("Pengarang", false, pengarang, (String value) {
                                                                                 setState(() {
                                                                                   pengarang = value;
                                                                                 });
                                                                               }),
-                                                                              TextInput("Penerbit",
-                                                                                  false, penerbit,
-                                                                                  (String value) {
+                                                                              TextInput("Penerbit", false, penerbit, (String value) {
                                                                                 setState(() {
                                                                                   penerbit = value;
                                                                                 });
@@ -660,27 +760,22 @@ class _DataBukuState extends State<DataBuku> {
                                                                             ],
                                                                           ),
                                                                           SizedBox(
-                                                                            height: 20,
+                                                                            height:
+                                                                                20,
                                                                           ),
                                                                           Row(
                                                                             children: [
-                                                                              TextInput("Barcode",
-                                                                                  false, barcode,
-                                                                                  (String value) {
+                                                                              TextInput("Barcode", false, barcode, (String value) {
                                                                                 setState(() {
                                                                                   barcode = value;
                                                                                 });
                                                                               }),
-                                                                              TextInput("Kategori",
-                                                                                  false, kategori,
-                                                                                  (String value) {
+                                                                              TextInput("Kategori", false, kategori, (String value) {
                                                                                 setState(() {
                                                                                   kategori = value;
                                                                                 });
                                                                               }),
-                                                                              TextInput("Halaman",
-                                                                                  false, halaman,
-                                                                                  (String value) {
+                                                                              TextInput("Halaman", false, halaman, (String value) {
                                                                                 setState(() {
                                                                                   halaman = value;
                                                                                 });
@@ -688,101 +783,78 @@ class _DataBukuState extends State<DataBuku> {
                                                                             ],
                                                                           ),
                                                                           SizedBox(
-                                                                            height: 20,
+                                                                            height:
+                                                                                20,
                                                                           ),
                                                                           Row(
                                                                             crossAxisAlignment:
-                                                                                CrossAxisAlignment
-                                                                                    .start,
+                                                                                CrossAxisAlignment.start,
                                                                             children: [
-                                                                              TextInput(
-                                                                                  "Rak", false, rak,
-                                                                                  (String value) {
+                                                                              TextInput("Rak", false, rak, (String value) {
                                                                                 setState(() {
                                                                                   rak = value;
                                                                                 });
                                                                               }),
-                                                                              TextInput("Sinopsis",
-                                                                                  true, sinopsis,
-                                                                                  (String value) {
+                                                                              TextInput("Sinopsis", true, sinopsis, (String value) {
                                                                                 setState(() {
                                                                                   sinopsis = value;
                                                                                 });
                                                                               }),
-                                                                              ImagePick("Gambar",
-                                                                                  () {
-                                                                                _pickImage(
-                                                                                    (final img,
-                                                                                        final img1) {
+                                                                              ImagePick("Gambar", () {
+                                                                                _pickImage((final img, final img1) {
                                                                                   setState(() {
                                                                                     image = img1;
                                                                                     tmpImage = img;
                                                                                     isPicked = true;
                                                                                   });
                                                                                 });
-                                                                              },
-                                                                                  image,
-                                                                                  tmpImage,
-                                                                                  "edit",
-                                                                                  isPicked,
-                                                                                  image1),
+                                                                              }, image, tmpImage, "edit", isPicked, image1),
                                                                             ],
                                                                           ),
                                                                           SizedBox(
-                                                                            height: 20,
+                                                                            height:
+                                                                                20,
                                                                           ),
                                                                           Row(
                                                                             crossAxisAlignment:
-                                                                                CrossAxisAlignment
-                                                                                    .start,
+                                                                                CrossAxisAlignment.start,
                                                                             children: [],
                                                                           ),
                                                                           SizedBox(
-                                                                            height: 20,
+                                                                            height:
+                                                                                20,
                                                                           ),
                                                                         ],
                                                                       ),
                                                                     ),
                                                                     Container(
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .center,
+                                                                            MainAxisAlignment.center,
                                                                         children: [
                                                                           ElevatedButton(
-                                                                            style: ElevatedButton
-                                                                                .styleFrom(
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
                                                                               primary: Colors.green,
-                                                                              padding: EdgeInsets
-                                                                                  .symmetric(
-                                                                                      vertical: 20,
-                                                                                      horizontal:
-                                                                                          50),
-                                                                              textStyle:
-                                                                                  const TextStyle(
-                                                                                      fontSize: 16),
+                                                                              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+                                                                              textStyle: const TextStyle(fontSize: 16),
                                                                             ),
                                                                             onPressed: !_loading
                                                                                 ? () {
-                                                                                    editBook(
-                                                                                        context,
-                                                                                        (bool val) {
+                                                                                    editBook(context, (bool val) {
                                                                                       setState(() {
-                                                                                        _loading =
-                                                                                            val;
+                                                                                        _loading = val;
                                                                                       });
                                                                                     }, data.id);
                                                                                   }
                                                                                 : null,
                                                                             child: _loading
                                                                                 ? const CircularProgressIndicator(
-                                                                                    strokeWidth:
-                                                                                        2.0,
-                                                                                    color: Colors
-                                                                                        .white,
+                                                                                    strokeWidth: 2.0,
+                                                                                    color: Colors.white,
                                                                                   )
-                                                                                : const Text(
-                                                                                    "Submit"),
+                                                                                : const Text("Submit"),
                                                                           ),
                                                                         ],
                                                                       ),
@@ -795,9 +867,11 @@ class _DataBukuState extends State<DataBuku> {
                                                 });
                                           },
                                           child: Container(
-                                            margin: EdgeInsets.only(top: 1, bottom: 1),
+                                            margin: EdgeInsets.only(
+                                                top: 1, bottom: 1),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               color: Colors.amber,
                                             ),
                                             width: 50,
@@ -815,112 +889,102 @@ class _DataBukuState extends State<DataBuku> {
                                           onTap: (() {
                                             showDialog(
                                                 context: context,
-                                                builder: (BuildContext context) {
-                                                  return StatefulBuilder(builder:
-                                                      (BuildContext context,
-                                                          void Function(void Function()) setState) {
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return StatefulBuilder(
+                                                      builder: (BuildContext
+                                                              context,
+                                                          void Function(
+                                                                  void
+                                                                      Function())
+                                                              setState) {
                                                     return Dialog(
-                                                        insetPadding:
-                                                            EdgeInsets.symmetric(horizontal: 300),
+                                                        insetPadding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    300),
                                                         child: Stack(
                                                           children: [
                                                             Container(
                                                                 width: 400,
                                                                 height: 240,
-                                                                padding: EdgeInsets.all(20),
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            20),
                                                                 child: Column(
                                                                   children: [
                                                                     Container(
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .center,
+                                                                            MainAxisAlignment.center,
                                                                         children: [
                                                                           Text(
                                                                             "Hapus Buku",
-                                                                            style: TextStyle(
-                                                                                fontSize: 20,
-                                                                                fontWeight:
-                                                                                    FontWeight
-                                                                                        .w700),
+                                                                            style:
+                                                                                TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                                                                           ),
                                                                         ],
                                                                       ),
                                                                     ),
                                                                     Container(
-                                                                        margin:
-                                                                            EdgeInsets.symmetric(
-                                                                                vertical: 30),
-                                                                        child: Text(
+                                                                        margin: EdgeInsets.symmetric(
+                                                                            vertical:
+                                                                                30),
+                                                                        child:
+                                                                            Text(
                                                                           textAlign:
                                                                               TextAlign.center,
                                                                           "Apakah anda yakin menghapus buku ${data["judul_buku"]}?",
                                                                           style: TextStyle(
                                                                               fontSize: 16,
-                                                                              fontWeight:
-                                                                                  FontWeight.w400),
+                                                                              fontWeight: FontWeight.w400),
                                                                         )),
                                                                     Container(
-                                                                      child: Row(
+                                                                      child:
+                                                                          Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .center,
+                                                                            MainAxisAlignment.center,
                                                                         children: [
                                                                           ElevatedButton(
-                                                                            style: ElevatedButton
-                                                                                .styleFrom(
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
                                                                               primary: Colors.red,
-                                                                              padding: EdgeInsets
-                                                                                  .symmetric(
-                                                                                      vertical: 20,
-                                                                                      horizontal:
-                                                                                          30),
-                                                                              textStyle:
-                                                                                  const TextStyle(
-                                                                                      fontSize: 16),
+                                                                              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                                              textStyle: const TextStyle(fontSize: 16),
                                                                             ),
-                                                                            onPressed: () {
-                                                                              Navigator.of(context)
-                                                                                  .pop("dialog");
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.of(context).pop("dialog");
                                                                             },
                                                                             child:
                                                                                 const Text("Close"),
                                                                           ),
                                                                           SizedBox(
-                                                                            width: 10,
+                                                                            width:
+                                                                                10,
                                                                           ),
                                                                           ElevatedButton(
-                                                                            style: ElevatedButton
-                                                                                .styleFrom(
+                                                                            style:
+                                                                                ElevatedButton.styleFrom(
                                                                               primary: Colors.green,
-                                                                              padding: EdgeInsets
-                                                                                  .symmetric(
-                                                                                      vertical: 20,
-                                                                                      horizontal:
-                                                                                          30),
-                                                                              textStyle:
-                                                                                  const TextStyle(
-                                                                                      fontSize: 16),
+                                                                              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+                                                                              textStyle: const TextStyle(fontSize: 16),
                                                                             ),
                                                                             onPressed: !_loading
                                                                                 ? () {
-                                                                                    deleteBook(
-                                                                                        data.id,
-                                                                                        context,
-                                                                                        (bool val) {
+                                                                                    deleteBook(data.id, context, (bool val) {
                                                                                       setState(() {
-                                                                                        _loading =
-                                                                                            val;
+                                                                                        _loading = val;
                                                                                       });
                                                                                     });
                                                                                   }
                                                                                 : null,
                                                                             child: _loading
                                                                                 ? const CircularProgressIndicator(
-                                                                                    strokeWidth:
-                                                                                        2.0,
-                                                                                    color: Colors
-                                                                                        .white,
+                                                                                    strokeWidth: 2.0,
+                                                                                    color: Colors.white,
                                                                                   )
                                                                                 : const Text("Ya"),
                                                                           ),
@@ -935,9 +999,11 @@ class _DataBukuState extends State<DataBuku> {
                                                 });
                                           }),
                                           child: Container(
-                                            margin: EdgeInsets.only(top: 1, bottom: 1),
+                                            margin: EdgeInsets.only(
+                                                top: 1, bottom: 1),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               color: Colors.red,
                                             ),
                                             width: 50,
@@ -953,12 +1019,15 @@ class _DataBukuState extends State<DataBuku> {
                                         ),
                                         InkWell(
                                           onTap: (() {
-                                            setFavorit(data['isRecomended'], data.id);
+                                            setFavorit(
+                                                data['isRecomended'], data.id);
                                           }),
                                           child: Container(
-                                            margin: EdgeInsets.only(top: 1, bottom: 1),
+                                            margin: EdgeInsets.only(
+                                                top: 1, bottom: 1),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               color: Colors.green,
                                             ),
                                             width: 50,
@@ -976,12 +1045,15 @@ class _DataBukuState extends State<DataBuku> {
                                         ),
                                         InkWell(
                                           onTap: (() {
-                                            setRecommend(data['isRecomended'], data.id);
+                                            setRecommend(
+                                                data['isRecomended'], data.id);
                                           }),
                                           child: Container(
-                                            margin: EdgeInsets.only(top: 1, bottom: 1),
+                                            margin: EdgeInsets.only(
+                                                top: 1, bottom: 1),
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
                                               color: Colors.blue,
                                             ),
                                             width: 50,
@@ -1018,10 +1090,11 @@ class _DataBukuState extends State<DataBuku> {
         });
   }
 
-  Container TextInput(String? label, bool? multiline, String? value, Function? onChanged) {
+  Container TextInput(
+      String? label, bool? multiline, String? value, Function? onChanged) {
     return Container(
       margin: EdgeInsets.only(right: 20),
-      width: 250,
+      width: 230,
       child: Column(
         children: [
           Row(
@@ -1039,7 +1112,8 @@ class _DataBukuState extends State<DataBuku> {
               onChanged!(value);
             }),
             initialValue: value,
-            keyboardType: multiline! ? TextInputType.multiline : TextInputType.none,
+            keyboardType:
+                multiline! ? TextInputType.multiline : TextInputType.none,
             maxLines: multiline ? 3 : 1,
             decoration: InputDecoration(
               border: OutlineInputBorder(),
@@ -1051,8 +1125,8 @@ class _DataBukuState extends State<DataBuku> {
     );
   }
 
-  Container ImagePick(String? label, VoidCallback? onPick, Uint8List? img, File? tmpImg,
-      String? type, bool isPick, String? img1) {
+  Container ImagePick(String? label, VoidCallback? onPick, Uint8List? img,
+      File? tmpImg, String? type, bool isPick, String? img1) {
     return Container(
       margin: EdgeInsets.only(right: 20),
       width: 300,
@@ -1112,7 +1186,8 @@ class _DataBukuState extends State<DataBuku> {
   }
 }
 
-Container PdfPick(String? label, VoidCallback? onPick, String? type, Map<String, dynamic> pdfFile) {
+Container PdfPick(String? label, VoidCallback? onPick, String? type,
+    Map<String, dynamic> pdfFile) {
   return Container(
     margin: EdgeInsets.only(right: 20),
     width: 300,
