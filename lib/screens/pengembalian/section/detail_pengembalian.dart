@@ -57,7 +57,7 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                     DataColumn(
                         label: TextWidget("Gambar",
                             fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
-                    DataColumn(label: Text("")),
+                    // DataColumn(label: Text("")),
                   ],
                   rows: List<DataRow>.generate(size, (index) {
                     Map<String, dynamic> data = snapDocs![index].data();
@@ -81,14 +81,14 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                           height: 100,
                         ),
                       )),
-                      DataCell(ButtonElevatedWidget(
-                        "Hapus",
-                        fontSize: fontSizeDataCell,
-                        backgroundColor: Colors.red,
-                        onPressed: () {
-                          oHapus(id);
-                        },
-                      )),
+                      // DataCell(ButtonElevatedWidget(
+                      //   "Hapus",
+                      //   fontSize: fontSizeDataCell,
+                      //   backgroundColor: Colors.red,
+                      //   onPressed: () {
+                      //     oHapus(id);
+                      //   },
+                      // )),
                     ]);
                   }));
             }

@@ -1,4 +1,3 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +7,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:web_dashboard_app_tut/utils/flutter_pdf_split.dart';
 import 'package:web_dashboard_app_tut/utils/position.dart';
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:web_dashboard_app_tut/utils/snackbar_utils.dart';
 
 class DataBuku extends StatefulWidget {
   const DataBuku({Key? key}) : super(key: key);
@@ -66,57 +70,69 @@ class _DataBukuState extends State<DataBuku> {
     return selectedDate;
   }
 
+  Future<void> splitPDF(path) async {
+    String? directory = await FilePickerWeb.platform.getDirectoryPath();
+    if (directory != null) {
+      FlutterPdfSplitResult splitResult = await FlutterPdfSplit.split(
+        FlutterPdfSplitArgs(path, directory, outFilePrefix: "Test"),
+      );
+      debugPrint(splitResult.toString());
+    } else {
+      showSnackbar("directory null", Colors.red);
+    }
+  }
+
   Future addBooks(BuildContext context, Function setLoad) async {
     setLoad(true);
     try {
-      var snapshot = await FirebaseStorage.instance
-          .ref()
-          .child("images")
-          .child('${DateTime.now()}-${judul}-${barcode}.jpg')
-          .putData(image);
-      var downloadUrl = await snapshot.ref.getDownloadURL();
+      // var snapshot = await FirebaseStorage.instance
+      //     .ref()
+      //     .child("images")
+      //     .child('${DateTime.now()}-${judul}-${barcode}.jpg')
+      //     .putData(image);
+      // var downloadUrl = await snapshot.ref.getDownloadURL();
 
-      var snapshotBuku = await FirebaseStorage.instance
-          .ref()
-          .child("buku")
-          .child(_pdfFile["fileName"])
-          .putData(_pdfFile["fileBytes"]);
-      var downloadUrlBuku = await snapshotBuku.ref.getDownloadURL();
+      // var snapshotBuku = await FirebaseStorage.instance
+      //     .ref()
+      //     .child("buku")
+      //     .child(_pdfFile["fileName"])
+      //     .putData(_pdfFile["fileBytes"]);
+      // var downloadUrlBuku = await snapshotBuku.ref.getDownloadURL();
 
-      final doc = FirebaseFirestore.instance.collection("books");
-      final json = {
-        "barcode": barcode,
-        "isFavorit": "0",
-        "isRecomended": "0",
-        "halaman": halaman,
-        "image": downloadUrl,
-        "buku": downloadUrlBuku,
-        "judul_buku": judul,
-        "kategori": kategori,
-        "penerbit": penerbit,
-        "pengarang": pengarang,
-        "rak": rak,
-        "sinopsis": sinopsis,
-        "tanggal": selectedDate,
-      };
+      // final doc = FirebaseFirestore.instance.collection("books");
+      // final json = {
+      //   "barcode": barcode,
+      //   "isFavorit": "0",
+      //   "isRecomended": "0",
+      //   "halaman": halaman,
+      //   "image": downloadUrl,
+      //   "buku": downloadUrlBuku,
+      //   "judul_buku": judul,
+      //   "kategori": kategori,
+      //   "penerbit": penerbit,
+      //   "pengarang": pengarang,
+      //   "rak": rak,
+      //   "sinopsis": sinopsis,
+      //   "tanggal": selectedDate,
+      // };
 
-      await doc.add(json);
+      // await doc.add(json);
 
-      Navigator.of(this.context).pop('dialog');
-      setLoad(false);
-      setState(() {
-        judul = "";
-        pengarang = "";
-        penerbit = "";
-        rak = "";
-        halaman = "";
-        sinopsis = "";
-        kategori = "";
-        barcode = "";
-        image = Uint8List(8);
-        tmpImage = null;
-        isPicked = false;
-      });
+      // Navigator.of(this.context).pop('dialog');
+      // setLoad(false);
+      // setState(() {
+      //   judul = "";
+      //   pengarang = "";
+      //   penerbit = "";
+      //   rak = "";
+      //   halaman = "";
+      //   sinopsis = "";
+      //   kategori = "";
+      //   barcode = "";
+      //   image = Uint8List(8);
+      //   tmpImage = null;
+      //   isPicked = false;
+      // });
     } on FirebaseException catch (e) {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
@@ -218,8 +234,7 @@ class _DataBukuState extends State<DataBuku> {
     if (result != null) {
       Uint8List? fileBytes = result.files.first.bytes;
       String fileName = result.files.first.name;
-
-      print(fileName);
+      String? pdfPath = result.files.first.path;
 
       setFile({"fileBytes": fileBytes, "fileName": fileName});
     }

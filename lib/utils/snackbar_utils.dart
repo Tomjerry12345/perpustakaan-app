@@ -12,3 +12,7 @@ class SnackbarUtils {
       ..showSnackBar(snakBar);
   }
 }
+
+void showSnackbar(String text, Color color) {
+  SnackbarUtils.showSnackBar(text, color);
+}

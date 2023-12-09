@@ -103,7 +103,7 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                             fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
                     DataColumn(label: Text("")),
                     DataColumn(label: Text("")),
-                    DataColumn(label: Text("")),
+                    // DataColumn(label: Text("")),
                   ],
                   rows: List<DataRow>.generate(size, (index) {
                     Map<String, dynamic> data = snapDocs![index].data();
@@ -187,14 +187,14 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                               }
                             : null,
                       )),
-                      DataCell(ButtonElevatedWidget(
-                        "Hapus",
-                        fontSize: fontSizeDataCell,
-                        backgroundColor: Colors.red,
-                        onPressed: () {
-                          oHapus(id);
-                        },
-                      )),
+                      // DataCell(ButtonElevatedWidget(
+                      //   "Hapus",
+                      //   fontSize: fontSizeDataCell,
+                      //   backgroundColor: Colors.red,
+                      //   onPressed: () {
+                      //     oHapus(id);
+                      //   },
+                      // )),
                     ]);
                   }));
             }
