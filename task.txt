@@ -1,3 +1,7 @@
+version: v0.0.2 ✅ ❌ 🔥
+
+- perbaiki bug tambah buku ✅
+
 version: v0.0.1 ✅ ❌ 🔥
 
 - Buat logic untuk konfirmasi di peminjaman ✅
