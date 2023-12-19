@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
-import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
-import 'package:web_dashboard_app_tut/utils/Time.dart';
-import 'package:web_dashboard_app_tut/widget/button/button_elevated_widget.dart';
-import 'package:web_dashboard_app_tut/widget/text/text_widget.dart';
+import 'package:admin_perpustakaan/model/ModelQuery.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/utils/Time.dart';
+import 'package:admin_perpustakaan/widget/button/button_elevated_widget.dart';
+import 'package:admin_perpustakaan/widget/text/text_widget.dart';
 
 class DetailPeminjaman extends StatefulWidget {
   final String? id;
@@ -42,8 +42,9 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
       "tanggal_peminjaman": data["tanggal_peminjaman"],
       "tanggal_pengembalian": data["tanggal_pengembalian"],
       "denda": data["denda"],
-      "sisa_hari":
-          !data["isTenggat"] ? "${data['sisa_hari']} Hari" : "Lewat ${data['sisa_hari']} Hari",
+      "sisa_hari": !data["isTenggat"]
+          ? "${data['sisa_hari']} Hari"
+          : "Lewat ${data['sisa_hari']} Hari",
       "image": data["image"],
     });
     oHapus(data["id"]);
@@ -68,15 +69,16 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: fs.query("peminjaman", [ModelQuery(key: "email", value: widget.id)]),
+          stream: fs.query(
+              "peminjaman", [ModelQuery(key: "email", value: widget.id)]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final snapDocs = snapshot.data?.docs;
               final size = snapshot.data!.size;
 
               return DataTable(
-                  headingRowColor:
-                      MaterialStateProperty.resolveWith((states) => Colors.blue.shade200),
+                  headingRowColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.blue.shade200),
                   columns: [
                     DataColumn(
                         label: TextWidget(
@@ -85,22 +87,28 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                     )),
                     DataColumn(
                         label: TextWidget("Judul Buku",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Pengarang",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Rak Buku",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Sisa hari",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Denda",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Gambar",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(label: Text("")),
                     DataColumn(label: Text("")),
                     // DataColumn(label: Text("")),
@@ -114,13 +122,14 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                     bool isTenggat = false;
 
                     if (data['tanggal_pengembalian'] != null) {
-                      final tanggalPeminjaman = data['tanggal_pengembalian'].toString().split("-");
+                      final tanggalPeminjaman =
+                          data['tanggal_pengembalian'].toString().split("-");
                       final datePeminjaman = int.parse(tanggalPeminjaman[2]);
                       final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
                       final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
 
-                      sisaHariNow =
-                          time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+                      sisaHariNow = time.getJumlahHariDate(
+                          yearPeminjaman, monthPeminjaman, datePeminjaman);
 
                       if (sisaHariNow == 0) {
                         sisaHariNow = 1;
@@ -146,12 +155,18 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                         data['judul_buku']!,
                         fontSize: fontSizeDataCell,
                       )),
-                      DataCell(TextWidget(data['pengarang']!, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget(data['rak']!, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget(!isTenggat ? "$sisaHariNow" : "Lewat $sisaHariNow Hari",
+                      DataCell(TextWidget(data['pengarang']!,
+                          fontSize: fontSizeDataCell)),
+                      DataCell(
+                          TextWidget(data['rak']!, fontSize: fontSizeDataCell)),
+                      DataCell(TextWidget(
+                          !isTenggat
+                              ? "$sisaHariNow"
+                              : "Lewat $sisaHariNow Hari",
                           color: !isTenggat ? Colors.black : Colors.red,
                           fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget(denda > 0 ? "$denda" : "-", fontSize: fontSizeDataCell)),
+                      DataCell(TextWidget(denda > 0 ? "$denda" : "-",
+                          fontSize: fontSizeDataCell)),
                       DataCell(Container(
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Image.network(

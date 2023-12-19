@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/data_anggota/data_anggota.dart';
-import 'package:web_dashboard_app_tut/screens/data_buku/data_buku.dart';
-import 'package:web_dashboard_app_tut/screens/peminjaman/peminjaman.dart';
-import 'package:web_dashboard_app_tut/screens/pengembalian/pengembalian.dart';
-import 'package:web_dashboard_app_tut/screens/scan/scan.dart';
-import 'package:web_dashboard_app_tut/widget/gambar.dart';
+import 'package:admin_perpustakaan/screens/data_anggota/data_anggota.dart';
+import 'package:admin_perpustakaan/screens/data_buku/data_buku.dart';
+import 'package:admin_perpustakaan/screens/peminjaman/peminjaman.dart';
+import 'package:admin_perpustakaan/screens/pengembalian/pengembalian.dart';
+import 'package:admin_perpustakaan/screens/scan/scan.dart';
+import 'package:admin_perpustakaan/widget/gambar.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -71,7 +71,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 extended: isExpanded,
                 backgroundColor: Colors.blue.shade700,
-                unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+                unselectedIconTheme:
+                    IconThemeData(color: Colors.white, opacity: 1),
                 unselectedLabelTextStyle: TextStyle(
                   color: Colors.white,
                 ),

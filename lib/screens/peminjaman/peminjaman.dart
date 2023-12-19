@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
-import 'package:web_dashboard_app_tut/screens/peminjaman/section/detail_peminjaman.dart';
-import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
-import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
+import 'package:admin_perpustakaan/model/ModelQuery.dart';
+import 'package:admin_perpustakaan/screens/peminjaman/section/detail_peminjaman.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/widget/header/header_widget.dart';
 
 class Peminjaman extends StatefulWidget {
   const Peminjaman({Key? key}) : super(key: key);
@@ -43,8 +43,8 @@ class _PeminjamanState extends State<Peminjaman> {
       final dataUsers = users.data();
       final usersEmail = dataUsers["email"];
 
-      final peminjaman =
-          await fs.queryFuture("peminjaman", [ModelQuery(key: "email", value: usersEmail)]);
+      final peminjaman = await fs.queryFuture(
+          "peminjaman", [ModelQuery(key: "email", value: usersEmail)]);
       final sumPeminjaman = peminjaman.size;
 
       Map<String, dynamic> peminjamanMap = {
@@ -56,7 +56,8 @@ class _PeminjamanState extends State<Peminjaman> {
       lData.add(dataUsers);
     }
 
-    lData.sort((a, b) => b['jumlah_peminjaman'].compareTo(a['jumlah_peminjaman']));
+    lData.sort(
+        (a, b) => b['jumlah_peminjaman'].compareTo(a['jumlah_peminjaman']));
 
     setState(() {
       listData = lData;
@@ -95,8 +96,11 @@ class _PeminjamanState extends State<Peminjaman> {
                                 });
                               },
                               title: Text(data["nama"]),
-                              subtitle: Text("Jumlah peminjaman : ${data["jumlah_peminjaman"]}"),
-                              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right)),
+                              subtitle: Text(
+                                  "Jumlah peminjaman : ${data["jumlah_peminjaman"]}"),
+                              trailing: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.arrow_right)),
                             ),
                           );
                         },

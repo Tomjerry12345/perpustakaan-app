@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
-import 'package:web_dashboard_app_tut/utils/position.dart';
-import 'package:web_dashboard_app_tut/utils/screen_utils.dart';
-import 'package:web_dashboard_app_tut/utils/snackbar_utils.dart';
-import 'package:web_dashboard_app_tut/widget/dialog/dialog_widget.dart';
-import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/utils/position.dart';
+import 'package:admin_perpustakaan/utils/screen_utils.dart';
+import 'package:admin_perpustakaan/utils/snackbar_utils.dart';
+import 'package:admin_perpustakaan/widget/dialog/dialog_widget.dart';
+import 'package:admin_perpustakaan/widget/header/header_widget.dart';
 
 import '../../model/ModelQuery.dart';
 import '../../widget/text/text_widget.dart';
@@ -23,7 +23,8 @@ class _ScanState extends State<Scan> {
   final fs = FirebaseServices();
 
   Future<void> typeMasuk(context, id) async {
-    final res = await fs.queryFuture("users", [ModelQuery(key: "email", value: id)]);
+    final res =
+        await fs.queryFuture("users", [ModelQuery(key: "email", value: id)]);
 
     bool found = res.size > 0;
 
@@ -42,8 +43,9 @@ class _ScanState extends State<Scan> {
                       height: found ? 0.6.h : 0.48.h,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: ExactAssetImage(
-                                  found ? 'assets/success.jpg' : 'assets/error.jpg'),
+                              image: ExactAssetImage(found
+                                  ? 'assets/success.jpg'
+                                  : 'assets/error.jpg'),
                               fit: BoxFit.cover))),
                   V(16),
                   TextWidget(
@@ -56,7 +58,8 @@ class _ScanState extends State<Scan> {
                   ElevatedButton(
                       onPressed: () async {
                         try {
-                          await fs.update("barcode", "code", {"code": "default"});
+                          await fs
+                              .update("barcode", "code", {"code": "default"});
                           dialogClose(context);
                         } catch (e) {
                           SnackbarUtils.showSnackBar(e.toString(), Colors.red);

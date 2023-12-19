@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
-import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
-import 'package:web_dashboard_app_tut/utils/Time.dart';
-import 'package:web_dashboard_app_tut/widget/button/button_elevated_widget.dart';
-import 'package:web_dashboard_app_tut/widget/text/text_widget.dart';
+import 'package:admin_perpustakaan/model/ModelQuery.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/utils/Time.dart';
+import 'package:admin_perpustakaan/widget/text/text_widget.dart';
 
 class DetailPengembalian extends StatefulWidget {
   final String? id;
@@ -30,15 +29,16 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: fs.query("pengembalian", [ModelQuery(key: "email", value: widget.id)]),
+          stream: fs.query(
+              "pengembalian", [ModelQuery(key: "email", value: widget.id)]),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final snapDocs = snapshot.data?.docs;
               final size = snapshot.data!.size;
 
               return DataTable(
-                  headingRowColor:
-                      MaterialStateProperty.resolveWith((states) => Colors.blue.shade200),
+                  headingRowColor: MaterialStateProperty.resolveWith(
+                      (states) => Colors.blue.shade200),
                   columns: [
                     DataColumn(
                         label: TextWidget(
@@ -47,16 +47,20 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                     )),
                     DataColumn(
                         label: TextWidget("Judul Buku",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Sisa hari",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Denda",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     DataColumn(
                         label: TextWidget("Gambar",
-                            fontSize: fontSizeDataCell, fontWeight: FontWeight.bold)),
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
                     // DataColumn(label: Text("")),
                   ],
                   rows: List<DataRow>.generate(size, (index) {
@@ -72,7 +76,8 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                       )),
                       DataCell(TextWidget(data['sisa_hari']!,
                           color: Colors.black, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget("${data['denda']!}", fontSize: fontSizeDataCell)),
+                      DataCell(TextWidget("${data['denda']!}",
+                          fontSize: fontSizeDataCell)),
                       DataCell(Container(
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Image.network(

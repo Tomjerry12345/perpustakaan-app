@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/dashboard_screen.dart';
-import 'package:web_dashboard_app_tut/utils/global_utils.dart';
+import 'package:admin_perpustakaan/screens/dashboard_screen.dart';
+import 'package:admin_perpustakaan/utils/global_utils.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

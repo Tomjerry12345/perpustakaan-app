@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:admin_perpustakaan/utils/log_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
@@ -7,11 +8,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:web_dashboard_app_tut/utils/flutter_pdf_split.dart';
-import 'package:web_dashboard_app_tut/utils/position.dart';
-import 'package:web_dashboard_app_tut/utils/snackbar_utils.dart';
-
-import '../../utils/log_utils.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/utils/flutter_pdf_split.dart';
+import 'package:admin_perpustakaan/utils/position.dart';
+import 'package:admin_perpustakaan/utils/snackbar_utils.dart';
+import 'package:admin_perpustakaan/utils/string_utils.dart';
 
 class DataBuku extends StatefulWidget {
   const DataBuku({Key? key}) : super(key: key);
@@ -21,10 +22,11 @@ class DataBuku extends StatefulWidget {
 }
 
 class _DataBukuState extends State<DataBuku> {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  String search = "";
-  late TextEditingController searchController =
-      TextEditingController(text: search);
+  final fs = FirebaseServices();
+
+  late TextEditingController searchController = TextEditingController(text: "");
+
+  String txtSearch = "";
 
   bool _loading = false;
   String judul = "";
@@ -126,6 +128,7 @@ class _DataBukuState extends State<DataBuku> {
         "image": downloadUrl,
         "buku": downloadUrlBuku,
         "judul_buku": judul,
+        "key_buku": normalizeTitle(judul),
         "kategori": kategori,
         "penerbit": penerbit,
         "pengarang": pengarang,
@@ -168,11 +171,14 @@ class _DataBukuState extends State<DataBuku> {
         downloadUrlBuku = await snapshotBuku.ref.getDownloadURL();
       }
 
+      log("key_buku", v: normalizeTitle(judul));
+
       final doc = FirebaseFirestore.instance.collection("books").doc(id);
       final json = {
         "barcode": barcode,
         "halaman": halaman,
         "judul_buku": judul,
+        "key_buku": normalizeTitle(judul),
         "kategori": kategori,
         "penerbit": penerbit,
         "pengarang": pengarang,
@@ -249,12 +255,9 @@ class _DataBukuState extends State<DataBuku> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: search != ""
-            ? firestore
-                .collection("books")
-                .where("judul_buku", isEqualTo: search)
-                .snapshots()
-            : firestore.collection("books").snapshots(),
+        stream: txtSearch != ""
+            ? fs.searching("books", "key_buku", txtSearch)
+            : fs.getAllStream("books"),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Expanded(
@@ -1181,7 +1184,9 @@ class _DataBukuState extends State<DataBuku> {
           color: Colors.white, borderRadius: BorderRadius.circular(5)),
       child: Center(
           child: TextField(
+        controller: searchController,
         decoration: InputDecoration(
+            hintText: "Masukkan nama buku",
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: Colors.blueAccent,
@@ -1196,37 +1201,41 @@ class _DataBukuState extends State<DataBuku> {
             ),
             suffixIcon: IconButton(
               icon: Icon(Icons.search),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  txtSearch = searchController.text;
+                });
+              },
             )),
       )),
     );
   }
-}
 
-Container PdfPick(String? label, VoidCallback? onPick, String? type,
-    Map<String, dynamic> pdfFile) {
-  return Container(
-    margin: EdgeInsets.only(right: 20),
-    width: 300,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(label!),
-        V(8),
-        InkWell(
-          onTap: onPick,
-          child: Container(
-            height: 100,
-            width: 100,
-            color: Colors.grey,
-            padding: EdgeInsets.all(8),
-            child: pdfFile["fileName"] == ""
-                ? Icon(Icons.assignment_add)
-                : Center(child: Text(pdfFile["fileName"])),
-          ),
-        )
-      ],
-    ),
-  );
+  Container PdfPick(String? label, VoidCallback? onPick, String? type,
+      Map<String, dynamic> pdfFile) {
+    return Container(
+      margin: EdgeInsets.only(right: 20),
+      width: 300,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(label!),
+          V(8),
+          InkWell(
+            onTap: onPick,
+            child: Container(
+              height: 100,
+              width: 100,
+              color: Colors.grey,
+              padding: EdgeInsets.all(8),
+              child: pdfFile["fileName"] == ""
+                  ? Icon(Icons.assignment_add)
+                  : Center(child: Text(pdfFile["fileName"])),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }

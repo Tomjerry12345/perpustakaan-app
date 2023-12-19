@@ -1,10 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:web_dashboard_app_tut/model/ModelQuery.dart';
-import 'package:web_dashboard_app_tut/services/FirebaseServices.dart';
-import 'package:web_dashboard_app_tut/widget/header/header_widget.dart';
+import 'package:admin_perpustakaan/model/ModelQuery.dart';
+import 'package:admin_perpustakaan/services/FirebaseServices.dart';
+import 'package:admin_perpustakaan/widget/header/header_widget.dart';
 
 import 'section/detail_pengembalian.dart';
 
@@ -47,8 +46,8 @@ class _PengembalianState extends State<Pengembalian> {
       final dataUsers = users.data();
       final usersEmail = dataUsers["email"];
 
-      final pengembalian =
-          await fs.queryFuture("pengembalian", [ModelQuery(key: "email", value: usersEmail)]);
+      final pengembalian = await fs.queryFuture(
+          "pengembalian", [ModelQuery(key: "email", value: usersEmail)]);
       final sumPengembalian = pengembalian.size;
 
       Map<String, dynamic> peminjamanMap = {
@@ -60,7 +59,8 @@ class _PengembalianState extends State<Pengembalian> {
       lData.add(dataUsers);
     }
 
-    lData.sort((a, b) => b['jumlah_pengembalian'].compareTo(a['jumlah_pengembalian']));
+    lData.sort(
+        (a, b) => b['jumlah_pengembalian'].compareTo(a['jumlah_pengembalian']));
 
     setState(() {
       listData = lData;
@@ -99,9 +99,11 @@ class _PengembalianState extends State<Pengembalian> {
                                 });
                               },
                               title: Text(data["nama"]),
-                              subtitle:
-                                  Text("Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
-                              trailing: IconButton(onPressed: () {}, icon: Icon(Icons.arrow_right)),
+                              subtitle: Text(
+                                  "Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
+                              trailing: IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.arrow_right)),
                             ),
                           );
                         },
