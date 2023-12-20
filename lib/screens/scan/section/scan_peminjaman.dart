@@ -188,6 +188,7 @@ class _ScanPeminjamanState extends State<ScanPeminjaman> {
                             height: 100,
                           ),
                         )),
+
                         DataCell(data["konfirmasi"]!
                             ? ButtonElevatedWidget(
                                 "Pengembalian",
@@ -197,14 +198,16 @@ class _ScanPeminjamanState extends State<ScanPeminjaman> {
                                   onPengembalian(data);
                                 },
                               )
-                            : ButtonElevatedWidget(
-                                "Konfirmasi",
-                                backgroundColor: Colors.green,
-                                fontSize: fontSizeDataCell,
-                                onPressed: () {
-                                  onKonfirmasi(id);
-                                },
-                              )),
+                            : data["type_peminjaman"] != "online"
+                                ? ButtonElevatedWidget(
+                                    "Konfirmasi",
+                                    backgroundColor: Colors.green,
+                                    fontSize: fontSizeDataCell,
+                                    onPressed: () {
+                                      onKonfirmasi(id);
+                                    },
+                                  )
+                                : Container()),
                         DataCell(ButtonElevatedWidget(
                           "Perpanjangan",
                           backgroundColor: Colors.blue,
