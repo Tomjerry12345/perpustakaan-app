@@ -1,8 +1,8 @@
 version: v0.0.3 ✅ ❌ 🔥
 
-- tambah tombol pengembalian di peminjaman ❌
-- hapus text konfirmasi di peminjaman ❌
-- ada tombol baca buku di peminjaman ❌
+- tambah tombol pengembalian di peminjaman ✅
+- hapus text konfirmasi di peminjaman ✅
+- ada tombol baca buku di peminjaman ✅
 
 version: v0.0.2 ✅ ❌ 🔥
 
