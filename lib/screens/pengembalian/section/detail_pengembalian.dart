@@ -65,7 +65,6 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                   ],
                   rows: List<DataRow>.generate(size, (index) {
                     Map<String, dynamic> data = snapDocs![index].data();
-                    String id = snapDocs[index].id;
                     final number = index + 1;
 
                     return DataRow(cells: [
@@ -74,9 +73,9 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                         data['judul_buku']!,
                         fontSize: fontSizeDataCell,
                       )),
-                      DataCell(TextWidget(data['sisa_hari']!,
+                      DataCell(TextWidget(data['sisa_hari'] ?? "-",
                           color: Colors.black, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget("${data['denda']!}",
+                      DataCell(TextWidget("${data['denda'] ?? "-"}",
                           fontSize: fontSizeDataCell)),
                       DataCell(Container(
                         padding: EdgeInsets.symmetric(vertical: 8),

@@ -34,7 +34,6 @@ class _ScanPeminjamanState extends State<ScanPeminjaman> {
   }
 
   void onPengembalian(Map<String, dynamic> data) {
-    print(data);
     fs.add("pengembalian", {
       "email": data["email"],
       "nama_peminjam": data["nama_peminjam"],
@@ -198,16 +197,16 @@ class _ScanPeminjamanState extends State<ScanPeminjaman> {
                                   onPengembalian(data);
                                 },
                               )
-                            : data["type_peminjaman"] != "online"
-                                ? ButtonElevatedWidget(
-                                    "Konfirmasi",
-                                    backgroundColor: Colors.green,
-                                    fontSize: fontSizeDataCell,
-                                    onPressed: () {
-                                      onKonfirmasi(id);
-                                    },
-                                  )
-                                : Container()),
+                            : ButtonElevatedWidget(
+                                "Konfirmasi",
+                                backgroundColor: Colors.green,
+                                fontSize: fontSizeDataCell,
+                                onPressed: () {
+                                  data["type_peminjaman"]! != "online"
+                                      ? onKonfirmasi(id)
+                                      : null;
+                                },
+                              )),
                         DataCell(ButtonElevatedWidget(
                           "Perpanjangan",
                           backgroundColor: Colors.blue,
