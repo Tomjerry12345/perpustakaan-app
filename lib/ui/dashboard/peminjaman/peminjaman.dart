@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
+import 'package:perpustakaan_mobile/ui/dashboard/data-buku/section/view-pdf/view_pdf.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/log_utils.dart';
+import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
 import 'package:perpustakaan_mobile/utils/screen_utils.dart';
 import 'package:perpustakaan_mobile/utils/show_utils.dart';
 import 'package:perpustakaan_mobile/widget/button/button_component.dart';
@@ -22,8 +24,13 @@ class Peminjaman extends StatefulWidget {
 class _PeminjamanState extends State<Peminjaman> {
   FirebaseServices db = FirebaseServices();
   final time = Time();
-
   final hariController = TextEditingController();
+
+  void onBacaBuku(DocumentSnapshot<Object?> documenSnapshot) {
+    final data = documenSnapshot.data() as Map<String, dynamic>;
+    navigatePush(ViewPdf(
+        path: data["buku"], judul: data["judul_buku"], isPinjam: false));
+  }
 
   Future<void> onPerpanjangan(id, int day) async {
     var getDate = time.getDateByRange(day);
@@ -68,6 +75,28 @@ class _PeminjamanState extends State<Peminjaman> {
             },
           )
         ]);
+  }
+
+  void onPengembalian(DocumentSnapshot<Object?> documenSnapshot) {
+    final id = documenSnapshot.id;
+    final data = documenSnapshot.data() as Map<String, dynamic>;
+    db.add("pengembalian", {
+      "email": data["email"],
+      "nama_peminjam": data["nama_peminjam"],
+      "judul_buku": data["judul_buku"],
+      "pengarang": data["pengarang"],
+      "tanggal_peminjaman": null,
+      "tanggal_pengembalian": null,
+      "type_peminjaman": data["type_peminjaman"],
+      "denda": null,
+      "sisa_hari": null,
+      "image": data["image"],
+    });
+    oHapus(id);
+  }
+
+  void oHapus(String id) {
+    db.delete("peminjaman", id);
   }
 
   @override
@@ -159,6 +188,7 @@ class _PeminjamanState extends State<Peminjaman> {
         color: Colors.white,
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -170,17 +200,48 @@ class _PeminjamanState extends State<Peminjaman> {
                 width: 0.2.h,
               ),
               V(16),
+              data['konfirmasi'] && data["type_peminjaman"] != "online"
+                  ? Container(
+                      // width: 0.34.w,
+                      color: data['konfirmasi'] ? Colors.green : Colors.red,
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        child: TextWidget(
+                          data['konfirmasi']
+                              ? "Konfirmasi"
+                              : "Belum konfirmasi",
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    )
+                  : Container(),
+              V(16),
               Container(
-                // width: 0.34.w,
-                color: data['konfirmasi'] ? Colors.green : Colors.red,
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  child: TextWidget(
-                    data['konfirmasi'] ? "Konfirmasi" : "Belum konfirmasi",
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
-                ),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple),
+                    onPressed: () {
+                      onPengembalian(data);
+                    },
+                    child: Text(
+                      "Pengembalian",
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+              V(16),
+              Container(
+                width: 124,
+                child: ElevatedButton(
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                    onPressed: () {
+                      onBacaBuku(data);
+                    },
+                    child: Text(
+                      "Baca buku",
+                      style: TextStyle(color: Colors.white),
+                    )),
               ),
               V(16),
               data["konfirmasi"]! && sisaHariNow < 7
@@ -198,7 +259,7 @@ class _PeminjamanState extends State<Peminjaman> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // V(20),
+              V(16),
               TextWidget(
                 "Judul buku",
                 fontWeight: FontWeight.bold,
