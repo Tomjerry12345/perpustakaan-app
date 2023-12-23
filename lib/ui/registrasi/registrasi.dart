@@ -25,8 +25,8 @@ class _RegistrasiState extends State<Registrasi> {
   final alamatController = TextEditingController();
   final pekerjaanController = TextEditingController();
   final hpController = TextEditingController();
+  final nikcontroller = TextEditingController();
   final namaIbuKandungController = TextEditingController();
-  final alamatIbuKandungController = TextEditingController();
   final noHpIbuKandungController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -85,7 +85,7 @@ class _RegistrasiState extends State<Registrasi> {
       SizedBox(
         height: 12,
       ),
-      FormCustom(text: "no.hp", controller: hpController, inputType: TextInputType.number),
+      FormCustom(text: "nik", controller: nikcontroller, inputType: TextInputType.number),
       SizedBox(
         height: 12,
       ),
@@ -95,10 +95,6 @@ class _RegistrasiState extends State<Registrasi> {
       ),
       SizedBox(
         height: 12,
-      ),
-      FormCustom(
-        text: "alamat rumah ibu kandung",
-        controller: alamatIbuKandungController,
       ),
       SizedBox(
         height: 12,
@@ -201,8 +197,8 @@ class _RegistrasiState extends State<Registrasi> {
         "alamat": alamatController.text.trim(),
         "pekerjaan": pekerjaanController.text.trim(),
         "hp": hpController.text.trim(),
-        "ibu_kandung": namaIbuKandungController.text.trim(),
-        "alamat_ibu_kandung": alamatIbuKandungController.text.trim(),
+        "ibu_kandung": nikcontroller.text.trim(),
+        "alamat_ibu_kandung": namaIbuKandungController.text.trim(),
         "no_hp_ibu_kandung": noHpIbuKandungController.text.trim(),
         "email": emailController.text.trim(),
         "created_at": DateTime.now(),

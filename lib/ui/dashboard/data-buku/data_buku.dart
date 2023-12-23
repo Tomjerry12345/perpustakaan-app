@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/show_utils.dart';
 
 import '../../../model/ModelQuery.dart';
 import '../../../utils/navigate_utils.dart';
@@ -36,19 +37,22 @@ class _DataBukuState extends State<DataBuku> {
 
   Future<void> getSisaPeminjaman() async {
     final time = Time();
-    final dataPeminjaman = await firebaseServices.queryFuture(
-        "peminjaman", [ModelQuery(key: "email", value: firebaseServices.getCurrentUser()?.email)]);
+    final dataPeminjaman = await firebaseServices.queryFuture("peminjaman", [
+      ModelQuery(key: "email", value: firebaseServices.getCurrentUser()?.email)
+    ]);
 
     for (final dataP in dataPeminjaman.docs) {
       final dt = dataP.data();
       if (dt["barcode"] == widget.data!["barcode"]) {
         if (dt['konfirmasi']) {
-          final tanggalPeminjaman = dt['tanggal_pengembalian'].toString().split("-");
+          final tanggalPeminjaman =
+              dt['tanggal_pengembalian'].toString().split("-");
           final datePeminjaman = int.parse(tanggalPeminjaman[2]);
           final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
           final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
 
-          int sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+          int sisaHariNow = time.getJumlahHariDate(
+              yearPeminjaman, monthPeminjaman, datePeminjaman);
 
           if (sisaHariNow == 0) {
             sisaHariNow = 1;
@@ -126,223 +130,288 @@ class _DataBukuState extends State<DataBuku> {
         ),
         body: Container(
             margin: EdgeInsets.only(top: 10, left: 20, right: 20),
-            child:
-                Wrap(spacing: 5.0, runSpacing: 4.0, direction: Axis.horizontal, children: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(top: 5, right: 10),
-                  height: 120,
-                  width: double.infinity,
-                  child: Row(
-                    children: [
-                      Image.network(
-                        widget.data!["image"],
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.contain,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Container(
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          spacing: 10.0,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(Icons.book),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(widget.data!["judul_buku"]),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.person),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(widget.data!["pengarang"]),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(Icons.barcode_reader),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text(widget.data!["barcode"]),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )),
-              Container(),
-              Column(
-                children: [
+            child: Wrap(
+                spacing: 5.0,
+                runSpacing: 4.0,
+                direction: Axis.horizontal,
+                children: <Widget>[
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    width: double.infinity,
-                    child: Wrap(
-                      children: [
-                        Column(
-                          children: [
-                            Wrap(
-                              spacing: 15,
+                      margin: EdgeInsets.only(top: 5, right: 10),
+                      height: 120,
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Image.network(
+                            widget.data!["image"],
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.contain,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            child: Wrap(
+                              direction: Axis.vertical,
+                              spacing: 10.0,
                               children: [
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  child: Text(
-                                    widget.data!["sinopsis"],
-                                    style: TextStyle(height: 1.5),
-                                  ),
-                                  margin: EdgeInsets.only(top: 5),
-                                  padding: EdgeInsets.all(8),
-                                  height: 130,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.blue, width: 2),
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 20),
-                                  child: Wrap(
-                                    spacing: 15,
-                                    direction: Axis.vertical,
-                                    children: [
-                                      Text(
-                                        'Tanggal Terbit: ${DateFormat("dd MMMM yyyy").format(widget.data!["tanggal"].toDate())}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Jumlah Halaman: ${widget.data!["halaman"]}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Rak Buku: ${widget.data!["rak"]}',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                Container(
-                                  width: double.infinity,
-                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 15),
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(3),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          sisaPeminjaman == null ? Colors.green : Colors.pink,
-                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                Row(
+                                  children: [
+                                    Icon(Icons.book),
+                                    SizedBox(
+                                      width: 5,
                                     ),
-                                    child: Text(sisaPeminjaman == null
-                                        ? "Ringkasan Buku"
-                                        : "Sisa peminjaman: $sisaPeminjaman Hari"),
-                                    onPressed: () async {
-                                      navigatePush(ViewPdf(
-                                          path: widget.data!["buku"],
-                                          judul: widget.data!["judul_buku"],
-                                          isPinjam: sisaPeminjaman != null));
-                                    },
-                                  ),
+                                    Text(widget.data!["judul_buku"]),
+                                  ],
                                 ),
-                                // V(8),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 15),
-                                  width: double.infinity,
-                                  padding: EdgeInsets.all(3),
-                                  child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      padding: EdgeInsets.symmetric(vertical: 20),
+                                Row(
+                                  children: [
+                                    Icon(Icons.person),
+                                    SizedBox(
+                                      width: 5,
                                     ),
-                                    child: Text("Pinjam Buku"),
-                                    onPressed: () async {
-                                      final qUsers = await firebaseServices.queryFuture("users", [
-                                        ModelQuery(
-                                            key: "email",
-                                            value: firebaseServices.getCurrentUser()?.email)
-                                      ]);
-                                      final dataUser = qUsers.docs[0].data();
+                                    Text(widget.data!["pengarang"]),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.barcode_reader),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(widget.data!["barcode"]),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )),
+                  Container(),
+                  Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 20),
+                        width: double.infinity,
+                        child: Wrap(
+                          children: [
+                            Column(
+                              children: [
+                                Wrap(
+                                  spacing: 15,
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        widget.data!["sinopsis"],
+                                        style: TextStyle(height: 1.5),
+                                      ),
+                                      margin: EdgeInsets.only(top: 5),
+                                      padding: EdgeInsets.all(8),
+                                      height: 130,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: Colors.blue, width: 2),
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.only(top: 20),
+                                      child: Wrap(
+                                        spacing: 15,
+                                        direction: Axis.vertical,
+                                        children: [
+                                          Text(
+                                            'Tanggal Terbit: ${DateFormat("dd MMMM yyyy").format(widget.data!["tanggal"].toDate())}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Jumlah Halaman: ${widget.data!["halaman"]}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          Text(
+                                            'Rak Buku: ${widget.data!["rak"]}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
 
-                                      final dataPeminjaman = await firebaseServices.queryFuture(
-                                          "peminjaman",
-                                          [ModelQuery(key: "email", value: dataUser["email"])]);
+                                    Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 15),
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(3),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              sisaPeminjaman == null
+                                                  ? Colors.green
+                                                  : Colors.pink,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20),
+                                        ),
+                                        child: Text(sisaPeminjaman == null
+                                            ? "Ringkasan Buku"
+                                            : "Sisa peminjaman: $sisaPeminjaman Hari"),
+                                        onPressed: () async {
+                                          navigatePush(ViewPdf(
+                                              path: widget.data!["buku"],
+                                              judul: widget.data!["judul_buku"],
+                                              isPinjam:
+                                                  sisaPeminjaman != null));
+                                        },
+                                      ),
+                                    ),
+                                    // V(8),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 15),
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(3),
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20),
+                                        ),
+                                        child: Text("Pinjam Buku"),
+                                        onPressed: () async {
+                                          AlertDialog alert = AlertDialog(
+                                            title: Text("Meminjam"),
+                                            content: Text(
+                                                "Apakah anda yakin ingin meminjam buku kata selvi?"),
+                                            actions: [
+                                              ElevatedButton(
+                                                  onPressed: () async {
+                                                    final qUsers =
+                                                        await firebaseServices
+                                                            .queryFuture(
+                                                                "users", [
+                                                      ModelQuery(
+                                                          key: "email",
+                                                          value: firebaseServices
+                                                              .getCurrentUser()
+                                                              ?.email)
+                                                    ]);
+                                                    final dataUser =
+                                                        qUsers.docs[0].data();
 
-                                      bool isDuplicated = false;
+                                                    final dataPeminjaman =
+                                                        await firebaseServices
+                                                            .queryFuture(
+                                                                "peminjaman", [
+                                                      ModelQuery(
+                                                          key: "email",
+                                                          value:
+                                                              dataUser["email"])
+                                                    ]);
 
-                                      for (final dataP in dataPeminjaman.docs) {
-                                        final dt = dataP.data();
-                                        if (dt["barcode"] == widget.data!["barcode"]) {
-                                          isDuplicated = true;
-                                          break;
-                                        }
-                                      }
+                                                    bool isDuplicated = false;
 
-                                      if (!isDuplicated) {
-                                        final sizeDataPeminjaman = dataPeminjaman.size;
+                                                    for (final dataP
+                                                        in dataPeminjaman
+                                                            .docs) {
+                                                      final dt = dataP.data();
+                                                      if (dt["barcode"] ==
+                                                          widget.data![
+                                                              "barcode"]) {
+                                                        isDuplicated = true;
+                                                        break;
+                                                      }
+                                                    }
 
-                                        if (sizeDataPeminjaman < 3) {
-                                          final data = <String, dynamic>{
-                                            "nama_peminjam": dataUser["nama"],
-                                            "email": dataUser["email"],
-                                            "judul_buku": widget.data!["judul_buku"],
-                                            "pengarang": widget.data!["pengarang"],
-                                            "image": widget.data!["image"],
-                                            "rak": widget.data!["rak"],
-                                            "konfirmasi": false,
-                                            "type_peminjaman": "online",
-                                            "barcode": widget.data!["barcode"]
-                                          };
+                                                    if (!isDuplicated) {
+                                                      final sizeDataPeminjaman =
+                                                          dataPeminjaman.size;
 
-                                          firebaseServices.add("peminjaman", data);
+                                                      if (sizeDataPeminjaman <
+                                                          3) {
+                                                        final data =
+                                                            <String, dynamic>{
+                                                          "nama_peminjam":
+                                                              dataUser["nama"],
+                                                          "email":
+                                                              dataUser["email"],
+                                                          "judul_buku":
+                                                              widget.data![
+                                                                  "judul_buku"],
+                                                          "pengarang":
+                                                              widget.data![
+                                                                  "pengarang"],
+                                                          "image": widget
+                                                              .data!["image"],
+                                                          "rak": widget
+                                                              .data!["rak"],
+                                                          "konfirmasi": false,
+                                                          "type_peminjaman":
+                                                              "online",
+                                                          "barcode": widget
+                                                              .data!["barcode"]
+                                                        };
 
-                                          Utils.showSnackBar("Berhasil", Colors.green);
+                                                        firebaseServices.add(
+                                                            "peminjaman", data);
 
-                                          navigatePop();
-                                        } else {
-                                          Utils.showSnackBar(
-                                              "Batas peminjaman buku tidak boleh lebih dari 3",
-                                              Colors.red);
-                                        }
-                                      } else {
-                                        Utils.showSnackBar("Buku sudah di pinjam", Colors.red);
-                                      }
-                                    },
-                                  ),
+                                                        Utils.showSnackBar(
+                                                            "Berhasil",
+                                                            Colors.green);
+
+                                                        navigatePop();
+                                                      } else {
+                                                        Utils.showSnackBar(
+                                                            "Batas peminjaman buku tidak boleh lebih dari 3",
+                                                            Colors.red);
+                                                      }
+                                                    } else {
+                                                      Utils.showSnackBar(
+                                                          "Buku sudah di pinjam",
+                                                          Colors.red);
+                                                    }
+                                                  },
+                                                  child: Text("Ok")),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    navigatePop();
+                                                  },
+                                                  child: Text("Batal")),
+                                            ],
+                                          );
+                                          dialogShow(
+                                              context: context, widget: alert);
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ])));
+                      ),
+                    ],
+                  )
+                ])));
   }
 }

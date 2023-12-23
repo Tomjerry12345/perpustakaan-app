@@ -47,10 +47,10 @@ class _BottomNavState extends State<BottomNav> {
             ),
             SimpleDialogOption(
               onPressed: () {
-                procesScan("verifikasi");
+                procesScan("kembalikan_buku");
                 dialogClose(context);
               },
-              child: const Text('Verifikasi'),
+              child: const Text('kembalikan buku'),
             ),
           ],
         ));
@@ -66,7 +66,7 @@ class _BottomNavState extends State<BottomNav> {
         if (type == "masuk") {
         } else if (type == "pinjam_buku") {
           _onPinjamBuku(barcodeScanRes);
-        } else if (type == "verifikasi") {
+        } else if (type == "kembalikan_buku") {
           _onPinjam(barcodeScanRes);
         }
       }
