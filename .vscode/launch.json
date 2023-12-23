@@ -7,6 +7,7 @@
         {
             "name": "perpustakaan_mobile",
             "request": "launch",
+            "program": "lib/main.dart",
             "type": "dart"
         },
         {

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -10,7 +9,8 @@ class ViewPdf extends StatefulWidget {
   final String? path, judul;
   final bool? isPinjam;
 
-  const ViewPdf({Key? key, this.path, this.judul, this.isPinjam = false}) : super(key: key);
+  const ViewPdf({Key? key, this.path, this.judul, this.isPinjam = false})
+      : super(key: key);
 
   @override
   State<ViewPdf> createState() => _ViewPdfState();
@@ -35,7 +35,6 @@ class _ViewPdfState extends State<ViewPdf> {
 
     if (!widget.isPinjam!) {
       for (int i = 0; i < 5; i++) {
-        print("delete => $i");
         PdfTemplate p = document.pages[i].createTemplate();
         outputDocument.pageSettings.setMargins(0);
         outputDocument.pages.add().graphics.drawPdfTemplate(p, Offset(0, 0));

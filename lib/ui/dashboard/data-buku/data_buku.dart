@@ -27,6 +27,7 @@ class DataBuku extends StatefulWidget {
 
 class _DataBukuState extends State<DataBuku> {
   final firebaseServices = FirebaseServices();
+  final time = Time();
   int? sisaPeminjaman;
 
   @override
