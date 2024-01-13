@@ -1,6 +1,6 @@
+import 'package:admin_perpustakaan/screens/autentikasi/login/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:admin_perpustakaan/screens/dashboard_screen.dart';
 import 'package:admin_perpustakaan/utils/global_utils.dart';
 
 Future<void> main() async {
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DashboardScreen(),
+      home: Login(),
       navigatorKey: navigatorKey,
     );
   }

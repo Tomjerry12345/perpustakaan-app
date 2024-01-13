@@ -22,6 +22,7 @@ dependencies:
   qr_flutter: ^4.0.0
   file_picker: ^5.5.0
   pdf: ^3.5.0
+  fast_snackbar: ^0.0.2
 
 dev_dependencies:
   flutter_test:

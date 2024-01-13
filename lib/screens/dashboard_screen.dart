@@ -1,3 +1,4 @@
+import 'package:admin_perpustakaan/screens/buku_tamu/buku_tamu.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_perpustakaan/screens/data_anggota/data_anggota.dart';
 import 'package:admin_perpustakaan/screens/data_buku/data_buku.dart';
@@ -105,6 +106,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   NavigationRailDestination(
                     icon: Icon(Icons.group),
+                    label: Text("Buku tamu"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.group),
                     label: Text("Data Anggota"),
                   ),
                 ],
@@ -118,7 +123,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ? Peminjaman()
                       : index == 3
                           ? Pengembalian()
-                          : DataAnggota()
+                          : index == 4
+                              ? BukuTamu()
+                              : DataAnggota()
         ],
       ),
     );

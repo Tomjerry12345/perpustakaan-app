@@ -8,6 +8,13 @@ class FirebaseServices {
   final _db = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
+  Future<void> signInWithEmailAndPassword(email, password) async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email.trim(),
+      password: password.trim(),
+    );
+  }
+
   void add(String path, data) {
     _db.collection(path).add(data).then((DocumentReference doc) =>
         print('DocumentSnapshot added with ID: ${doc.id}'));

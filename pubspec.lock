@@ -137,6 +137,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  fast_snackbar:
+    dependency: "direct main"
+    description:
+      name: fast_snackbar
+      sha256: "658dfc1c242d199d2c2e00183ffb52d07951dd32c211b59d3159af9e6f1a4cf4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   ffi:
     dependency: transitive
     description:
@@ -606,5 +614,5 @@ packages:
     source: hosted
     version: "6.3.0"
 sdks:
-  dart: ">=3.1.0-185.0.dev <4.0.0"
+  dart: ">=3.1.2 <4.0.0"
   flutter: ">=3.7.0"

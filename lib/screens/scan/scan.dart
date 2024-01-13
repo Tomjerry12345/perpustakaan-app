@@ -4,7 +4,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:admin_perpustakaan/services/FirebaseServices.dart';
 import 'package:admin_perpustakaan/utils/position.dart';
 import 'package:admin_perpustakaan/utils/screen_utils.dart';
-import 'package:admin_perpustakaan/utils/snackbar_utils.dart';
 import 'package:admin_perpustakaan/widget/dialog/dialog_widget.dart';
 import 'package:admin_perpustakaan/widget/header/header_widget.dart';
 
@@ -62,7 +61,7 @@ class _ScanState extends State<Scan> {
                               .update("barcode", "code", {"code": "default"});
                           dialogClose(context);
                         } catch (e) {
-                          SnackbarUtils.showSnackBar(e.toString(), Colors.red);
+                          context.showFastSnackbar(e.toString(), Colors.red);
                         }
                       },
                       child: const Text("Kembali"))

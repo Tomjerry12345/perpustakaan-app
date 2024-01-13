@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:admin_perpustakaan/utils/log_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_snackbar/fast_snackbar.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:admin_perpustakaan/services/FirebaseServices.dart';
 import 'package:admin_perpustakaan/utils/flutter_pdf_split.dart';
 import 'package:admin_perpustakaan/utils/position.dart';
-import 'package:admin_perpustakaan/utils/snackbar_utils.dart';
 import 'package:admin_perpustakaan/utils/string_utils.dart';
 
 class DataBuku extends StatefulWidget {
@@ -98,7 +98,8 @@ class _DataBukuState extends State<DataBuku> {
       );
       debugPrint(splitResult.toString());
     } else {
-      showSnackbar("directory null", Colors.red);
+      context.showFastSnackbar("directory null",
+          color: TypeFastSnackbar.success);
     }
   }
 
