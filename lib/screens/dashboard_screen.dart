@@ -93,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     label: Text("Data Buku"),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.library_books),
+                    icon: Icon(Icons.book),
                     label: Text("Peminjaman"),
                   ),
                   // NavigationRailDestination(
@@ -105,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     label: Text("Pengembalian"),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.group),
+                    icon: Icon(Icons.menu),
                     label: Text("Buku tamu"),
                   ),
                   NavigationRailDestination(
