@@ -180,7 +180,11 @@ class _PengembalianState extends State<Pengembalian> {
                       margin: EdgeInsets.all(8),
                       child: TextWidget(
                         // data['tanggal_peminjaman'],
-                        data["denda"] > 0 ? "Rp. $data['denda']" : "-",
+                        data["denda"] != null
+                            ? data["denda"] > 0
+                                ? "Rp. $data['denda']"
+                                : "-"
+                            : "-",
                         color: Colors.white,
                       ),
                     ),
