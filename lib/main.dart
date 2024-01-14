@@ -5,6 +5,7 @@ import 'package:perpustakaan_mobile/firebase_options.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/services/NotificationServices.dart';
+import 'package:perpustakaan_mobile/ui/autentikasi/face_autentikasi.dart';
 import 'package:perpustakaan_mobile/ui/awal/awal.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/bottom_nav.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
@@ -44,18 +45,14 @@ void sendNotif() async {
 
   for (var element in data.docs) {
     final d = element.data();
-
     final tanggal = d["tanggal_pengembalian"].toString().split("-");
-
     Time time = Time();
-
     final getDate = time.getDateBeforeByRange(tanggal[2], 3);
-
-    logO("date", getDate);
 
     if (time.getYear() == int.parse(tanggal[0])) {
       if (time.getMonth() == int.parse(tanggal[1])) {
-        if (getDate >= time.getDate() && time.getDate() <= int.parse(tanggal[2])) {
+        if (getDate >= time.getDate() &&
+            time.getDate() <= int.parse(tanggal[2])) {
           NotificationServices.scheduleNotification(
               id: i,
               title: "Pemberitahuan",
@@ -77,7 +74,6 @@ final navigatorKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -97,9 +93,9 @@ class MainPage extends StatelessWidget {
             stream: FirebaseAuth.instance.authStateChanges(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return BottomNav();
+                return const FaceAutentikasi();
               } else {
-                return Login();
+                return const Login();
               }
             }),
       );

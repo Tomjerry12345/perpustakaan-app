@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
-import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/screen_utils.dart';
 import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
 
@@ -113,7 +112,7 @@ class _PengembalianState extends State<Pengembalian> {
                 child: Container(
                   margin: EdgeInsets.all(8),
                   child: TextWidget(
-                    data['judul_buku'],
+                    data['pengarang'],
                     color: Colors.white,
                   ),
                 ),
@@ -148,7 +147,7 @@ class _PengembalianState extends State<Pengembalian> {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: TextWidget(
-                        data['tanggal_peminjaman'],
+                        data['tanggal_peminjaman'] ?? "-",
                         color: Colors.white,
                       ),
                     ),
@@ -164,7 +163,7 @@ class _PengembalianState extends State<Pengembalian> {
                     child: Container(
                       margin: EdgeInsets.all(8),
                       child: TextWidget(
-                        data['tanggal_pengembalian'],
+                        data['tanggal_pengembalian'] ?? "-",
                         color: Colors.white,
                       ),
                     ),

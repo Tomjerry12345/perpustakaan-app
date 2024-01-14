@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:perpustakaan_mobile/main.dart';
+import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/registrasi/registrasi.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
@@ -18,11 +20,13 @@ class _LoginState extends State<Login> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  final LocalAuthentication auth = LocalAuthentication();
+  final fs = FirebaseServices();
+
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-
     super.dispose();
   }
 
@@ -139,10 +143,10 @@ class _LoginState extends State<Login> {
                     ),
                     TextButton(
                       onPressed: () {
-                        print("test");
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Registrasi()),
+                          MaterialPageRoute(
+                              builder: (context) => const Registrasi()),
                         );
                       },
                       child: Text(
@@ -172,13 +176,14 @@ class _LoginState extends State<Login> {
         child: CircularProgressIndicator(),
       ),
     );
-
     try {
+      final email = emailController.text.trim();
+      final password = passwordController.text.trim();
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+        email: email,
+        password: password,
       );
-      Utils.showSnackBar("Berhasil Login.", Colors.green);
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
     } on FirebaseAuthException catch (e) {
       Navigator.of(context, rootNavigator: true).pop('dialog');

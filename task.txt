@@ -1,3 +1,9 @@
+version: v0.0.4 ✅ ❌ 🔥
+- tambahkan face autentikasi / fingerprint ✅
+- di pengembalian bermasalah ❌
+- ketika klik mengembalikan buku akan muncul pop up konfirmasi ❌
+- ringkasan buku 10 halaman 🔥
+
 version: v0.0.3 ✅ ❌ 🔥
 
 - tambah tombol pengembalian di peminjaman ✅

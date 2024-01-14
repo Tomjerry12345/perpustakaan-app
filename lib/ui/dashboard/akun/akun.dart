@@ -6,7 +6,9 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/kartu_perpus/kartu_perpus.dart';
+import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
 import 'package:printing/printing.dart';
 
 class Akun extends StatefulWidget {
@@ -35,8 +37,7 @@ class _AkunState extends State<Akun> {
     void displayPdf(data) async {
       final doc = pw.Document();
 
-      final provider = await flutterImageProvider(NetworkImage(
-        data["image"]));
+      final provider = await flutterImageProvider(NetworkImage(data["image"]));
 
       doc.addPage(pw.Page(
           pageFormat: pdf.PdfPageFormat.a4,
@@ -60,13 +61,13 @@ class _AkunState extends State<Akun> {
                             width: 50,
                             color: pdf.PdfColor(0.8, 0.9, 1),
                           ),
-                          
                           pw.SizedBox(
                             width: 8,
                           ),
                           pw.Text(
                             "Kartu Perpustakaan",
-                            style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+                            style: pw.TextStyle(
+                                fontSize: 24, fontWeight: pw.FontWeight.bold),
                           )
                         ],
                       ),
@@ -155,6 +156,7 @@ class _AkunState extends State<Akun> {
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Utils.showSnackBar("Berhasil logout.", Colors.red);
+                navigatePush(Login(), isRemove: true);
               },
             ),
           ],
@@ -168,7 +170,8 @@ class _AkunState extends State<Akun> {
           ),
         ),
         body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            stream: fs.query("users", [ModelQuery(key: "email", value: user!.email)]),
+            stream: fs
+                .query("users", [ModelQuery(key: "email", value: user!.email)]),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 final docs = snapshot.data!.docs[0];
@@ -193,10 +196,12 @@ class _AkunState extends State<Akun> {
                             CircleAvatar(
                               radius: 45,
                               backgroundColor: Colors.blue,
-                              backgroundImage:
-                                  data["image"] != null ? NetworkImage(data["image"]) : null,
+                              backgroundImage: data["image"] != null
+                                  ? NetworkImage(data["image"])
+                                  : null,
                               child: data["image"] == null
-                                  ? Text(data["nama"][0], style: TextStyle(fontSize: 24))
+                                  ? Text(data["nama"][0],
+                                      style: TextStyle(fontSize: 24))
                                   : null,
                             ),
                           ],
@@ -205,7 +210,8 @@ class _AkunState extends State<Akun> {
                           height: 18,
                         ),
                         Center(
-                          child: Text(data["nama"], style: TextStyle(fontSize: 24)),
+                          child: Text(data["nama"],
+                              style: TextStyle(fontSize: 24)),
                         ),
                         SizedBox(
                           height: 18,
@@ -222,14 +228,19 @@ class _AkunState extends State<Akun> {
                           height: 18,
                         ),
                         ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16.0)),
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
                             width: 200,
                             height: 304,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
-                                  colors: [Color(0xff0096ff), Color(0xff6610f2)],
+                                  colors: [
+                                    Color(0xff0096ff),
+                                    Color(0xff6610f2)
+                                  ],
                                   begin: FractionalOffset.bottomLeft,
                                   end: FractionalOffset.bottomRight),
                             ),
@@ -318,21 +329,24 @@ class _AkunState extends State<Akun> {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         SizedBox(
           width: x,
         ),
         Text(
           ":",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         SizedBox(
           width: 8,
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         )
       ],
     );
@@ -345,7 +359,9 @@ class _AkunState extends State<Akun> {
         pw.Text(
           title,
           style: pw.TextStyle(
-              fontSize: 18, fontWeight: pw.FontWeight.bold, color: pdf.PdfColor(1, 1, 1)),
+              fontSize: 18,
+              fontWeight: pw.FontWeight.bold,
+              color: pdf.PdfColor(1, 1, 1)),
         ),
         pw.SizedBox(
           width: x,
@@ -353,7 +369,9 @@ class _AkunState extends State<Akun> {
         pw.Text(
           ":",
           style: pw.TextStyle(
-              fontSize: 18, fontWeight: pw.FontWeight.bold, color: pdf.PdfColor(1, 1, 1)),
+              fontSize: 18,
+              fontWeight: pw.FontWeight.bold,
+              color: pdf.PdfColor(1, 1, 1)),
         ),
         pw.SizedBox(
           width: 8,
@@ -361,7 +379,9 @@ class _AkunState extends State<Akun> {
         pw.Text(
           value,
           style: pw.TextStyle(
-              fontSize: 18, fontWeight: pw.FontWeight.bold, color: pdf.PdfColor(1, 1, 1)),
+              fontSize: 18,
+              fontWeight: pw.FontWeight.bold,
+              color: pdf.PdfColor(1, 1, 1)),
         )
       ],
     );

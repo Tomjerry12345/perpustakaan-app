@@ -6,7 +6,12 @@ class Time {
   String getTimeNow() {
     var formatter = new DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(_now);
-    print(formattedDate); // 2016-01-25
+    return formattedDate;
+  }
+
+  String getTimeNowHour() {
+    var formatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    String formattedDate = formatter.format(_now);
     return formattedDate;
   }
 
