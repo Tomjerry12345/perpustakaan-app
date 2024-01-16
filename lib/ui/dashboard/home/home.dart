@@ -5,6 +5,8 @@ import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/services/NotificationServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/data-buku/data_buku.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
+import 'package:perpustakaan_mobile/utils/position.dart';
+import 'package:perpustakaan_mobile/utils/screen_utils.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -31,19 +33,22 @@ class _HomeState extends State<Home> {
   Future<void> onNotification() async {
     final user = fs.getCurrentUser();
     final time = Time();
-    final res = await fs.queryFuture("peminjaman", [ModelQuery(key: "email", value: user?.email)]);
+    final res = await fs.queryFuture(
+        "peminjaman", [ModelQuery(key: "email", value: user?.email)]);
 
     if (res.size > 0) {
       res.docs.forEach((e) {
         final data = e.data();
 
         if (data['konfirmasi']) {
-          final tanggalPeminjaman = data['tanggal_pengembalian'].toString().split("-");
+          final tanggalPeminjaman =
+              data['tanggal_pengembalian'].toString().split("-");
           final datePeminjaman = int.parse(tanggalPeminjaman[2]);
           final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
           final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
 
-          int sisaHariNow = time.getJumlahHariDate(yearPeminjaman, monthPeminjaman, datePeminjaman);
+          int sisaHariNow = time.getJumlahHariDate(
+              yearPeminjaman, monthPeminjaman, datePeminjaman);
 
           if (sisaHariNow > 0 && sisaHariNow <= 3) {
             NotificationServices.showNotification(
@@ -59,7 +64,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> openTalkBackSettings() async {
-    const url = 'package:com.google.android.marvin.talkback/com.android.settings.DisplaySettings';
+    const url =
+        'package:com.google.android.marvin.talkback/com.android.settings.DisplaySettings';
     // ignore: deprecated_member_use
     if (await canLaunch(url)) {
       // ignore: deprecated_member_use
@@ -321,9 +327,11 @@ class _HomeState extends State<Home> {
                             DocumentSnapshot data = snapshot.data!.docs[index];
                             return CardBook(data, context);
                           }),
-                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 150,
-                            childAspectRatio: MediaQuery.of(context).size.height / 1360,
+                            childAspectRatio:
+                                MediaQuery.of(context).size.height / 1360,
                           ),
                         );
                 }),
@@ -347,43 +355,43 @@ class _HomeState extends State<Home> {
           },
           splashColor: Colors.blueAccent,
           child: Container(
-              decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent, width: 3)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueAccent, width: 3)),
               child: Center(
                   child: Column(children: [
                 Container(
                     height: 200,
                     child: Column(
                       children: <Widget>[
+                        V(8),
                         Image.network(
                           data["image"],
-                          height: 140,
+                          height: 0.14.h,
                           width: 150,
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        V(8),
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                            Text(
-                              data["judul_buku"],
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              data["pengarang"],
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          ]),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data["judul_buku"],
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                V(8),
+                                Text(
+                                  data["pengarang"],
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                              ]),
                         ),
                       ],
                     ))

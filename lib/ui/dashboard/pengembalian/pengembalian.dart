@@ -69,14 +69,16 @@ class _PengembalianState extends State<Pengembalian> {
         color: Colors.white,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              V(20),
+              V(8),
               Image.network(
                 data["image"],
-                height: 0.2.h,
+                height: 0.22.h,
                 width: 0.2.h,
               ),
             ],
@@ -85,7 +87,7 @@ class _PengembalianState extends State<Pengembalian> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // V(20),
+              V(8),
               TextWidget(
                 "Judul buku",
                 fontWeight: FontWeight.bold,

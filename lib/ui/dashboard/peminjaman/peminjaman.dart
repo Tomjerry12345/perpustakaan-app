@@ -97,6 +97,7 @@ class _PeminjamanState extends State<Peminjaman> {
 
   void oHapus(String id) {
     db.delete("peminjaman", id);
+    navigatePop();
   }
 
   @override
@@ -224,7 +225,8 @@ class _PeminjamanState extends State<Peminjaman> {
                     onPressed: () {
                       AlertDialog alert = AlertDialog(
                         title: Text("Meminjam"),
-                        content: Text("Apakah anda yakin ingin meminjam buku?"),
+                        content:
+                            Text("Apakah anda yakin ingin mengembalikan buku?"),
                         actions: [
                           ElevatedButton(
                               onPressed: () async {
