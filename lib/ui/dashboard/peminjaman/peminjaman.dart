@@ -222,7 +222,23 @@ class _PeminjamanState extends State<Peminjaman> {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.purple),
                     onPressed: () {
-                      onPengembalian(data);
+                      AlertDialog alert = AlertDialog(
+                        title: Text("Meminjam"),
+                        content: Text("Apakah anda yakin ingin meminjam buku?"),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                onPengembalian(data);
+                              },
+                              child: Text("Ok")),
+                          ElevatedButton(
+                              onPressed: () {
+                                navigatePop();
+                              },
+                              child: Text("Batal")),
+                        ],
+                      );
+                      dialogShow(context: context, widget: alert);
                     },
                     child: Text(
                       "Pengembalian",

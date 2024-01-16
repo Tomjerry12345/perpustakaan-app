@@ -302,7 +302,7 @@ class _DataBukuState extends State<DataBuku> {
                                           AlertDialog alert = AlertDialog(
                                             title: Text("Meminjam"),
                                             content: Text(
-                                                "Apakah anda yakin ingin meminjam buku kata selvi?"),
+                                                "Apakah anda yakin ingin meminjam buku?"),
                                             actions: [
                                               ElevatedButton(
                                                   onPressed: () async {

@@ -39,8 +39,8 @@ class _FaceAutentikasiState extends State<FaceAutentikasi> {
       final canAuth = await isAuth();
       if (canAuth) {
         bool authenticated = await auth.authenticate(
-            localizedReason: "Silahkan masukkan sidik jari anda",
-            options: const AuthenticationOptions(biometricOnly: true));
+            localizedReason: "Silahkan masukkan sidik jari anda untuk mengisi buku tamu",
+            );
         if (authenticated) {
           final user = fs.getCurrentUser();
           final time = Time();
