@@ -12,6 +12,8 @@ class BukuTamu extends StatefulWidget {
 class _BukuTamuState extends State<BukuTamu> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  final double sizeColumn = 200;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -36,48 +38,57 @@ class _BukuTamuState extends State<BukuTamu> {
                       ],
                     ),
                   ),
-                  Card(
-                    color: Colors.black54,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          left: 10, right: 10, bottom: 40, top: 15),
-                      child: Column(
-                        children: [
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                                headingRowColor:
-                                    MaterialStateProperty.resolveWith(
-                                        (states) => Colors.blue.shade200),
-                                columns: [
-                                  DataColumn(label: Text("No anggota")),
-                                  DataColumn(label: Text("Nama")),
-                                  DataColumn(label: Text("Alamat")),
-                                  DataColumn(label: Text("Tanggal berkunjung")),
-                                  DataColumn(label: Text("Pekerjaan")),
-                                  DataColumn(label: Text("No Hp")),
-                                ],
-                                rows: List<DataRow>.generate(
-                                    snapshot.data!.docs.length, (index) {
-                                  DocumentSnapshot data =
-                                      snapshot.data!.docs[index];
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: 10, right: 10, bottom: 40, top: 15),
+                    child: Column(
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                              headingRowColor:
+                                  MaterialStateProperty.resolveWith(
+                                      (states) => Colors.blue.shade200),
+                              columns: [
+                                DataColumn(label: Text("No anggota")),
+                                DataColumn(label: Text("Nama")),
+                                DataColumn(label: Text("Alamat")),
+                                DataColumn(label: Text("Tanggal berkunjung")),
+                                DataColumn(label: Text("Pekerjaan")),
+                                DataColumn(label: Text("No Hp")),
+                              ],
+                              rows: List<DataRow>.generate(
+                                  snapshot.data!.docs.length, (index) {
+                                DocumentSnapshot data =
+                                    snapshot.data!.docs[index];
 
-                                  return DataRow(cells: [
-                                    DataCell(Text(data['no_anggota'])),
-                                    DataCell(Text(data['nama'])),
-                                    DataCell(Text(data['alamat'])),
-                                    DataCell(Text(data['tanggal'])),
-                                    DataCell(Text(data['pekerjaan'])),
-                                    DataCell(Text(data['noHp'])),
-                                  ]);
-                                })),
-                          ),
-                          //Now let's set the pagination
-                          SizedBox(
-                            height: 40.0,
-                          ),
-                        ],
-                      ),
+                                return DataRow(cells: [
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['no_anggota']))),
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['nama']))),
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['alamat']))),
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['tanggal']))),
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['pekerjaan']))),
+                                  DataCell(Container(
+                                      width: sizeColumn,
+                                      child: Text(data['noHp']))),
+                                ]);
+                              })),
+                        ),
+                        //Now let's set the pagination
+                        SizedBox(
+                          height: 40.0,
+                        ),
+                      ],
                     ),
                   ),
                 ],
