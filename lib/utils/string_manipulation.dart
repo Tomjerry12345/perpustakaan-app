@@ -1,2 +1,8 @@
-String formatTitik(data, jumlah) =>
-    data.length > jumlah ? "${data.substring(0, jumlah)}..." : data;
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+  }
+
+  String formatTitik(jumlah) =>
+      length > jumlah ? "${substring(0, jumlah)}..." : this;
+}

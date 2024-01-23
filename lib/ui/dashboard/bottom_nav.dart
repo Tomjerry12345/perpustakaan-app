@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/akun.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/home/home.dart';
@@ -124,6 +125,16 @@ class _BottomNavState extends State<BottomNav> {
       };
 
       await doc.add(json);
+
+      final resBook = await fs.queryFuture(
+          "books", [ModelQuery(key: "judul_buku", value: book["judul_buku"])]);
+      final id = resBook.docs.first.id;
+      final data = resBook.docs.first.data();
+      final stokBuku = int.parse(data["stok_buku"]);
+
+      if (stokBuku > 0) {
+        await fs.update("books", id, {"stok_buku": (stokBuku - 1).toString()});
+      }
 
       Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
     } else {

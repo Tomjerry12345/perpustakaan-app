@@ -1,5 +1,7 @@
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:perpustakaan_mobile/model/ModelBuku.dart';
 import 'package:perpustakaan_mobile/model/ModelQuery.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/services/NotificationServices.dart';
@@ -26,11 +28,40 @@ class _HomeState extends State<Home> {
   final fs = FirebaseServices();
 
   String search = "";
+  String kategori = "";
+
+  List<ModelBuku> listModelBuku = [];
 
   @override
   initState() {
     super.initState();
     onNotification();
+    onGetKategori();
+  }
+
+  Future<void> onGetKategori() async {
+    List<ModelBuku> listKategori = [];
+    List<ModelBuku> listUnique = [];
+
+    final resBooks = await fs.getAll("books");
+
+    for (var e in resBooks.docs) {
+      final dataBooks = e.data();
+      final kategori = dataBooks["kategori"].toString();
+      listKategori.add(ModelBuku(kategori: kategori.capitalize()));
+    }
+
+    var uniqueIDs = listKategori
+        .map((e) => e.kategori)
+        .toSet(); //list if UniqueID to remove duplicates
+    for (var e in uniqueIDs) {
+      listUnique.add(listKategori.firstWhere((i) => i.kategori == e));
+    }
+
+    log("list", v: listUnique);
+    setState(() {
+      listModelBuku = listUnique;
+    });
   }
 
   Future<void> onNotification() async {
@@ -108,7 +139,6 @@ class _HomeState extends State<Home> {
                       ),
                       child: TextField(
                         onChanged: (value) {
-                          log("value", v: value);
                           setState(() {
                             search = value;
                           });
@@ -162,6 +192,25 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                     ),
+                    V(16),
+                    listModelBuku.isNotEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: CustomDropdown<ModelBuku>.search(
+                              decoration: const CustomDropdownDecoration(
+                                  closedFillColor: Colors.white,
+                                  closedShadow: [BoxShadow(spreadRadius: 0.5)]),
+                              hintText: 'Kategori',
+                              items: listModelBuku,
+                              excludeSelected: false,
+                              onChanged: (value) {
+                                setState(() {
+                                  kategori = value.kategori.capitalize();
+                                });
+                              },
+                            ),
+                          )
+                        : Container()
 
                     // ElevatedButton(
                     //   onPressed: () {
@@ -184,106 +233,112 @@ class _HomeState extends State<Home> {
                     //       ),
                     //     ],
                     //   ),
-                    //   child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const Kategori()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.dashboard,
-                    //             size: 30,
-                    //             color: Colors.blue,
+                    //   child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //       children: [
+                    //         InkWell(
+                    //           onTap: () {
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) => const Kategori()),
+                    //             // );
+                    //           },
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.dashboard,
+                    //                 size: 30,
+                    //                 color: Colors.blue,
+                    //               ),
+                    //               Text(
+                    //                 'Kategori',
+                    //                 style: TextStyle(
+                    //                   fontSize: 15,
+                    //                   color: Warna.warnabiru1,
+                    //                 ),
+                    //               ),
+                    //             ],
                     //           ),
-                    //           Text(
-                    //             'Kategori',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
+                    //         ),
+                    //         InkWell(
+                    //           onTap: () {
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) => const StokBuku()),
+                    //             // );
+                    //           },
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.article,
+                    //                 size: 30,
+                    //                 color: Colors.blue,
+                    //               ),
+                    //               Text(
+                    //                 'Stok Buku',
+                    //                 style: TextStyle(
+                    //                   fontSize: 15,
+                    //                   color: Warna.warnabiru1,
+                    //                 ),
+                    //               ),
+                    //             ],
                     //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const StokBuku()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.article,
-                    //             size: 30,
-                    //             color: Colors.blue,
+                    //         ),
+                    //         InkWell(
+                    //           onTap: () {
+                    //             // Navigator.push(
+                    //             //   context,
+                    //             //   MaterialPageRoute(
+                    //             //       builder: (context) => const terlaris()),
+                    //             // );
+                    //           },
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.favorite,
+                    //                 size: 30,
+                    //                 color: Colors.blue,
+                    //               ),
+                    //               Text(
+                    //                 'Favorit',
+                    //                 style: TextStyle(
+                    //                   fontSize: 15,
+                    //                   color: Warna.warnabiru1,
+                    //                 ),
+                    //               ),
+                    //             ],
                     //           ),
-                    //           Text(
-                    //             'Stok Buku',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
+                    //         ),
+                    //         InkWell(
+                    //           onTap: () {
+                    //             // FirebaseAuth.instance.signOut();
+                    //             // Utils.showSnackBar(
+                    //             //     "Berhasil logout.", Colors.red);
+                    //           },
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             children: [
+                    //               Icon(
+                    //                 Icons.logout,
+                    //                 size: 30,
+                    //                 color: Colors.blue,
+                    //               ),
+                    //               Text(
+                    //                 'Logout',
+                    //                 style: TextStyle(
+                    //                   fontSize: 15,
+                    //                   color: Warna.warnabiru1,
+                    //                 ),
+                    //               ),
+                    //             ],
                     //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(builder: (context) => const terlaris()),
-                    //         );
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.favorite,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Favorit',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         FirebaseAuth.instance.signOut();
-                    //         Utils.showSnackBar("Berhasil logout.", Colors.red);
-                    //       },
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Icon(
-                    //             Icons.logout,
-                    //             size: 30,
-                    //             color: Colors.blue,
-                    //           ),
-                    //           Text(
-                    //             'Logout',
-                    //             style: TextStyle(
-                    //               fontSize: 15,
-                    //               color: Warna.warnabiru1,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     )
-                    //   ]),
+                    //         )
+                    //       ]),
                     // ),
                   ],
                 ),
@@ -313,7 +368,12 @@ class _HomeState extends State<Home> {
                         .collection("books")
                         .where("judul_buku", isGreaterThanOrEqualTo: search)
                         .snapshots()
-                    : fs.getAllStream("books"),
+                    : kategori != ""
+                        ? firestore
+                            .collection("books")
+                            .where("kategori", isGreaterThanOrEqualTo: kategori)
+                            .snapshots()
+                        : fs.getAllStream("books"),
                 builder: (context, snapshot) {
                   return !snapshot.hasData
                       ? const Center(
@@ -377,7 +437,7 @@ class _HomeState extends State<Home> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextWidget(
+                            const TextWidget(
                               "Judul buku : ",
                               color: Colors.blue,
                               fontSize: 10,
@@ -385,14 +445,14 @@ class _HomeState extends State<Home> {
                             ),
                             V(8),
                             Text(
-                              formatTitik(judulBuku, 14),
+                              judulBuku.formatTitik(14),
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.blue,
                               ),
                             ),
                             V(8),
-                            TextWidget(
+                            const TextWidget(
                               "Pengarang : ",
                               color: Colors.blue,
                               fontSize: 10,
@@ -400,7 +460,7 @@ class _HomeState extends State<Home> {
                             ),
                             V(8),
                             Text(
-                              formatTitik(pengarang, 14),
+                              pengarang.formatTitik(14),
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.blue,
@@ -411,14 +471,20 @@ class _HomeState extends State<Home> {
                               children: [
                                 TextWidget(
                                   "Stok buku : ",
-                                  color: Colors.blue,
+                                  color: data["stok_buku"] == "0"
+                                      ? Colors.red
+                                      : Colors.blue,
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 H(8),
                                 TextWidget(
-                                  data["stok_buku"],
-                                  color: Colors.blue,
+                                  data["stok_buku"] == "0"
+                                      ? "habis"
+                                      : data["stok_buku"],
+                                  color: data["stok_buku"] == "0"
+                                      ? Colors.red
+                                      : Colors.blue,
                                   fontSize: 10,
                                 ),
                               ],
