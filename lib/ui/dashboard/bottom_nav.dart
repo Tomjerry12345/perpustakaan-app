@@ -14,7 +14,10 @@ import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/show_utils.dart';
 
 class BottomNav extends StatefulWidget {
+  const BottomNav({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _BottomNavState createState() => _BottomNavState();
 }
 
@@ -59,8 +62,8 @@ class _BottomNavState extends State<BottomNav> {
   Future<void> procesScan(String type) async {
     String barcodeScanRes;
     try {
-      barcodeScanRes =
-          await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
 
       if (barcodeScanRes != "-1") {
         if (type == "masuk") {
@@ -130,7 +133,8 @@ class _BottomNavState extends State<BottomNav> {
 
   Future<void> _onPinjam(String barcodeScanRes) async {
     if (barcodeScanRes == "default") {
-      await fs.update("barcode", "code", {"code": "peminjaman-${currentUser!.email}"});
+      await fs.update(
+          "barcode", "code", {"code": "peminjaman-${currentUser!.email}"});
     }
   }
 
@@ -142,8 +146,12 @@ class _BottomNavState extends State<BottomNav> {
         backgroundColor: Colors.white,
         buttonData: [
           PandaBarButtonData(id: 'Home', icon: Icons.home, title: 'Home'),
-          PandaBarButtonData(id: 'Peminjaman', icon: Icons.book_online, title: 'Peminjaman'),
-          PandaBarButtonData(id: 'Pengembalian', icon: Icons.book_sharp, title: 'Pengembalian'),
+          PandaBarButtonData(
+              id: 'Peminjaman', icon: Icons.book_online, title: 'Peminjaman'),
+          PandaBarButtonData(
+              id: 'Pengembalian',
+              icon: Icons.book_sharp,
+              title: 'Pengembalian'),
           PandaBarButtonData(
             id: 'Akun',
             icon: Icons.account_box,
@@ -158,7 +166,7 @@ class _BottomNavState extends State<BottomNav> {
         onFabButtonPressed: () {
           onScan(context);
         },
-        fabIcon: Icon(
+        fabIcon: const Icon(
           Icons.qr_code,
           color: Colors.white,
         ),

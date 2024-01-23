@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 void logO(t, m) {
+  // ignore: avoid_print
   print("[log] $t => $m");
 }
 

@@ -21,12 +21,12 @@ class _StokBukuState extends State<StokBuku> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: new Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
         ),
-        title: new Center(
+        title: const Center(
           child: Text(
             'Stok Buku',
             style: TextStyle(color: Colors.white),
@@ -34,12 +34,12 @@ class _StokBukuState extends State<StokBuku> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {},
           ),
         ],
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [Color(0xff0096ff), Color(0xff6610f2)],
                 begin: FractionalOffset.bottomLeft,
@@ -51,15 +51,16 @@ class _StokBukuState extends State<StokBuku> {
           stream: firestore.collection("books").snapshots(),
           builder: (context, snapshot) {
             return !snapshot.hasData
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 150,
-                        childAspectRatio: MediaQuery.of(context).size.height / 1400,
+                        childAspectRatio:
+                            MediaQuery.of(context).size.height / 1400,
                       ),
                       primary: true,
                       shrinkWrap: true,
@@ -74,9 +75,10 @@ class _StokBukuState extends State<StokBuku> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Card CardBook(DocumentSnapshot data, BuildContext contex) {
     return Card(
-        margin: EdgeInsets.only(right: 5, left: 5, top: 5),
+        margin: const EdgeInsets.only(right: 5, left: 5, top: 5),
         child: InkWell(
             onTap: () {},
             splashColor: Colors.blueAccent,
@@ -88,7 +90,7 @@ class _StokBukuState extends State<StokBuku> {
                 )),
                 child: Center(
                     child: Column(children: [
-                  Container(
+                  SizedBox(
                     height: 200,
                     child: Column(children: <Widget>[
                       Image.network(
@@ -96,31 +98,33 @@ class _StokBukuState extends State<StokBuku> {
                         height: 150,
                         width: 150,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text(
-                            data["judul_buku"],
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            data["pengarang"],
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ]),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                data["judul_buku"],
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                data["pengarang"],
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ]),
                       )
                     ]),
                   )

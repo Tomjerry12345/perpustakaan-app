@@ -1,16 +1,18 @@
+// ignore_for_file: file_names
+
 import 'package:intl/intl.dart';
 
 class Time {
   final _now = DateTime.now();
 
   String getTimeNow() {
-    var formatter = new DateFormat('yyyy-MM-dd');
+    var formatter = DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(_now);
     return formattedDate;
   }
 
   String getTimeNowHour() {
-    var formatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    var formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     String formattedDate = formatter.format(_now);
     return formattedDate;
   }
@@ -53,8 +55,8 @@ class Time {
 
   int getLastDateInMonth() {
     var lastDayDateTime = (_now.month < 12)
-        ? new DateTime(_now.year, _now.month + 1, 0)
-        : new DateTime(_now.year + 1, 1, 0);
+        ? DateTime(_now.year, _now.month + 1, 0)
+        : DateTime(_now.year + 1, 1, 0);
     return lastDayDateTime.day;
   }
 

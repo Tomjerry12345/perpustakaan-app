@@ -1,8 +1,12 @@
 version: v0.0.4 ✅ ❌ 🔥
+- harus ada stok buku sisa berapa 🔥
+- harus ada konfirmasi dari admin ketika peminjaman offline ❌
+- itu perpanjangan di ubah menjadi 7 hari 🔥
+- tambahkan filter kategori di bagian asal home ❌
 - tambahkan face autentikasi / fingerprint ✅
 - di pengembalian bermasalah ❌
 - ketika klik mengembalikan buku akan muncul pop up konfirmasi ❌
-- ringkasan buku 10 halaman 🔥
+- ringkasan buku 10 halaman ✅
 
 version: v0.0.3 ✅ ❌ 🔥
 

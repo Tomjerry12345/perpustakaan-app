@@ -37,7 +37,10 @@ class _ViewPdfState extends State<ViewPdf> {
       for (int i = 0; i < 10; i++) {
         PdfTemplate p = document.pages[i].createTemplate();
         outputDocument.pageSettings.setMargins(0);
-        outputDocument.pages.add().graphics.drawPdfTemplate(p, Offset(0, 0));
+        outputDocument.pages
+            .add()
+            .graphics
+            .drawPdfTemplate(p, const Offset(0, 0));
       }
 
       byteFile = Uint8List.fromList(await outputDocument.save());

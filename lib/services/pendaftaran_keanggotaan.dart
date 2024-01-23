@@ -22,53 +22,53 @@ class _PendaftaranState extends State<Pendaftaran> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(children: [
             Container(
-              margin: EdgeInsets.only(top: 75),
+              margin: const EdgeInsets.only(top: 75),
               width: double.infinity,
-              child: Text(
+              child: const Text(
                 "Registrasi",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 24, color: Colors.blueAccent),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 36,
             ),
             FormCustom(
               text: "nama",
               controller: namaController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             FormCustom(
               text: "alamat",
               controller: alamatController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             FormCustom(
               text: "pekerjaan",
               controller: pekerjaanController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             FormCustom(
               text: "no.hp",
               controller: hpController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             FormCustom(
               text: "email",
               controller: emailController,
             ),
-            SizedBox(
+            const SizedBox(
               height: 12,
             ),
             FormCustom(

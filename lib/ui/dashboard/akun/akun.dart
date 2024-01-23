@@ -8,6 +8,7 @@ import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/kartu_perpus/kartu_perpus.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
 import 'package:printing/printing.dart';
 
@@ -45,12 +46,12 @@ class _AkunState extends State<Akun> {
             return pw.Container(
               width: 500,
               height: 200,
-              color: pdf.PdfColor(0.6, 1, 0.3),
+              color: const pdf.PdfColor(0.6, 1, 0.3),
               child: pw.Column(children: [
                 pw.Container(
                   height: 78,
                   width: 500,
-                  color: pdf.PdfColor(0.8, 1, 0),
+                  color: const pdf.PdfColor(0.8, 1, 0),
                   child: pw.Column(
                     children: [
                       pw.Row(
@@ -59,7 +60,7 @@ class _AkunState extends State<Akun> {
                           pw.Container(
                             height: 50,
                             width: 50,
-                            color: pdf.PdfColor(0.8, 0.9, 1),
+                            color: const pdf.PdfColor(0.8, 0.9, 1),
                           ),
                           pw.SizedBox(
                             width: 8,
@@ -76,7 +77,7 @@ class _AkunState extends State<Akun> {
                         children: [
                           pw.Text(
                             "No.Anggota ${data["no_anggota"]}",
-                            style: pw.TextStyle(
+                            style: const pw.TextStyle(
                               fontSize: 12,
                             ),
                           )
@@ -126,6 +127,7 @@ class _AkunState extends State<Akun> {
             );
           }));
 
+      // ignore: use_build_context_synchronously
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -136,7 +138,7 @@ class _AkunState extends State<Akun> {
     return Scaffold(
         appBar: AppBar(
           leading: InkWell(
-            child: new Icon(
+            child: const Icon(
               Icons.arrow_back,
               color: Colors.white,
             ),
@@ -144,7 +146,7 @@ class _AkunState extends State<Akun> {
               Navigator.pop(context);
             },
           ),
-          title: Center(
+          title: const Center(
             child: Text(
               'Profile',
               style: TextStyle(color: Colors.white),
@@ -152,16 +154,16 @@ class _AkunState extends State<Akun> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Utils.showSnackBar("Berhasil logout.", Colors.red);
-                navigatePush(Login(), isRemove: true);
+                navigatePush(const Login(), isRemove: true);
               },
             ),
           ],
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0xff0096ff), Color(0xff6610f2)],
                   begin: FractionalOffset.bottomLeft,
@@ -176,9 +178,10 @@ class _AkunState extends State<Akun> {
               if (snapshot.hasData) {
                 final docs = snapshot.data!.docs[0];
                 final data = docs.data();
-                print(data);
+                log("data", v: data);
                 return Container(
-                    padding: EdgeInsets.only(left: 30, top: 20, right: 30),
+                    padding:
+                        const EdgeInsets.only(left: 30, top: 20, right: 30),
                     child: ListView(
                       children: [
                         // Text(
@@ -201,19 +204,19 @@ class _AkunState extends State<Akun> {
                                   : null,
                               child: data["image"] == null
                                   ? Text(data["nama"][0],
-                                      style: TextStyle(fontSize: 24))
+                                      style: const TextStyle(fontSize: 24))
                                   : null,
                             ),
                           ],
                         )),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         Center(
                           child: Text(data["nama"],
-                              style: TextStyle(fontSize: 24)),
+                              style: const TextStyle(fontSize: 24)),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         Center(
@@ -221,17 +224,17 @@ class _AkunState extends State<Akun> {
                             onPressed: () {
                               displayPdf(data);
                             },
-                            child: Text("Lihat kartu perpustakaan"),
+                            child: const Text("Lihat kartu perpustakaan"),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 18,
                         ),
                         ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16.0)),
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             width: 200,
                             height: 304,
@@ -252,7 +255,7 @@ class _AkunState extends State<Akun> {
                                   value: data["no_anggota"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -260,7 +263,7 @@ class _AkunState extends State<Akun> {
                                   value: data["email"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -268,7 +271,7 @@ class _AkunState extends State<Akun> {
                                   value: data["alamat"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -276,7 +279,7 @@ class _AkunState extends State<Akun> {
                                   value: data["hp"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -284,7 +287,7 @@ class _AkunState extends State<Akun> {
                                   value: data["pekerjaan"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -292,7 +295,7 @@ class _AkunState extends State<Akun> {
                                   value: data["ibu_kandung"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -300,7 +303,7 @@ class _AkunState extends State<Akun> {
                                   value: data["no_hp_ibu_kandung"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                                 Data(
@@ -308,7 +311,7 @@ class _AkunState extends State<Akun> {
                                   value: data["alamat_ibu_kandung"],
                                   x: 16,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 16,
                                 ),
                               ],
@@ -319,39 +322,41 @@ class _AkunState extends State<Akun> {
                     ));
               }
 
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }));
   }
 
+  // ignore: non_constant_identifier_names
   Row Data({String title = "", String value = "", double x = 0.0}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         SizedBox(
           width: x,
         ),
-        Text(
+        const Text(
           ":",
           style: TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
               fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
         )
       ],
     );
   }
 
+  // ignore: non_constant_identifier_names
   pw.Row DataPrint({String title = "", String value = "", double x = 0.0}) {
     return pw.Row(
       mainAxisAlignment: pw.MainAxisAlignment.start,
@@ -361,7 +366,7 @@ class _AkunState extends State<Akun> {
           style: pw.TextStyle(
               fontSize: 18,
               fontWeight: pw.FontWeight.bold,
-              color: pdf.PdfColor(1, 1, 1)),
+              color: const pdf.PdfColor(1, 1, 1)),
         ),
         pw.SizedBox(
           width: x,
@@ -371,7 +376,7 @@ class _AkunState extends State<Akun> {
           style: pw.TextStyle(
               fontSize: 18,
               fontWeight: pw.FontWeight.bold,
-              color: pdf.PdfColor(1, 1, 1)),
+              color: const pdf.PdfColor(1, 1, 1)),
         ),
         pw.SizedBox(
           width: 8,
@@ -381,7 +386,7 @@ class _AkunState extends State<Akun> {
           style: pw.TextStyle(
               fontSize: 18,
               fontWeight: pw.FontWeight.bold,
-              color: pdf.PdfColor(1, 1, 1)),
+              color: const pdf.PdfColor(1, 1, 1)),
         )
       ],
     );
