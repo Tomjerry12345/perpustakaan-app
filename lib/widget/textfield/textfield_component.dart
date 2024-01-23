@@ -17,7 +17,7 @@ class InputTextfield extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: hintText,
       ),
     );
@@ -53,7 +53,7 @@ class _PasswordTextfieldState extends State<PasswordTextfield> {
       obscureText: passwordVisible,
       controller: widget.controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         hintText: widget.hintText,
         suffixIcon: IconButton(
           icon: Icon(passwordVisible ? Icons.visibility : Icons.visibility_off),

@@ -30,7 +30,7 @@ class _ScanState extends State<Scan> {
     Future.delayed(Duration.zero, () async {
       await dialogShow(
           context: context,
-          widget: Container(
+          widget: SizedBox(
             width: 0.4.w,
             height: found ? 0.8.h : 0.7.h,
             child: Column(
@@ -111,7 +111,8 @@ class _ScanState extends State<Scan> {
             return widgetMain(code);
           }
 
-          return Expanded(child: Center(child: CircularProgressIndicator()));
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
         },
       ),
     );

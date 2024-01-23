@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:admin_perpustakaan/model/ModelQuery.dart';
 import 'package:admin_perpustakaan/services/FirebaseServices.dart';
 import 'package:admin_perpustakaan/widget/header/header_widget.dart';
@@ -83,7 +81,7 @@ class _PengembalianState extends State<Pengembalian> {
         ),
         Expanded(
             child: !isClick
-                ? listData.length > 0
+                ? listData.isNotEmpty
                     ? ListView.builder(
                         itemCount: listData.length,
                         itemBuilder: (context, index) {
@@ -103,12 +101,12 @@ class _PengembalianState extends State<Pengembalian> {
                                   "Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
                               trailing: IconButton(
                                   onPressed: () {},
-                                  icon: Icon(Icons.arrow_right)),
+                                  icon: const Icon(Icons.arrow_right)),
                             ),
                           );
                         },
                       )
-                    : Center(child: CircularProgressIndicator())
+                    : const Center(child: CircularProgressIndicator())
                 : DetailPengembalian(id: email, onGetData: getData))
       ]),
     );

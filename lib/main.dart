@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       // home: Login(),
-      home: DashboardScreen(),
+      home: const DashboardScreen(),
       navigatorKey: navigatorKey,
     );
   }

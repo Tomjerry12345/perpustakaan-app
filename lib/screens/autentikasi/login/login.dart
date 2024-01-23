@@ -22,7 +22,7 @@ class Login extends StatelessWidget {
       body: Container(
         color: Colors.blue.shade700,
         child: Center(
-          child: Container(
+          child: SizedBox(
             width: 0.3.w,
             height: 0.5.h,
             child: Card(
@@ -30,14 +30,14 @@ class Login extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(children: [
-                  Center(
+                  const Center(
                       child: TextWidget(
                     "Masuk",
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   )),
                   V(8),
-                  TextWidget("Silahkan login terlebih dahulu"),
+                  const TextWidget("Silahkan login terlebih dahulu"),
                   V(48),
                   TextfieldComponent(
                     hintText: "Email",
@@ -50,7 +50,7 @@ class Login extends StatelessWidget {
                     type: TypeTextField.password,
                   ),
                   V(32),
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: ButtonElevatedWidget(
                       "Masuk",
@@ -58,11 +58,11 @@ class Login extends StatelessWidget {
                         try {
                           final emailTxt = emailController.text;
                           final passTxt = passController.text;
-                          print("$emailTxt => $passTxt");
                           await fs.signInWithEmailAndPassword(
                               emailTxt, passTxt);
-                          navigatePush(DashboardScreen());
+                          navigatePush(const DashboardScreen());
                         } catch (e) {
+                          // ignore: use_build_context_synchronously
                           context.showFastSnackbar("$e",
                               color: TypeFastSnackbar.error);
                         }

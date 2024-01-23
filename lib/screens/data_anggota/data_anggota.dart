@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class DataAnggota extends StatefulWidget {
   const DataAnggota({Key? key}) : super(key: key);
@@ -21,29 +20,33 @@ class _DataAnggotaState extends State<DataAnggota> {
             return Expanded(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 30, bottom: 10),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 30, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           "Data Anggota",
-                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 40, top: 15),
+                    padding: const EdgeInsets.only(
+                        left: 10, right: 10, bottom: 40, top: 15),
                     child: Column(
                       children: [
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
-                              headingRowColor: MaterialStateProperty.resolveWith(
-                                  (states) => Colors.blue.shade200),
-                              columns: [
+                              headingRowColor:
+                                  MaterialStateProperty.resolveWith(
+                                      (states) => Colors.blue.shade200),
+                              columns: const [
                                 DataColumn(label: Text("No Anggota")),
                                 DataColumn(label: Text("Nama")),
                                 DataColumn(label: Text("Email")),
@@ -53,9 +56,10 @@ class _DataAnggotaState extends State<DataAnggota> {
                                 DataColumn(label: Text("Nama Ibu")),
                                 DataColumn(label: Text("No Hp Ibu")),
                               ],
-                              rows: List<DataRow>.generate(snapshot.data!.docs.length, (index) {
-                                DocumentSnapshot data = snapshot.data!.docs[index];
-
+                              rows: List<DataRow>.generate(
+                                  snapshot.data!.docs.length, (index) {
+                                DocumentSnapshot data =
+                                    snapshot.data!.docs[index];
 
                                 return DataRow(cells: [
                                   DataCell(Text(data['no_anggota'])),
@@ -70,7 +74,7 @@ class _DataAnggotaState extends State<DataAnggota> {
                               })),
                         ),
                         //Now let's set the pagination
-                        SizedBox(
+                        const SizedBox(
                           height: 40.0,
                         ),
                       ],
@@ -80,7 +84,7 @@ class _DataAnggotaState extends State<DataAnggota> {
               ),
             );
           } else {
-            return Expanded(
+            return const Expanded(
               child: Center(child: CircularProgressIndicator()),
             );
           }

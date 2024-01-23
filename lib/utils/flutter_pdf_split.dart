@@ -12,7 +12,8 @@ class FlutterPdfSplitArgs {
   /// Prefix for each pdf page file, default value is 'page_'
   final String outFilePrefix;
 
-  FlutterPdfSplitArgs(this.filePath, this.outDirectory, {this.outFilePrefix = "page_"});
+  FlutterPdfSplitArgs(this.filePath, this.outDirectory,
+      {this.outFilePrefix = "page_"});
 
   Map get toMap => {
         "filePath": filePath,
@@ -29,16 +30,16 @@ class FlutterPdfSplitResult {
       : assert(result.containsKey("pageCount") &&
             result.containsKey("pagePaths") &&
             result["pagePaths"] is List) {
-    this.pageCount = result["pageCount"];
-    this.pagePaths = <String>[];
-    (result["pagePaths"] as List).forEach((path) {
-      if (path is String) this.pagePaths.add(path);
-    });
+    pageCount = result["pageCount"];
+    pagePaths = <String>[];
+    for (var path in (result["pagePaths"] as List)) {
+      if (path is String) pagePaths.add(path);
+    }
   }
 }
 
 class FlutterPdfSplit {
-  static const MethodChannel _channel = const MethodChannel('flutter_pdf_split');
+  static const MethodChannel _channel = MethodChannel('flutter_pdf_split');
 
   static Future<String?> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
@@ -46,13 +47,13 @@ class FlutterPdfSplit {
   }
 
   static Future<FlutterPdfSplitResult> split(FlutterPdfSplitArgs args) async {
-    // TODO verify args keys
     return _split(args);
   }
 
   /// Splits PDF file [value] and returns the page count.
   static Future<FlutterPdfSplitResult> _split(FlutterPdfSplitArgs args) async {
-    Map<dynamic, dynamic> result = await (_channel.invokeMethod('split', args.toMap));
+    Map<dynamic, dynamic> result =
+        await (_channel.invokeMethod('split', args.toMap));
     return FlutterPdfSplitResult(result);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class BukuTamu extends StatefulWidget {
   const BukuTamu({Key? key}) : super(key: key);
@@ -23,8 +22,8 @@ class _BukuTamuState extends State<BukuTamu> {
             return Expanded(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
+                  const Padding(
+                    padding: EdgeInsets.only(
                         left: 20, right: 20, top: 30, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +38,7 @@ class _BukuTamuState extends State<BukuTamu> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         left: 10, right: 10, bottom: 40, top: 15),
                     child: Column(
                       children: [
@@ -49,7 +48,7 @@ class _BukuTamuState extends State<BukuTamu> {
                               headingRowColor:
                                   MaterialStateProperty.resolveWith(
                                       (states) => Colors.blue.shade200),
-                              columns: [
+                              columns: const [
                                 DataColumn(label: Text("No anggota")),
                                 DataColumn(label: Text("Nama")),
                                 DataColumn(label: Text("Alamat")),
@@ -63,29 +62,29 @@ class _BukuTamuState extends State<BukuTamu> {
                                     snapshot.data!.docs[index];
 
                                 return DataRow(cells: [
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['no_anggota']))),
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['nama']))),
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['alamat']))),
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['tanggal']))),
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['pekerjaan']))),
-                                  DataCell(Container(
+                                  DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['noHp']))),
                                 ]);
                               })),
                         ),
                         //Now let's set the pagination
-                        SizedBox(
+                        const SizedBox(
                           height: 40.0,
                         ),
                       ],
@@ -95,7 +94,7 @@ class _BukuTamuState extends State<BukuTamu> {
               ),
             );
           } else {
-            return Expanded(
+            return const Expanded(
               child: Center(child: CircularProgressIndicator()),
             );
           }

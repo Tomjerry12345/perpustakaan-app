@@ -80,7 +80,7 @@ class _PeminjamanState extends State<Peminjaman> {
         ),
         Expanded(
             child: !isClick
-                ? listData.length > 0
+                ? listData.isNotEmpty
                     ? ListView.builder(
                         itemCount: listData.length,
                         itemBuilder: (context, index) {
@@ -100,12 +100,12 @@ class _PeminjamanState extends State<Peminjaman> {
                                   "Jumlah peminjaman : ${data["jumlah_peminjaman"]}"),
                               trailing: IconButton(
                                   onPressed: () {},
-                                  icon: Icon(Icons.arrow_right)),
+                                  icon: const Icon(Icons.arrow_right)),
                             ),
                           );
                         },
                       )
-                    : Center(child: CircularProgressIndicator())
+                    : const Center(child: CircularProgressIndicator())
                 : DetailPeminjaman(id: email))
       ]),
     );

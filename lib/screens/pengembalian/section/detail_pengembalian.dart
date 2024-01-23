@@ -78,7 +78,7 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                       DataCell(TextWidget("${data['denda'] ?? "-"}",
                           fontSize: fontSizeDataCell)),
                       DataCell(Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Image.network(
                           data["image"]!,
                           width: 50,
@@ -97,7 +97,8 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                   }));
             }
 
-            return Expanded(child: Center(child: CircularProgressIndicator()));
+            return const Expanded(
+                child: Center(child: CircularProgressIndicator()));
           }),
     );
   }

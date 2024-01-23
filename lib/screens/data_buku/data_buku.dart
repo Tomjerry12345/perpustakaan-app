@@ -1,5 +1,6 @@
-import 'dart:io';
+// ignore_for_file: use_build_context_synchronously, non_constant_identifier_names
 
+import 'dart:io';
 import 'package:admin_perpustakaan/utils/log_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_snackbar/fast_snackbar.dart';
@@ -70,26 +71,26 @@ class _DataBukuState extends State<DataBuku> {
       final imgTmp = await image.readAsBytes();
       setImage(File(image.path), imgTmp);
     } on PlatformException catch (e) {
-      print("Failed pick image");
+      log("failed pick image", v: e);
     }
   }
 
-  Future<DateTime> _selectDate(
-    BuildContext context,
-  ) async {
-    final selected = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(3000));
+  // Future<DateTime> _selectDate(
+  //   BuildContext context,
+  // ) async {
+  //   final selected = await showDatePicker(
+  //       context: context,
+  //       initialDate: selectedDate,
+  //       firstDate: DateTime(2000),
+  //       lastDate: DateTime(3000));
 
-    if (selected != null && selected != selectedDate) {
-      setState(() {
-        selectedDate = selected;
-      });
-    }
-    return selectedDate;
-  }
+  //   if (selected != null && selected != selectedDate) {
+  //     setState(() {
+  //       selectedDate = selected;
+  //     });
+  //   }
+  //   return selectedDate;
+  // }
 
   Future<void> splitPDF(path) async {
     String? directory = await FilePickerWeb.platform.getDirectoryPath();
@@ -110,7 +111,7 @@ class _DataBukuState extends State<DataBuku> {
       var snapshot = await FirebaseStorage.instance
           .ref()
           .child("images")
-          .child('${DateTime.now()}-${judul}-${barcode}.jpg')
+          .child('${DateTime.now()}-$judul-$barcode.jpg')
           .putData(image);
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
@@ -144,7 +145,7 @@ class _DataBukuState extends State<DataBuku> {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
       defaultState();
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
     }
@@ -159,7 +160,7 @@ class _DataBukuState extends State<DataBuku> {
         var snapshot = await FirebaseStorage.instance
             .ref()
             .child("images")
-            .child('${DateTime.now()}-${judul}-${barcode}.jpg')
+            .child('${DateTime.now()}-$judul-$barcode.jpg')
             .putData(image);
         downloadUrl = await snapshot.ref.getDownloadURL();
       }
@@ -195,7 +196,7 @@ class _DataBukuState extends State<DataBuku> {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
       defaultState();
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
     }
@@ -209,7 +210,7 @@ class _DataBukuState extends State<DataBuku> {
       };
 
       await doc.update(json);
-    } on FirebaseException catch (e) {}
+    } on FirebaseException catch (_) {}
   }
 
   Future setRecommend(String? value, String? id) async {
@@ -220,7 +221,7 @@ class _DataBukuState extends State<DataBuku> {
       };
 
       await docUser.update(json);
-    } on FirebaseException catch (e) {}
+    } on FirebaseException catch (_) {}
   }
 
   Future deleteBook(String? id, BuildContext context, Function setLoad) async {
@@ -232,7 +233,7 @@ class _DataBukuState extends State<DataBuku> {
 
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (_) {
       Navigator.of(this.context).pop('dialog');
       setLoad(false);
     }
@@ -262,6 +263,7 @@ class _DataBukuState extends State<DataBuku> {
       halaman = data['halaman'];
       sinopsis = data['sinopsis'];
       kategori = data['kategori'];
+      stokBuku = data['stok_buku'];
       barcode = data['barcode'];
       isPicked = false;
       image = Uint8List(8);
@@ -284,28 +286,25 @@ class _DataBukuState extends State<DataBuku> {
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                  ),
-                                  const Text(
-                                    "Edit Buku",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                  InkWell(
-                                      child: const Icon(Icons.close),
-                                      onTap: () {
-                                        Navigator.of(context).pop('dialog');
-                                      }),
-                                ],
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Icon(
+                                  Icons.close,
+                                  color: Colors.white,
+                                ),
+                                const Text(
+                                  "Edit Buku",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                InkWell(
+                                    child: const Icon(Icons.close),
+                                    onTap: () {
+                                      Navigator.of(context).pop('dialog');
+                                    }),
+                              ],
                             ),
                             Container(
                               margin: const EdgeInsets.symmetric(vertical: 30),
@@ -411,35 +410,33 @@ class _DataBukuState extends State<DataBuku> {
                                 ],
                               ),
                             ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.green,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 50),
-                                      textStyle: const TextStyle(fontSize: 16),
-                                    ),
-                                    onPressed: !_loading
-                                        ? () {
-                                            editBook(context, (bool val) {
-                                              setState(() {
-                                                _loading = val;
-                                              });
-                                            }, data.id);
-                                          }
-                                        : null,
-                                    child: _loading
-                                        ? const CircularProgressIndicator(
-                                            strokeWidth: 2.0,
-                                            color: Colors.white,
-                                          )
-                                        : const Text("Submit"),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 50),
+                                    textStyle: const TextStyle(fontSize: 16),
                                   ),
-                                ],
-                              ),
+                                  onPressed: !_loading
+                                      ? () {
+                                          editBook(context, (bool val) {
+                                            setState(() {
+                                              _loading = val;
+                                            });
+                                          }, data.id);
+                                        }
+                                      : null,
+                                  child: _loading
+                                      ? const CircularProgressIndicator(
+                                          strokeWidth: 2.0,
+                                          color: Colors.white,
+                                        )
+                                      : const Text("Submit"),
+                                ),
+                              ],
                             )
                           ],
                         )),
@@ -467,6 +464,8 @@ class _DataBukuState extends State<DataBuku> {
                   Expanded(
                     child: InteractiveViewer(
                       constrained: false,
+                      minScale: 0.1,
+                      // transformationController: viewTransformationController,
                       child: DataTable(
                           headingRowColor: MaterialStateProperty.resolveWith(
                               (states) => Colors.blue.shade200),
@@ -477,7 +476,7 @@ class _DataBukuState extends State<DataBuku> {
                             DataColumn(label: Text("Penerbit")),
                             DataColumn(label: Text("Kategori")),
                             DataColumn(label: Text("Rak Buku")),
-                            // DataColumn(label: Text("Stok Buku")),
+                            DataColumn(label: Text("Stok Buku")),
                             DataColumn(label: Text("Halaman")),
                             DataColumn(label: Text("Gambar")),
                             DataColumn(label: Text("Aksi")),
@@ -488,15 +487,17 @@ class _DataBukuState extends State<DataBuku> {
 
                             final number = index + 1;
 
-                            log("data", v: data.data());
-
                             return DataRow(cells: [
                               DataCell(Text(number.toString())),
                               DataCell(Text(data['judul_buku'])),
                               DataCell(Text(data['pengarang'])),
-                              DataCell(Text(data['penerbit'])),
+                              DataCell(SizedBox(
+                                  width: 150, child: Text(data['penerbit']))),
                               DataCell(Text(data['kategori'])),
-                              DataCell(Text(data['rak'])),
+                              DataCell(SizedBox(
+                                  width: 50, child: Text(data['rak']))),
+                              DataCell(SizedBox(
+                                  width: 50, child: Text(data['stok_buku']))),
                               // DataCell(Container(
                               //   constraints: BoxConstraints(
                               //     maxWidth: 100,
@@ -506,13 +507,12 @@ class _DataBukuState extends State<DataBuku> {
                               //   ),
                               // )),
                               DataCell(Text(data['halaman'])),
-                              DataCell(Container(
+                              DataCell(SizedBox(
                                 width: 50,
                                 height: 50,
                                 child: Image.network(data["image"]),
                               )),
-                              DataCell(Container(
-                                  child: Row(
+                              DataCell(Row(
                                 children: [
                                   InkWell(
                                     onTap: () {
@@ -561,23 +561,20 @@ class _DataBukuState extends State<DataBuku> {
                                                                   .all(20),
                                                           child: Column(
                                                             children: [
-                                                              Container(
-                                                                child:
-                                                                    const Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Text(
-                                                                      "Hapus Buku",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              20,
-                                                                          fontWeight:
-                                                                              FontWeight.w700),
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                              const Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    "Hapus Buku",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            20,
+                                                                        fontWeight:
+                                                                            FontWeight.w700),
+                                                                  ),
+                                                                ],
                                                               ),
                                                               Container(
                                                                   margin: const EdgeInsets
@@ -595,69 +592,76 @@ class _DataBukuState extends State<DataBuku> {
                                                                         fontWeight:
                                                                             FontWeight.w400),
                                                                   )),
-                                                              Container(
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    ElevatedButton(
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        primary:
-                                                                            Colors.red,
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                20,
-                                                                            horizontal:
-                                                                                30),
-                                                                        textStyle:
-                                                                            const TextStyle(fontSize: 16),
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop("dialog");
-                                                                      },
-                                                                      child: const Text(
-                                                                          "Close"),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .red,
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              20,
+                                                                          horizontal:
+                                                                              30),
+                                                                      textStyle:
+                                                                          const TextStyle(
+                                                                              fontSize: 16),
                                                                     ),
-                                                                    const SizedBox(
-                                                                      width: 10,
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop(
+                                                                              "dialog");
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Close"),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                          vertical:
+                                                                              20,
+                                                                          horizontal:
+                                                                              30),
+                                                                      textStyle:
+                                                                          const TextStyle(
+                                                                              fontSize: 16),
                                                                     ),
-                                                                    ElevatedButton(
-                                                                      style: ElevatedButton
-                                                                          .styleFrom(
-                                                                        primary:
-                                                                            Colors.green,
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                20,
-                                                                            horizontal:
-                                                                                30),
-                                                                        textStyle:
-                                                                            const TextStyle(fontSize: 16),
-                                                                      ),
-                                                                      onPressed: !_loading
-                                                                          ? () {
-                                                                              deleteBook(data.id, context, (bool val) {
-                                                                                setState(() {
-                                                                                  _loading = val;
+                                                                    onPressed:
+                                                                        !_loading
+                                                                            ? () {
+                                                                                deleteBook(data.id, context, (bool val) {
+                                                                                  setState(() {
+                                                                                    _loading = val;
+                                                                                  });
                                                                                 });
-                                                                              });
-                                                                            }
-                                                                          : null,
-                                                                      child: _loading
-                                                                          ? const CircularProgressIndicator(
-                                                                              strokeWidth: 2.0,
-                                                                              color: Colors.white,
-                                                                            )
-                                                                          : const Text("Ya"),
-                                                                    ),
-                                                                  ],
-                                                                ),
+                                                                              }
+                                                                            : null,
+                                                                    child: _loading
+                                                                        ? const CircularProgressIndicator(
+                                                                            strokeWidth:
+                                                                                2.0,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          )
+                                                                        : const Text("Ya"),
+                                                                  ),
+                                                                ],
                                                               )
                                                             ],
                                                           )),
@@ -734,7 +738,7 @@ class _DataBukuState extends State<DataBuku> {
                                   //   ),
                                   // ),
                                 ],
-                              ))),
+                              )),
                             ]);
                           })),
                     ),
@@ -801,44 +805,38 @@ class _DataBukuState extends State<DataBuku> {
               ? isPicked
                   ? InkWell(
                       onTap: onPick,
-                      child: Container(
-                        child: Image.memory(
-                          img!,
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.fill,
-                        ),
+                      child: Image.memory(
+                        img!,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.fill,
                       ),
                     )
                   : InkWell(
                       onTap: onPick,
-                      child: Container(
-                        child: Image.network(
-                          img1!,
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.fill,
-                        ),
+                      child: Image.network(
+                        img1!,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.fill,
                       ),
                     )
               : tmpImage != null
                   ? InkWell(
                       onTap: onPick,
-                      child: Container(
-                        child: Image.memory(
-                          img!,
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.fill,
-                        ),
+                      child: Image.memory(
+                        img!,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.fill,
                       ),
                     )
                   : InkWell(
                       onTap: onPick,
-                      child: Container(
+                      child: const SizedBox(
                         height: 100,
                         width: 100,
-                        child: const Icon(Icons.add_a_photo),
+                        child: Icon(Icons.add_a_photo),
                       ),
                     )
         ],
@@ -873,9 +871,8 @@ class _DataBukuState extends State<DataBuku> {
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(5)),
             child: ElevatedButton(
-                child: const Text('Tambah Buku'),
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.blueAccent,
+                    backgroundColor: Colors.blueAccent,
                     textStyle: const TextStyle(fontSize: 16)),
                 onPressed: () {
                   showDialog(
@@ -894,32 +891,29 @@ class _DataBukuState extends State<DataBuku> {
                                       padding: const EdgeInsets.all(20),
                                       child: Column(
                                         children: [
-                                          Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                const Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                ),
-                                                const Text(
-                                                  "Tambah Buku",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.w700),
-                                                ),
-                                                InkWell(
-                                                    child:
-                                                        const Icon(Icons.close),
-                                                    onTap: () {
-                                                      Navigator.of(context)
-                                                          .pop('dialog');
-                                                    }),
-                                              ],
-                                            ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              ),
+                                              const Text(
+                                                "Tambah Buku",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                              InkWell(
+                                                  child:
+                                                      const Icon(Icons.close),
+                                                  onTap: () {
+                                                    Navigator.of(context)
+                                                        .pop('dialog');
+                                                  }),
+                                            ],
                                           ),
                                           Container(
                                             margin: const EdgeInsets.symmetric(
@@ -1038,41 +1032,38 @@ class _DataBukuState extends State<DataBuku> {
                                               ],
                                             ),
                                           ),
-                                          Container(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Colors.green,
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 20,
-                                                        horizontal: 50),
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                  onPressed: !_loading
-                                                      ? () {
-                                                          addBooks(context,
-                                                              (bool val) {
-                                                            setState(() {
-                                                              _loading = val;
-                                                            });
-                                                          });
-                                                        }
-                                                      : null,
-                                                  child: _loading
-                                                      ? const CircularProgressIndicator(
-                                                          strokeWidth: 2.0,
-                                                          color: Colors.white,
-                                                        )
-                                                      : const Text("Submit"),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: Colors.green,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 20,
+                                                      horizontal: 50),
+                                                  textStyle: const TextStyle(
+                                                      fontSize: 16),
                                                 ),
-                                              ],
-                                            ),
+                                                onPressed: !_loading
+                                                    ? () {
+                                                        addBooks(context,
+                                                            (bool val) {
+                                                          setState(() {
+                                                            _loading = val;
+                                                          });
+                                                        });
+                                                      }
+                                                    : null,
+                                                child: _loading
+                                                    ? const CircularProgressIndicator(
+                                                        strokeWidth: 2.0,
+                                                        color: Colors.white,
+                                                      )
+                                                    : const Text("Submit"),
+                                              ),
+                                            ],
                                           )
                                         ],
                                       )),
@@ -1080,7 +1071,8 @@ class _DataBukuState extends State<DataBuku> {
                               ));
                         });
                       });
-                }),
+                },
+                child: const Text('Tambah Buku')),
           ),
         ]));
   }

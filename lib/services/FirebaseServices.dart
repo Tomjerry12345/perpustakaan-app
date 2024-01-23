@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,7 +19,7 @@ class FirebaseServices {
 
   void add(String path, data) {
     _db.collection(path).add(data).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+        log('DocumentSnapshot added with ID', v: doc.id));
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAll(String path) {
@@ -32,9 +34,9 @@ class FirebaseServices {
       String path, List<ModelQuery> query) {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
-    query.forEach((e) {
+    for (var e in query) {
       collection = collection.where(e.key, isEqualTo: e.value);
-    });
+    }
 
     return collection.snapshots();
   }
@@ -43,9 +45,9 @@ class FirebaseServices {
       String path, List<ModelQuery> query) {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
-    query.forEach((e) {
+    for (var e in query) {
       collection = collection.where(e.key, isEqualTo: e.value);
-    });
+    }
 
     return collection.get();
   }
@@ -69,8 +71,8 @@ class FirebaseServices {
         .collection(path)
         .doc(id)
         .update(data)
-        .then((value) => print("sukses"))
-        .catchError((error) => print("Failed to update user: $error"));
+        .then((value) => log("sukses"))
+        .catchError((error) => log("Failed to update user: $error"));
   }
 
   void delete(String path, String id) {
@@ -78,8 +80,8 @@ class FirebaseServices {
         .collection(path)
         .doc(id)
         .delete()
-        .then((value) => print('Berhasil menghapush data'))
-        .catchError((error) => print("Failed to delete user: $error"));
+        .then((value) => log('Berhasil menghapush data'))
+        .catchError((error) => log("Failed to delete user: $error"));
   }
 
   User? getCurrentUser() {

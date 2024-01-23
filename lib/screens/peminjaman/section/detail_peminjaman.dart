@@ -33,7 +33,6 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
   }
 
   void onPengembalian(Map<String, dynamic> data) {
-    print(data);
     fs.add("pengembalian", {
       "email": data["email"],
       "nama_peminjam": data["nama_peminjam"],
@@ -109,8 +108,8 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                         label: TextWidget("Gambar",
                             fontSize: fontSizeDataCell,
                             fontWeight: FontWeight.bold)),
-                    DataColumn(label: Text("")),
-                    DataColumn(label: Text("")),
+                    const DataColumn(label: Text("")),
+                    const DataColumn(label: Text("")),
                     // DataColumn(label: Text("")),
                   ],
                   rows: List<DataRow>.generate(size, (index) {
@@ -168,7 +167,7 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                       DataCell(TextWidget(denda > 0 ? "$denda" : "-",
                           fontSize: fontSizeDataCell)),
                       DataCell(Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Image.network(
                           data["image"]!,
                           width: 50,
@@ -216,7 +215,8 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                   }));
             }
 
-            return Expanded(child: Center(child: CircularProgressIndicator()));
+            return const Expanded(
+                child: Center(child: CircularProgressIndicator()));
           }),
     );
   }

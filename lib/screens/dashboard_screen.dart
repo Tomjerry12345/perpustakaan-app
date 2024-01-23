@@ -24,108 +24,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: NavigationRail(
-                leading: Container(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 5, bottom: 2),
-                    child: Wrap(direction: Axis.vertical, children: [
-                      Wrap(
-                        spacing: 5.0,
-                        runSpacing: 3.0,
-                        direction: Axis.horizontal,
+          NavigationRail(
+              leading: Container(
+                margin: const EdgeInsets.only(top: 5, bottom: 2),
+                child: Wrap(direction: Axis.vertical, children: [
+                  Wrap(
+                    spacing: 5.0,
+                    runSpacing: 3.0,
+                    direction: Axis.horizontal,
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        backgroundImage: AssetImage(gambar.logo),
+                      ),
+                      const Wrap(
+                        direction: Axis.vertical,
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage(gambar.logo),
+                          Text(
+                            'Perpustakaan Wilayah',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
-                          Wrap(
-                            direction: Axis.vertical,
-                            children: [
-                              Text(
-                                'Perpustakaan Wilayah',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                'Sulawesi Selatan',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'Sulawesi Selatan',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 40,
-                        width: 200,
-                        child: Divider(color: Colors.white),
-                      ),
-                    ]),
+                    ],
                   ),
+                  const SizedBox(
+                    height: 40,
+                    width: 200,
+                    child: Divider(color: Colors.white),
+                  ),
+                ]),
+              ),
+              extended: isExpanded,
+              backgroundColor: Colors.blue.shade700,
+              unselectedIconTheme:
+                  const IconThemeData(color: Colors.white, opacity: 1),
+              unselectedLabelTextStyle: const TextStyle(
+                color: Colors.white,
+              ),
+              selectedIconTheme: IconThemeData(color: Colors.blue.shade300),
+              onDestinationSelected: (value) {
+                setState(() {
+                  index = value;
+                });
+              },
+              destinations: const [
+                NavigationRailDestination(
+                  icon: Icon(Icons.qr_code),
+                  label: Text("Scan"),
                 ),
-                extended: isExpanded,
-                backgroundColor: Colors.blue.shade700,
-                unselectedIconTheme:
-                    IconThemeData(color: Colors.white, opacity: 1),
-                unselectedLabelTextStyle: TextStyle(
-                  color: Colors.white,
+                NavigationRailDestination(
+                  icon: Icon(Icons.book),
+                  label: Text("Data Buku"),
                 ),
-                selectedIconTheme: IconThemeData(color: Colors.blue.shade300),
-                onDestinationSelected: (value) {
-                  setState(() {
-                    index = value;
-                  });
-                },
-                destinations: [
-                  NavigationRailDestination(
-                    icon: Icon(Icons.qr_code),
-                    label: Text("Scan"),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.book),
-                    label: Text("Data Buku"),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.bookmark_remove),
-                    label: Text("Peminjaman"),
-                  ),
-                  // NavigationRailDestination(
-                  //   icon: Icon(Icons.person),
-                  //   label: Text("Profile"),
-                  // ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.bookmark_add),
-                    label: Text("Pengembalian"),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.menu_book),
-                    label: Text("Buku tamu"),
-                  ),
-                  NavigationRailDestination(
-                    icon: Icon(Icons.group),
-                    label: Text("Data Anggota"),
-                  ),
-                ],
-                selectedIndex: index),
-          ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.bookmark_remove),
+                  label: Text("Peminjaman"),
+                ),
+                // NavigationRailDestination(
+                //   icon: Icon(Icons.person),
+                //   label: Text("Profile"),
+                // ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.bookmark_add),
+                  label: Text("Pengembalian"),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.menu_book),
+                  label: Text("Buku tamu"),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.group),
+                  label: Text("Data Anggota"),
+                ),
+              ],
+              selectedIndex: index),
           index == 0
-              ? Scan()
+              ? const Scan()
               : index == 1
-                  ? DataBuku()
+                  ? const DataBuku()
                   : index == 2
-                      ? Peminjaman()
+                      ? const Peminjaman()
                       : index == 3
-                          ? Pengembalian()
+                          ? const Pengembalian()
                           : index == 4
-                              ? BukuTamu()
-                              : DataAnggota()
+                              ? const BukuTamu()
+                              : const DataAnggota()
         ],
       ),
     );

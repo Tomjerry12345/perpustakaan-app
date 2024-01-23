@@ -17,11 +17,11 @@ class ButtonElevatedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      style: ElevatedButton.styleFrom(backgroundColor: backgroundColor),
       child: Text(
         title,
         style: TextStyle(color: color, fontSize: fontSize),
       ),
-      style: ElevatedButton.styleFrom(backgroundColor: backgroundColor),
     );
   }
 }
