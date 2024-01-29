@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       scaffoldMessengerKey: Utils.messengerKey,
       navigatorKey: navigatorKey,
-      home: Awal(),
+      home: const Awal(),
     );
   }
 }

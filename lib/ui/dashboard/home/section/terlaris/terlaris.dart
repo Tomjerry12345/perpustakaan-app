@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
+// ignore: camel_case_types
 class terlaris extends StatefulWidget {
   const terlaris({Key? key}) : super(key: key);
 
@@ -11,8 +10,10 @@ class terlaris extends StatefulWidget {
   State<terlaris> createState() => _terlarisState();
 }
 
+// ignore: camel_case_types
 class _terlarisState extends State<terlaris> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // ignore: non_constant_identifier_names
   final User = FirebaseAuth.instance.currentUser;
 
   @override
@@ -20,7 +21,7 @@ class _terlarisState extends State<terlaris> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: new Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
@@ -28,7 +29,7 @@ class _terlarisState extends State<terlaris> {
             Navigator.pop(context);
           },
         ),
-        title: new Center(
+        title: const Center(
           child: Text(
             'Favorit',
             style: TextStyle(
@@ -39,12 +40,12 @@ class _terlarisState extends State<terlaris> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {},
           ),
         ],
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [Color(0xff0096ff), Color(0xff6610f2)],
                 begin: FractionalOffset.bottomLeft,
@@ -59,11 +60,11 @@ class _terlarisState extends State<terlaris> {
               .snapshots(),
           builder: (context, snapshot) {
             return !snapshot.hasData
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: GridView.builder(
                       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 150,
@@ -83,9 +84,10 @@ class _terlarisState extends State<terlaris> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Card CardBook(DocumentSnapshot data, BuildContext contex) {
     return Card(
-      margin: EdgeInsets.only(right: 5, left: 5, top: 5),
+      margin: const EdgeInsets.only(right: 5, left: 5, top: 5),
       child: InkWell(
           onTap: () {},
           splashColor: Colors.blueAccent,
@@ -98,7 +100,7 @@ class _terlarisState extends State<terlaris> {
               child: Center(
                   child: Column(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 200,
                     child: Column(children: <Widget>[
                       Image.network(
@@ -106,28 +108,28 @@ class _terlarisState extends State<terlaris> {
                         height: 150,
                         width: 150,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 data["judul_buku"],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Text(
                                 data["pengarang"],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 10,
                                   color: Colors.black,
                                 ),
@@ -137,12 +139,12 @@ class _terlarisState extends State<terlaris> {
                     ]),
                   ),
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         border: Border(
                             top: BorderSide(color: Colors.blue, width: 1))),
                     height: 35,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Row(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(

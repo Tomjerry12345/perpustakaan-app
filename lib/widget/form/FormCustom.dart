@@ -1,5 +1,6 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class FormCustom extends StatefulWidget {
   final String text;
@@ -27,13 +28,13 @@ class _FormCustomState extends State<FormCustom> {
         // prefixIcon: Icon(Icons.lock,
         //     // color: HexColor("#C3C6C3"),
         //     color: Colors.blue),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.blue,
             width: 1.0,
           ),
         ),
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             // color: HexColor("#019267"),
             color: Colors.blue,
@@ -41,7 +42,7 @@ class _FormCustomState extends State<FormCustom> {
           ),
         ),
         hintText: widget.text,
-        hintStyle: TextStyle(color: Color(0xff2BB1EB)),
+        hintStyle: const TextStyle(color: Color(0xff2BB1EB)),
       ),
     );
   }

@@ -25,7 +25,7 @@ class _PengembalianState extends State<Pengembalian> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Pengembalian',
             style: TextStyle(color: Colors.white),
           ),
@@ -43,24 +43,24 @@ class _PengembalianState extends State<Pengembalian> {
             builder: ((context, snapshot) {
               return snapshot.hasData
                   ? SafeArea(
-                      child: Container(
-                          child: ListView.builder(
+                      child: ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: ((context, index) {
                         DocumentSnapshot data = snapshot.data!.docs[index];
                         return ItemCard(data, context);
                       }),
-                    )))
-                  : Center(
+                    ))
+                  : const Center(
                       child: CircularProgressIndicator(),
                     );
             })));
   }
 
+  // ignore: non_constant_identifier_names
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(bottom: 10),
       // height: 0.40.h,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -88,7 +88,7 @@ class _PengembalianState extends State<Pengembalian> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               V(8),
-              TextWidget(
+              const TextWidget(
                 "Judul buku",
                 fontWeight: FontWeight.bold,
               ),
@@ -96,7 +96,7 @@ class _PengembalianState extends State<Pengembalian> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['judul_buku'],
                     color: Colors.white,
@@ -104,7 +104,7 @@ class _PengembalianState extends State<Pengembalian> {
                 ),
               ),
               V(8),
-              TextWidget(
+              const TextWidget(
                 "Pengarang",
                 fontWeight: FontWeight.bold,
               ),
@@ -112,7 +112,7 @@ class _PengembalianState extends State<Pengembalian> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['pengarang'],
                     color: Colors.white,
@@ -120,7 +120,7 @@ class _PengembalianState extends State<Pengembalian> {
                 ),
               ),
               V(8),
-              TextWidget(
+              const TextWidget(
                 "Nama peminjam",
                 fontWeight: FontWeight.bold,
               ),
@@ -128,7 +128,7 @@ class _PengembalianState extends State<Pengembalian> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['nama_peminjam'],
                     color: Colors.white,
@@ -139,7 +139,7 @@ class _PengembalianState extends State<Pengembalian> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextWidget(
+                  const TextWidget(
                     "Tanggal Peminjaman",
                     fontWeight: FontWeight.bold,
                   ),
@@ -147,7 +147,7 @@ class _PengembalianState extends State<Pengembalian> {
                     width: 0.5.w,
                     color: Colors.blue,
                     child: Container(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       child: TextWidget(
                         data['tanggal_peminjaman'] ?? "-",
                         color: Colors.white,
@@ -155,7 +155,7 @@ class _PengembalianState extends State<Pengembalian> {
                     ),
                   ),
                   V(8),
-                  TextWidget(
+                  const TextWidget(
                     "Tanggal Pengembalian",
                     fontWeight: FontWeight.bold,
                   ),
@@ -163,7 +163,7 @@ class _PengembalianState extends State<Pengembalian> {
                     width: 0.5.w,
                     color: Colors.blue,
                     child: Container(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       child: TextWidget(
                         data['tanggal_pengembalian'] ?? "-",
                         color: Colors.white,
@@ -171,7 +171,7 @@ class _PengembalianState extends State<Pengembalian> {
                     ),
                   ),
                   V(8),
-                  TextWidget(
+                  const TextWidget(
                     "Denda",
                     fontWeight: FontWeight.bold,
                   ),
@@ -179,7 +179,7 @@ class _PengembalianState extends State<Pengembalian> {
                     width: 0.5.w,
                     color: Colors.blue,
                     child: Container(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       child: TextWidget(
                         // data['tanggal_peminjaman'],
                         data["denda"] != null

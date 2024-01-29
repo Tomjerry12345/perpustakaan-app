@@ -39,8 +39,9 @@ class _FaceAutentikasiState extends State<FaceAutentikasi> {
       final canAuth = await isAuth();
       if (canAuth) {
         bool authenticated = await auth.authenticate(
-            localizedReason: "Silahkan masukkan sidik jari anda untuk mengisi buku tamu",
-            );
+          localizedReason:
+              "Silahkan masukkan sidik jari anda untuk mengisi buku tamu",
+        );
         if (authenticated) {
           final user = fs.getCurrentUser();
           final time = Time();
@@ -55,7 +56,7 @@ class _FaceAutentikasiState extends State<FaceAutentikasi> {
             "noHp": u["hp"],
             "pekerjaan": u["pekerjaan"]
           });
-          navigatePush(BottomNav(), isRemove: true);
+          navigatePush(const BottomNav(), isRemove: true);
         } else {
           showToast("sidik jari tidak di temukan", Colors.red);
           FirebaseAuth.instance.signOut();

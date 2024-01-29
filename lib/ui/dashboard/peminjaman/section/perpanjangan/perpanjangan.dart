@@ -20,11 +20,11 @@ class _PerpanjanganState extends State<Perpanjangan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: new Icon(
+        leading: const Icon(
           Icons.arrow_back,
           color: Colors.white,
         ),
-        title: new Center(
+        title: const Center(
           child: Text(
             'Perpanjangan',
             style: TextStyle(color: Colors.white),
@@ -32,12 +32,12 @@ class _PerpanjanganState extends State<Perpanjangan> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {},
           ),
         ],
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [Color(0xff0096ff), Color(0xff6610f2)],
                 begin: FractionalOffset.bottomLeft,
@@ -46,7 +46,7 @@ class _PerpanjanganState extends State<Perpanjangan> {
         ),
       ),
       body: Container(
-          margin: EdgeInsets.only(top: 10),
+          margin: const EdgeInsets.only(top: 10),
           height: double.infinity,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -54,9 +54,10 @@ class _PerpanjanganState extends State<Perpanjangan> {
             borderRadius: BorderRadius.circular(5),
             color: Colors.white,
           ),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: Wrap(
                 spacing: 8.0,
                 direction: Axis.horizontal,
@@ -70,26 +71,26 @@ class _PerpanjanganState extends State<Perpanjangan> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 20, left: 20),
+                    margin: const EdgeInsets.only(top: 20, left: 20),
                     child: Wrap(
                       spacing: 10,
                       direction: Axis.vertical,
                       children: [
-                        Container(
+                        SizedBox(
                           width: 250,
                           child: Text(
                             "Judul buku: ${widget.data!['judul_buku']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 300,
                           child: Text(
                             "Nama peminjam: ${widget.data!['nama_peminjam']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             ),
@@ -102,21 +103,21 @@ class _PerpanjanganState extends State<Perpanjangan> {
                         //     color: Colors.black,
                         //   ),
                         // ),
-                        Container(
+                        SizedBox(
                           width: 250,
                           child: Text(
                             "Tanggal peminjaman: ${widget.data!['tanggal_peminjaman']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                        Container(
+                        SizedBox(
                           width: 250,
                           child: Text(
                             "Tanggal pengembalian: ${widget.data!['tanggal_pengembalian']}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               color: Colors.black,
                             ),
@@ -132,26 +133,28 @@ class _PerpanjanganState extends State<Perpanjangan> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   width: 140,
                   height: 70,
-                  padding: EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                   ),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)))),
-                    child: Text("Perpanjang"),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)))),
+                    child: const Text("Perpanjang"),
                     onPressed: () async {
                       final id = widget.data!.id;
-                      var tanggalPengembalian = widget.data!['tanggal_pengembalian'];
+                      var tanggalPengembalian =
+                          widget.data!['tanggal_pengembalian'];
                       final split = tanggalPengembalian.toString().split("-");
 
                       final time = Time();
 
-                      var getDate = time.getDateByRangeIndex(14, int.parse(split[2]));
+                      var getDate =
+                          time.getDateByRangeIndex(7, int.parse(split[2]));
 
                       // final tanggalPengembalian =
                       //     "${time.getYear()}-${time.getMonth()}-$getDate";
@@ -162,22 +165,20 @@ class _PerpanjanganState extends State<Perpanjangan> {
                         month = 1;
                       }
 
-                      tanggalPengembalian = "${split[0]}-${month}-${getDate[0]}";
-
-                      print(tanggalPengembalian);
+                      tanggalPengembalian = "${split[0]}-$month-${getDate[0]}";
 
                       final data = <String, dynamic>{
                         "nama_peminjam": widget.data!['nama_peminjam'],
                         "judul_buku": widget.data!["judul_buku"],
-                        "tanggal_peminjaman": widget.data!['tanggal_peminjaman'],
+                        "tanggal_peminjaman":
+                            widget.data!['tanggal_peminjaman'],
                         "tanggal_pengembalian": tanggalPengembalian,
                         "image": widget.data!["image"]
                       };
 
                       await firebaseServices.update("peminjaman", id, data);
-
                       Utils.showSnackBar("Berhasil", Colors.green);
-
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     },
                   ),

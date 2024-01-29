@@ -1,4 +1,6 @@
+// ignore_for_file: file_names
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServices {
@@ -14,10 +16,10 @@ class NotificationServices {
     await _notifications.initialize(initializationSettings,
         onDidReceiveNotificationResponse:
             ((NotificationResponse notificationResponse) {
-      print("details ${notificationResponse}");
+      log("details", v: notificationResponse);
     }));
 
-    print("initt notif.....");
+    log("initt notif.....");
   }
 
   static Future showNotification({
@@ -35,8 +37,8 @@ class NotificationServices {
     String? body,
     String? payload,
   }) async =>
-      _notifications.zonedSchedule(id, title, body, _scheduleDaily(Time(8)),
-          await _notificationDetails(),
+      _notifications.zonedSchedule(id, title, body,
+          _scheduleDaily(const Time(8)), await _notificationDetails(),
           payload: payload,
           androidAllowWhileIdle: true,
           uiLocalNotificationDateInterpretation:
@@ -56,7 +58,7 @@ class NotificationServices {
         time.hour, time.minute, time.second);
 
     return scheduleDate.isBefore(now)
-        ? scheduleDate.add(Duration(days: 1))
+        ? scheduleDate.add(const Duration(days: 1))
         : scheduleDate;
   }
 

@@ -47,8 +47,8 @@ class _PeminjamanState extends State<Peminjaman> {
   void onClickPerpanjangan(BuildContext context, id) {
     dialogShowCustomContent(
         context: context,
-        title: TextWidget("Perpanjangan"),
-        content: Container(
+        title: const TextWidget("Perpanjangan"),
+        content: SizedBox(
           height: 70,
           child: Column(
             children: [
@@ -109,7 +109,7 @@ class _PeminjamanState extends State<Peminjaman> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             'Peminjaman',
             style: TextStyle(color: Colors.white),
           ),
@@ -127,21 +127,21 @@ class _PeminjamanState extends State<Peminjaman> {
             builder: ((context, snapshot) {
               return snapshot.hasData
                   ? SafeArea(
-                      child: Container(
-                          child: ListView.builder(
+                      child: ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: ((context, index) {
                         DocumentSnapshot data = snapshot.data!.docs[index];
 
                         return ItemCard(data, context);
                       }),
-                    )))
-                  : Center(
+                    ))
+                  : const Center(
                       child: CircularProgressIndicator(),
                     );
             })));
   }
 
+  // ignore: non_constant_identifier_names
   Container ItemCard(DocumentSnapshot data, BuildContext context) {
     int sisaHariNow = 0;
     int denda = 0;
@@ -170,8 +170,9 @@ class _PeminjamanState extends State<Peminjaman> {
         denda = sisaHariNow * 1000;
         deletePeminjamanOnline();
       } else if (sisaHariNow < 0) {
-        if (data["type_peminjaman"] == "online")
+        if (data["type_peminjaman"] == "online") {
           db.delete("peminjaman", data.id);
+        }
         sisaHariNow = sisaHariNow.abs();
         isTenggat = true;
         denda = sisaHariNow * 1000;
@@ -180,8 +181,8 @@ class _PeminjamanState extends State<Peminjaman> {
     }
 
     return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.only(bottom: 10),
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(bottom: 10),
       // height: 0.40.h,
       width: double.infinity,
       decoration: BoxDecoration(
@@ -207,7 +208,7 @@ class _PeminjamanState extends State<Peminjaman> {
                       // width: 0.34.w,
                       color: data['konfirmasi'] ? Colors.green : Colors.red,
                       child: Container(
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         child: TextWidget(
                           data['konfirmasi']
                               ? "Konfirmasi"
@@ -218,37 +219,35 @@ class _PeminjamanState extends State<Peminjaman> {
                       ),
                     )
                   : Container(),
-              Container(
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue),
-                    onPressed: () {
-                      AlertDialog alert = AlertDialog(
-                        title: Text("Meminjam"),
-                        content:
-                            Text("Apakah anda yakin ingin mengembalikan buku?"),
-                        actions: [
-                          ElevatedButton(
-                              onPressed: () async {
-                                onPengembalian(data);
-                              },
-                              child: Text("Ok")),
-                          ElevatedButton(
-                              onPressed: () {
-                                navigatePop();
-                              },
-                              child: Text("Batal")),
-                        ],
-                      );
-                      dialogShow(context: context, widget: alert);
-                    },
-                    child: Text(
-                      "Pengembalian",
-                      style: TextStyle(color: Colors.white),
-                    )),
-              ),
-              V(15),
-              Container(
+              ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+                  onPressed: () {
+                    AlertDialog alert = AlertDialog(
+                      title: const Text("Meminjam"),
+                      content: const Text(
+                          "Apakah anda yakin ingin mengembalikan buku?"),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () async {
+                              onPengembalian(data);
+                            },
+                            child: const Text("Ok")),
+                        ElevatedButton(
+                            onPressed: () {
+                              navigatePop();
+                            },
+                            child: const Text("Batal")),
+                      ],
+                    );
+                    dialogShow(context: context, widget: alert);
+                  },
+                  child: const Text(
+                    "Pengembalian",
+                    style: TextStyle(color: Colors.white),
+                  )),
+              V(16),
+              SizedBox(
                 width: 124,
                 child: ElevatedButton(
                     style:
@@ -256,7 +255,7 @@ class _PeminjamanState extends State<Peminjaman> {
                     onPressed: () {
                       onBacaBuku(data);
                     },
-                    child: Text(
+                    child: const Text(
                       "Baca buku",
                       style: TextStyle(color: Colors.white),
                     )),
@@ -268,7 +267,7 @@ class _PeminjamanState extends State<Peminjaman> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               V(16),
-              TextWidget(
+              const TextWidget(
                 "Judul buku",
                 fontWeight: FontWeight.bold,
               ),
@@ -276,7 +275,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['judul_buku'],
                     color: Colors.white,
@@ -284,7 +283,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 ),
               ),
               V(8),
-              TextWidget(
+              const TextWidget(
                 "Pengarang",
                 fontWeight: FontWeight.bold,
               ),
@@ -292,7 +291,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['judul_buku'],
                     color: Colors.white,
@@ -300,7 +299,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 ),
               ),
               V(8),
-              TextWidget(
+              const TextWidget(
                 "Nama peminjam",
                 fontWeight: FontWeight.bold,
               ),
@@ -308,7 +307,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 width: 0.5.w,
                 color: Colors.grey,
                 child: Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: TextWidget(
                     data['nama_peminjam'],
                     color: Colors.white,
@@ -320,7 +319,7 @@ class _PeminjamanState extends State<Peminjaman> {
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextWidget(
+                        const TextWidget(
                           "Sisa hari",
                           fontWeight: FontWeight.bold,
                         ),
@@ -332,7 +331,7 @@ class _PeminjamanState extends State<Peminjaman> {
                                   ? Colors.red
                                   : Colors.blue,
                           child: Container(
-                            margin: EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(8),
                             child: TextWidget(
                               // data['tanggal_peminjaman'],
                               !isTenggat
@@ -346,7 +345,7 @@ class _PeminjamanState extends State<Peminjaman> {
                         denda > 0 && data['type_peminjaman'] == "offline"
                             ? Column(
                                 children: [
-                                  TextWidget(
+                                  const TextWidget(
                                     "Denda",
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -354,7 +353,7 @@ class _PeminjamanState extends State<Peminjaman> {
                                     width: 0.5.w,
                                     color: Colors.blue,
                                     child: Container(
-                                      margin: EdgeInsets.all(8),
+                                      margin: const EdgeInsets.all(8),
                                       child: TextWidget(
                                         // data['tanggal_peminjaman'],
                                         "$denda",
@@ -368,15 +367,13 @@ class _PeminjamanState extends State<Peminjaman> {
                       ],
                     )
                   : Container(),
-                  V(12),
+              V(12),
               data["konfirmasi"]! && sisaHariNow < 7
-                  ? Container(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            onClickPerpanjangan(context, data.id);
-                          },
-                          child: Text("Perpanjangan")),
-                    )
+                  ? ElevatedButton(
+                      onPressed: () {
+                        onClickPerpanjangan(context, data.id);
+                      },
+                      child: const Text("Perpanjangan"))
                   : Container(),
             ],
           )

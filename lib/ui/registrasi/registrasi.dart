@@ -8,6 +8,7 @@ import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/generated_utils.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 import 'package:perpustakaan_mobile/widget/avatar/avatar_component.dart';
@@ -37,11 +38,11 @@ class _RegistrasiState extends State<Registrasi> {
 
   @override
   Widget build(BuildContext context) {
-    print("test");
+    log("test");
     return Scaffold(
         body: ListView(padding: const EdgeInsets.all(8), children: <Widget>[
       Container(
-        margin: EdgeInsets.only(top: 75),
+        margin: const EdgeInsets.only(top: 75),
         width: double.infinity,
         child: Text(
           "Registrasi",
@@ -49,7 +50,7 @@ class _RegistrasiState extends State<Registrasi> {
           style: TextStyle(fontSize: 24, color: Warna.warnabiru1),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 36,
       ),
       Center(
@@ -68,35 +69,38 @@ class _RegistrasiState extends State<Registrasi> {
         text: "nama",
         controller: namaController,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
         text: "alamat",
         controller: alamatController,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
         text: "pekerjaan",
         controller: pekerjaanController,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
-      FormCustom(text: "nik", controller: nikcontroller, inputType: TextInputType.number),
-      SizedBox(
+      FormCustom(
+          text: "nik",
+          controller: nikcontroller,
+          inputType: TextInputType.number),
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
         text: "nama ibu kandung",
         controller: namaIbuKandungController,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
@@ -104,7 +108,7 @@ class _RegistrasiState extends State<Registrasi> {
         controller: noHpIbuKandungController,
         inputType: TextInputType.number,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
@@ -112,38 +116,38 @@ class _RegistrasiState extends State<Registrasi> {
         controller: emailController,
         inputType: TextInputType.emailAddress,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
       FormCustom(
         text: "password",
         controller: passwordController,
       ),
-      SizedBox(
+      const SizedBox(
         height: 12,
       ),
-      SizedBox(
+      const SizedBox(
         height: 20,
       ),
       Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         width: double.infinity,
-        padding: EdgeInsets.all(3),
+        padding: const EdgeInsets.all(3),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: Colors.blue,
-            padding: EdgeInsets.symmetric(vertical: 20),
+            backgroundColor: Colors.blue,
+            padding: const EdgeInsets.symmetric(vertical: 20),
           ),
-          child: Text("Daftar"),
+          child: const Text("Daftar"),
           onPressed: () {
             signUp();
           },
         ),
       ),
-      SizedBox(height: 20),
+      const SizedBox(height: 20),
       Container(
         width: double.infinity,
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -154,7 +158,8 @@ class _RegistrasiState extends State<Registrasi> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Login()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Login()));
               },
               child: Text(
                 "Login",
@@ -177,7 +182,7 @@ class _RegistrasiState extends State<Registrasi> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => Center(
+        builder: (context) => const Center(
           child: CircularProgressIndicator(),
         ),
       );
@@ -187,7 +192,8 @@ class _RegistrasiState extends State<Registrasi> {
         password: passwordController.text.trim(),
       );
 
-      final docUser = FirebaseFirestore.instance.collection("users").doc(res.user!.uid);
+      final docUser =
+          FirebaseFirestore.instance.collection("users").doc(res.user!.uid);
 
       final urlFile = await fs.uploadFile(getImage!, "profile");
 
@@ -212,8 +218,9 @@ class _RegistrasiState extends State<Registrasi> {
       navigatorKey.currentState!.popUntil((route) => route.isFirst);
     } catch (e) {
       if (e is FirebaseAuthException) {
-        print('Kode Kesalahan: ${e.code}');
-        print('Pesan Kesalahan: ${e.message}');
+        log('Kode Kesalahan', v: e.code);
+        log('Pesan Kesalahan: ${e.message}');
+        // ignore: use_build_context_synchronously
         Navigator.of(context, rootNavigator: true).pop('dialog');
         Utils.showSnackBar(e.message, Colors.red);
       } else {

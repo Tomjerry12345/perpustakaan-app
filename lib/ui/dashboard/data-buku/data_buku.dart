@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/show_utils.dart';
 
 import '../../../model/ModelQuery.dart';
@@ -60,7 +61,7 @@ class _DataBukuState extends State<DataBuku> {
           } else if (sisaHariNow < 0) {
             sisaHariNow = sisaHariNow.abs();
           }
-          print(sisaHariNow);
+          log("sisaHariNow", v: sisaHariNow);
           setState(() {
             sisaPeminjaman = sisaHariNow;
           });
@@ -72,18 +73,18 @@ class _DataBukuState extends State<DataBuku> {
 
   Future<File> createFileOfPdfUrl() async {
     Completer<File> completer = Completer();
-    print("Start download file from internet!");
+    log("Start download file from internet!");
     try {
       // "https://berlin2017.droidcon.cod.newthinking.net/sites/global.droidcon.cod.newthinking.net/files/media/documents/Flutter%20-%2060FPS%20UI%20of%20the%20future%20%20-%20DroidconDE%2017.pdf";
       // final url = "https://pdfkit.org/docs/guide.pdf";
-      final url = "http://www.pdf995.com/samples/pdf.pdf";
+      const url = "http://www.pdf995.com/samples/pdf.pdf";
       final filename = url.substring(url.lastIndexOf("/") + 1);
       var request = await HttpClient().getUrl(Uri.parse(url));
       var response = await request.close();
       var bytes = await consolidateHttpClientResponseBytes(response);
       var dir = await getApplicationDocumentsDirectory();
-      print("Download files");
-      print("${dir.path}/$filename");
+      log("Download files");
+      log("${dir.path}/$filename");
       File file = File("${dir.path}/$filename");
 
       await file.writeAsBytes(bytes, flush: true);
@@ -100,7 +101,7 @@ class _DataBukuState extends State<DataBuku> {
     return Scaffold(
         appBar: AppBar(
           leading: InkWell(
-            child: new Icon(
+            child: const Icon(
               Icons.arrow_back,
               color: Colors.white,
             ),
@@ -108,7 +109,7 @@ class _DataBukuState extends State<DataBuku> {
               Navigator.pop(context);
             },
           ),
-          title: new Center(
+          title: const Center(
             child: Text(
               'Data Buku',
               style: TextStyle(color: Colors.white),
@@ -121,7 +122,7 @@ class _DataBukuState extends State<DataBuku> {
           //   ),
           // ],
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [Color(0xff0096ff), Color(0xff6610f2)],
                   begin: FractionalOffset.bottomLeft,
@@ -130,14 +131,14 @@ class _DataBukuState extends State<DataBuku> {
           ),
         ),
         body: Container(
-            margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
             child: Wrap(
                 spacing: 5.0,
                 runSpacing: 4.0,
                 direction: Axis.horizontal,
                 children: <Widget>[
                   Container(
-                      margin: EdgeInsets.only(top: 5, right: 10),
+                      margin: const EdgeInsets.only(top: 5, right: 10),
                       height: 120,
                       width: double.infinity,
                       child: Row(
@@ -148,43 +149,41 @@ class _DataBukuState extends State<DataBuku> {
                             height: 120,
                             fit: BoxFit.contain,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
-                          Container(
-                            child: Wrap(
-                              direction: Axis.vertical,
-                              spacing: 10.0,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.book),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(widget.data!["judul_buku"]),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.person),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(widget.data!["pengarang"]),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.barcode_reader),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(widget.data!["barcode"]),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          Wrap(
+                            direction: Axis.vertical,
+                            spacing: 10.0,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.book),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(widget.data!["judul_buku"]),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.person),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(widget.data!["pengarang"]),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Icon(Icons.barcode_reader),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(widget.data!["barcode"]),
+                                ],
+                              ),
+                            ],
                           )
                         ],
                       )),
@@ -192,7 +191,7 @@ class _DataBukuState extends State<DataBuku> {
                   Column(
                     children: [
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
+                        margin: const EdgeInsets.symmetric(vertical: 20),
                         width: double.infinity,
                         child: Wrap(
                           children: [
@@ -201,16 +200,12 @@ class _DataBukuState extends State<DataBuku> {
                                 Wrap(
                                   spacing: 15,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Container(
-                                      child: Text(
-                                        widget.data!["sinopsis"],
-                                        style: TextStyle(height: 1.5),
-                                      ),
-                                      margin: EdgeInsets.only(top: 5),
-                                      padding: EdgeInsets.all(8),
+                                      margin: const EdgeInsets.only(top: 5),
+                                      padding: const EdgeInsets.all(8),
                                       height: 130,
                                       width: double.infinity,
                                       decoration: BoxDecoration(
@@ -219,30 +214,34 @@ class _DataBukuState extends State<DataBuku> {
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
                                       ),
+                                      child: Text(
+                                        widget.data!["sinopsis"],
+                                        style: const TextStyle(height: 1.5),
+                                      ),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(top: 20),
+                                      margin: const EdgeInsets.only(top: 20),
                                       child: Wrap(
                                         spacing: 15,
                                         direction: Axis.vertical,
                                         children: [
                                           Text(
                                             'Tanggal Terbit: ${DateFormat("dd MMMM yyyy").format(widget.data!["tanggal"].toDate())}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
                                             'Jumlah Halaman: ${widget.data!["halaman"]}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,
                                             ),
                                           ),
                                           Text(
                                             'Rak Buku: ${widget.data!["rak"]}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.black,
                                             ),
@@ -253,25 +252,25 @@ class _DataBukuState extends State<DataBuku> {
 
                                     Container(
                                       width: double.infinity,
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 8),
-                                      child: Column(
+                                      child: const Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                       ),
                                     ),
                                     Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 15),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 15),
                                       width: double.infinity,
-                                      padding: EdgeInsets.all(3),
+                                      padding: const EdgeInsets.all(3),
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               sisaPeminjaman == null
                                                   ? Colors.green
                                                   : Colors.pink,
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 20),
                                         ),
                                         child: Text(sisaPeminjaman == null
@@ -288,20 +287,20 @@ class _DataBukuState extends State<DataBuku> {
                                     ),
                                     // V(8),
                                     Container(
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 15),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 15),
                                       width: double.infinity,
-                                      padding: EdgeInsets.all(3),
+                                      padding: const EdgeInsets.all(3),
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 20),
                                         ),
-                                        child: Text("Pinjam Buku"),
+                                        child: const Text("Pinjam Buku"),
                                         onPressed: () async {
                                           AlertDialog alert = AlertDialog(
-                                            title: Text("Meminjam"),
-                                            content: Text(
+                                            title: const Text("Meminjam"),
+                                            content: const Text(
                                                 "Apakah anda yakin ingin meminjam buku?"),
                                             actions: [
                                               ElevatedButton(
@@ -402,12 +401,12 @@ class _DataBukuState extends State<DataBuku> {
                                                           Colors.red);
                                                     }
                                                   },
-                                                  child: Text("Ok")),
+                                                  child: const Text("Ok")),
                                               ElevatedButton(
                                                   onPressed: () {
                                                     navigatePop();
                                                   },
-                                                  child: Text("Batal")),
+                                                  child: const Text("Batal")),
                                             ],
                                           );
                                           dialogShow(

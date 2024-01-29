@@ -1,10 +1,10 @@
 name: perpustakaan_mobile
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.0.1 <4.0.0'
+  sdk: ">=3.0.1 <4.0.0"
 
 dependencies:
   flutter:
@@ -29,7 +29,8 @@ dependencies:
   http: ^0.13.0
   image_picker: ^0.8.7+5
   firebase_storage: ^11.2.8
-  local_auth: ^2.1.8 
+  local_auth: ^2.1.8
+  animated_custom_dropdown: ^3.0.0
 
 dev_dependencies:
   flutter_test:

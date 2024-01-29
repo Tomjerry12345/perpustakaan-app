@@ -1,9 +1,12 @@
+// ignore_for_file: file_names
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
 
 import '../model/ModelQuery.dart';
 
@@ -15,14 +18,15 @@ class FirebaseServices {
     _db
         .collection(path)
         .add(data)
-        .then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
+        .then((DocumentReference doc) => log("sukses"));
   }
 
   Future<QuerySnapshot<Map<String, dynamic>>> getAll(String path) {
     return _db.collection(path).get();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getSpecifict(String path, String doc) {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getSpecifict(
+      String path, String doc) {
     return _db.collection(path).doc(doc).get();
   }
 
@@ -30,12 +34,13 @@ class FirebaseServices {
     return _db.collection(path).snapshots();
   }
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> query(String path, List<ModelQuery> query) {
+  Stream<QuerySnapshot<Map<String, dynamic>>> query(
+      String path, List<ModelQuery> query) {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
-    query.forEach((e) {
+    for (var e in query) {
       collection = collection.where(e.key, isEqualTo: e.value);
-    });
+    }
 
     return collection.snapshots();
   }
@@ -44,9 +49,9 @@ class FirebaseServices {
       String path, List<ModelQuery> query) async {
     Query<Map<String, dynamic>> collection = _db.collection(path);
 
-    query.forEach((e) {
+    for (var e in query) {
       collection = collection.where(e.key, isEqualTo: e.value);
-    });
+    }
 
     return collection.get();
   }
@@ -56,8 +61,8 @@ class FirebaseServices {
         .collection(path)
         .doc(id)
         .update(data)
-        .then((value) => print("sukses"))
-        .catchError((error) => print("Failed to delete user: $error"));
+        .then((value) => log("sukses"))
+        .catchError((error) => log("Failed to delete user: $error"));
   }
 
   void delete(String path, String id) {
@@ -65,8 +70,8 @@ class FirebaseServices {
         .collection(path)
         .doc(id)
         .delete()
-        .then((value) => print('Berhasil menghapush data'))
-        .catchError((error) => print("Failed to delete user: $error"));
+        .then((value) => log('Berhasil menghapush data'))
+        .catchError((error) => log("Failed to delete user: $error"));
   }
 
   User? getCurrentUser() {
@@ -75,7 +80,8 @@ class FirebaseServices {
 
   Future uploadFile(File file, String type) async {
     String fileName = basename(file.path);
-    final firebaseStorageRef = FirebaseStorage.instance.ref().child('$type/$fileName');
+    final firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('$type/$fileName');
     final uploadTask = await firebaseStorageRef.putFile(file);
     final taskSnapshot = uploadTask.ref.getDownloadURL();
     return taskSnapshot;

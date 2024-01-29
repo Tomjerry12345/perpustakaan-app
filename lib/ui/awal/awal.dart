@@ -28,7 +28,7 @@ class _AwalState extends State<Awal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -38,9 +38,12 @@ class _AwalState extends State<Awal> {
               width: 150,
               height: 100,
             ),
-            Text(
+            const Text(
               'LIBRARY SULSEL',
-              style: TextStyle(fontSize: 18, color: Colors.blue, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold),
             ),
           ],
         ),
