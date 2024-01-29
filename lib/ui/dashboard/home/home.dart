@@ -371,7 +371,7 @@ class _HomeState extends State<Home> {
                     : kategori != ""
                         ? firestore
                             .collection("books")
-                            .where("kategori", isGreaterThanOrEqualTo: kategori)
+                            .where("kategori", isEqualTo: kategori)
                             .snapshots()
                         : fs.getAllStream("books"),
                 builder: (context, snapshot) {
