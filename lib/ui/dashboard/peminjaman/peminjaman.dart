@@ -221,7 +221,7 @@ class _PeminjamanState extends State<Peminjaman> {
               Container(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.purple),
+                        backgroundColor: Colors.blue),
                     onPressed: () {
                       AlertDialog alert = AlertDialog(
                         title: Text("Meminjam"),
@@ -247,7 +247,7 @@ class _PeminjamanState extends State<Peminjaman> {
                       style: TextStyle(color: Colors.white),
                     )),
               ),
-              V(16),
+              V(15),
               Container(
                 width: 124,
                 child: ElevatedButton(
@@ -327,7 +327,7 @@ class _PeminjamanState extends State<Peminjaman> {
                         Container(
                           width: 0.5.w,
                           color: sisaHariNow <= 3
-                              ? Colors.yellow
+                              ? Colors.grey
                               : sisaHariNow < 0
                                   ? Colors.red
                                   : Colors.blue,
