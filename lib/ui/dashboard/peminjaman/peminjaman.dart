@@ -326,7 +326,7 @@ class _PeminjamanState extends State<Peminjaman> {
                         Container(
                           width: 0.5.w,
                           color: sisaHariNow <= 3
-                              ? Colors.yellow
+                              ? Colors.grey
                               : sisaHariNow < 0
                                   ? Colors.red
                                   : Colors.blue,
