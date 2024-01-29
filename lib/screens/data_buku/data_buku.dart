@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:admin_perpustakaan/utils/log_utils.dart';
+import 'package:admin_perpustakaan/utils/string_manipulation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fast_snackbar/fast_snackbar.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
@@ -180,7 +181,7 @@ class _DataBukuState extends State<DataBuku> {
         "halaman": halaman,
         "judul_buku": judul,
         "key_buku": normalizeTitle(judul),
-        "kategori": kategori,
+        "kategori": kategori.capitalize(),
         "penerbit": penerbit,
         "pengarang": pengarang,
         "rak": rak,
