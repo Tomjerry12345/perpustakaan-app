@@ -341,7 +341,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Card CardBook(DocumentSnapshot data, BuildContext context) {
+  Widget CardBook(DocumentSnapshot data, BuildContext context) {
     return Card(
       margin: EdgeInsets.only(right: 5, left: 5, top: 5),
       child: InkWell(
@@ -360,7 +360,6 @@ class _HomeState extends State<Home> {
               child: Center(
                   child: Column(children: [
                 Container(
-                    height: 200,
                     child: Column(
                       children: <Widget>[
                         V(8),
@@ -394,8 +393,10 @@ class _HomeState extends State<Home> {
                               ]),
                         ),
                       ],
-                    ))
-              ])))),
+                    )
+                    )
+              ])))
+              ),
     );
   }
 }

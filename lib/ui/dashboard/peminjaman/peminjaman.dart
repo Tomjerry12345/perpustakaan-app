@@ -28,6 +28,7 @@ class _PeminjamanState extends State<Peminjaman> {
 
   void onBacaBuku(DocumentSnapshot<Object?> documenSnapshot) {
     final data = documenSnapshot.data() as Map<String, dynamic>;
+    log("data", v: data);
     navigatePush(ViewPdf(
         path: data["buku"], judul: data["judul_buku"], isPinjam: false));
   }
@@ -194,7 +195,7 @@ class _PeminjamanState extends State<Peminjaman> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              V(20),
+              V(10),
               Image.network(
                 data["image"],
                 height: 0.2.h,
@@ -217,7 +218,6 @@ class _PeminjamanState extends State<Peminjaman> {
                       ),
                     )
                   : Container(),
-              V(16),
               Container(
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -261,16 +261,6 @@ class _PeminjamanState extends State<Peminjaman> {
                       style: TextStyle(color: Colors.white),
                     )),
               ),
-              V(16),
-              data["konfirmasi"]! && sisaHariNow < 7
-                  ? Container(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            onClickPerpanjangan(context, data.id);
-                          },
-                          child: Text("Perpanjangan")),
-                    )
-                  : Container(),
             ],
           ),
           Column(
@@ -377,7 +367,17 @@ class _PeminjamanState extends State<Peminjaman> {
                             : Container()
                       ],
                     )
-                  : Container()
+                  : Container(),
+                  V(12),
+              data["konfirmasi"]! && sisaHariNow < 7
+                  ? Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            onClickPerpanjangan(context, data.id);
+                          },
+                          child: Text("Perpanjangan")),
+                    )
+                  : Container(),
             ],
           )
         ],

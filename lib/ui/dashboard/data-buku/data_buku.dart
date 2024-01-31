@@ -349,6 +349,11 @@ class _DataBukuState extends State<DataBuku> {
 
                                                       if (sizeDataPeminjaman <
                                                           3) {
+                                                        var getDate = time
+                                                            .getDateByRange(14);
+
+                                                        final tanggalPengembalian =
+                                                            "${time.getYear()}-${getDate[1]}-${getDate[0]}";
                                                         final data =
                                                             <String, dynamic>{
                                                           "nama_peminjam":
@@ -365,11 +370,17 @@ class _DataBukuState extends State<DataBuku> {
                                                               .data!["image"],
                                                           "rak": widget
                                                               .data!["rak"],
-                                                          "konfirmasi": false,
+                                                          "konfirmasi": true,
                                                           "type_peminjaman":
                                                               "online",
                                                           "barcode": widget
-                                                              .data!["barcode"]
+                                                              .data!["barcode"],
+                                                          "tanggal_peminjaman":
+                                                              time.getTimeNow(),
+                                                          "tanggal_pengembalian":
+                                                              tanggalPengembalian,
+                                                          "buku": widget
+                                                              .data!["buku"]
                                                         };
 
                                                         firebaseServices.add(
