@@ -8,6 +8,7 @@ import 'package:perpustakaan_mobile/ui/registrasi/registrasi.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
+import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -120,7 +121,10 @@ class _LoginState extends State<Login> {
                   backgroundColor: const Color(0xff2BB1EB),
                   padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
-                child: const Text("Masuk"),
+                child: const TextWidget(
+                  "Masuk",
+                  color: Colors.white,
+                ),
                 onPressed: () {
                   signIn();
                 },

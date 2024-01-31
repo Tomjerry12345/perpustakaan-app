@@ -12,7 +12,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/log_utils.dart';
+import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/utils/show_utils.dart';
+import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
 
 import '../../../model/ModelQuery.dart';
 import '../../../utils/navigate_utils.dart';
@@ -139,7 +141,7 @@ class _DataBukuState extends State<DataBuku> {
                 children: <Widget>[
                   Container(
                       margin: const EdgeInsets.only(top: 5, right: 10),
-                      height: 120,
+                      height: 140,
                       width: double.infinity,
                       child: Row(
                         children: [
@@ -149,45 +151,52 @@ class _DataBukuState extends State<DataBuku> {
                             height: 120,
                             fit: BoxFit.contain,
                           ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Wrap(
-                            direction: Axis.vertical,
-                            spacing: 10.0,
+                          H(8),
+                          Column(
                             children: [
                               Row(
                                 children: [
                                   const Icon(Icons.book),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(widget.data!["judul_buku"]),
+                                  H(8),
+                                  SizedBox(
+                                      width: 180,
+                                      child: TextWidget(
+                                        widget.data!["judul_buku"],
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                 ],
                               ),
+                              V(16),
                               Row(
                                 children: [
                                   const Icon(Icons.person),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(widget.data!["pengarang"]),
+                                  H(8),
+                                  SizedBox(
+                                      width: 180,
+                                      child: TextWidget(
+                                        widget.data!["pengarang"],
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                 ],
                               ),
+                              V(16),
                               Row(
                                 children: [
                                   const Icon(Icons.barcode_reader),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(widget.data!["barcode"]),
+                                  H(8),
+                                  SizedBox(
+                                      width: 180,
+                                      child: TextWidget(
+                                        widget.data!["barcode"],
+                                        fontWeight: FontWeight.bold,
+                                      )),
                                 ],
                               ),
                             ],
                           )
                         ],
                       )),
-                  Container(),
+                  V(16),
                   Column(
                     children: [
                       Container(
@@ -249,7 +258,6 @@ class _DataBukuState extends State<DataBuku> {
                                         ],
                                       ),
                                     ),
-
                                     Container(
                                       width: double.infinity,
                                       padding: const EdgeInsets.symmetric(
@@ -273,9 +281,12 @@ class _DataBukuState extends State<DataBuku> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 20),
                                         ),
-                                        child: Text(sisaPeminjaman == null
-                                            ? "Ringkasan Buku"
-                                            : "Sisa peminjaman: $sisaPeminjaman Hari"),
+                                        child: TextWidget(
+                                          sisaPeminjaman == null
+                                              ? "Ringkasan Buku"
+                                              : "Sisa peminjaman: $sisaPeminjaman Hari",
+                                          color: Colors.white,
+                                        ),
                                         onPressed: () async {
                                           navigatePush(ViewPdf(
                                               path: widget.data!["buku"],
@@ -296,7 +307,10 @@ class _DataBukuState extends State<DataBuku> {
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 20),
                                         ),
-                                        child: const Text("Pinjam Buku"),
+                                        child: const TextWidget(
+                                          "Pinjam Buku",
+                                          color: Colors.black,
+                                        ),
                                         onPressed: () async {
                                           AlertDialog alert = AlertDialog(
                                             title: const Text("Meminjam"),

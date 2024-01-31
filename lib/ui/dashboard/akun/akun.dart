@@ -10,6 +10,7 @@ import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
+import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:printing/printing.dart';
 
 class Akun extends StatefulWidget {
@@ -154,7 +155,7 @@ class _AkunState extends State<Akun> {
           ),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.logout),
+              icon: const Icon(Icons.logout, color: Colors.white),
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Utils.showSnackBar("Berhasil logout.", Colors.red);
@@ -178,7 +179,6 @@ class _AkunState extends State<Akun> {
               if (snapshot.hasData) {
                 final docs = snapshot.data!.docs[0];
                 final data = docs.data();
-                log("data", v: data);
                 return Container(
                     padding:
                         const EdgeInsets.only(left: 30, top: 20, right: 30),
@@ -209,16 +209,12 @@ class _AkunState extends State<Akun> {
                             ),
                           ],
                         )),
-                        const SizedBox(
-                          height: 18,
-                        ),
+                        V(18),
                         Center(
                           child: Text(data["nama"],
                               style: const TextStyle(fontSize: 24)),
                         ),
-                        const SizedBox(
-                          height: 18,
-                        ),
+                        V(18),
                         Center(
                           child: OutlinedButton(
                             onPressed: () {
@@ -227,9 +223,7 @@ class _AkunState extends State<Akun> {
                             child: const Text("Lihat kartu perpustakaan"),
                           ),
                         ),
-                        const SizedBox(
-                          height: 18,
-                        ),
+                        V(18),
                         ClipRRect(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16.0)),
@@ -237,7 +231,7 @@ class _AkunState extends State<Akun> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 16, horizontal: 16),
                             width: 200,
-                            height: 304,
+                            height: 320,
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                   colors: [
@@ -255,65 +249,49 @@ class _AkunState extends State<Akun> {
                                   value: data["no_anggota"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "Email",
                                   value: data["email"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "Alamat",
                                   value: data["alamat"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "No.Hp",
                                   value: data["hp"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "Pekerjaan",
                                   value: data["pekerjaan"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "Ibu Kandung",
                                   value: data["ibu_kandung"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "No.Hp Ibu",
                                   value: data["no_hp_ibu_kandung"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                                 Data(
                                   title: "Alamat Ibu",
                                   value: data["alamat_ibu_kandung"],
                                   x: 16,
                                 ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
+                                V(16),
                               ],
                             ),
                           ),

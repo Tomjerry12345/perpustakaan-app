@@ -392,7 +392,7 @@ class _HomeState extends State<Home> {
                               SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 150,
                             childAspectRatio:
-                                MediaQuery.of(context).size.height / 1480,
+                                MediaQuery.of(context).size.height / 1580,
                           ),
                         );
                 }),
@@ -421,77 +421,70 @@ class _HomeState extends State<Home> {
           child: Container(
               decoration: BoxDecoration(
                   border: Border.all(color: Colors.blueAccent, width: 3)),
-              child: Column(children: [
+              child: Stack(children: [
                 Column(
-                  children: <Widget>[
-                    V(8),
-                    Image.network(
-                      data["image"],
-                      height: 0.10.h,
-                      width: 150,
-                    ),
-                    V(16),
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      V(16),
+                      Image.network(
+                        data["image"],
+                        height: 0.10.h,
+                        width: 150,
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const TextWidget(
-                              "Judul buku : ",
-                              color: Colors.blue,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              judulBuku,
+                              style: const TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
                             ),
                             V(8),
                             Text(
-                              judulBuku.formatTitik(14),
+                              pengarang,
                               style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.blue,
                               ),
                             ),
-                            V(8),
-                            const TextWidget(
-                              "Pengarang : ",
-                              color: Colors.blue,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            V(8),
-                            Text(
-                              pengarang.formatTitik(14),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            V(8),
-                            Row(
-                              children: [
-                                TextWidget(
-                                  "Stok buku : ",
-                                  color: data["stok_buku"] == "0"
-                                      ? Colors.red
-                                      : Colors.blue,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                H(8),
-                                TextWidget(
-                                  data["stok_buku"] == "0"
-                                      ? "habis"
-                                      : data["stok_buku"],
-                                  color: data["stok_buku"] == "0"
-                                      ? Colors.red
-                                      : Colors.blue,
-                                  fontSize: 10,
-                                ),
-                              ],
-                            )
-                          ]),
+                          ],
+                        ),
+                      ),
+                    ]),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        TextWidget(
+                          "Stok buku : ",
+                          color: data["stok_buku"] == "0"
+                              ? Colors.red
+                              : Colors.blue,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        H(8),
+                        TextWidget(
+                          data["stok_buku"] == "0"
+                              ? "habis"
+                              : data["stok_buku"],
+                          color: data["stok_buku"] == "0"
+                              ? Colors.red
+                              : Colors.blue,
+                          fontSize: 10,
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 )
               ]))),
     );

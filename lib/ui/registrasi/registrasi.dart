@@ -13,6 +13,7 @@ import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 import 'package:perpustakaan_mobile/widget/avatar/avatar_component.dart';
 import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
+import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
 
 class Registrasi extends StatefulWidget {
   const Registrasi({Key? key}) : super(key: key);
@@ -138,7 +139,10 @@ class _RegistrasiState extends State<Registrasi> {
             backgroundColor: Colors.blue,
             padding: const EdgeInsets.symmetric(vertical: 20),
           ),
-          child: const Text("Daftar"),
+          child: const TextWidget(
+            "Daftar",
+            color: Colors.white,
+          ),
           onPressed: () {
             signUp();
           },
