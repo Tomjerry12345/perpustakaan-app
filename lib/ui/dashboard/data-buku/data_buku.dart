@@ -141,9 +141,10 @@ class _DataBukuState extends State<DataBuku> {
                 children: <Widget>[
                   Container(
                       margin: const EdgeInsets.only(top: 5, right: 10),
-                      height: 140,
+                      // height: 140,
                       width: double.infinity,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.network(
                             widget.data!["image"],
@@ -153,39 +154,43 @@ class _DataBukuState extends State<DataBuku> {
                           ),
                           H(8),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Icon(Icons.book),
                                   H(8),
                                   SizedBox(
-                                      width: 180,
+                                      width: 150,
                                       child: TextWidget(
                                         widget.data!["judul_buku"],
                                         fontWeight: FontWeight.bold,
                                       )),
                                 ],
                               ),
-                              V(16),
+                              V(8),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Icon(Icons.person),
                                   H(8),
                                   SizedBox(
-                                      width: 180,
+                                      width: 150,
                                       child: TextWidget(
                                         widget.data!["pengarang"],
                                         fontWeight: FontWeight.bold,
                                       )),
                                 ],
                               ),
-                              V(16),
+                              V(8),
                               Row(
                                 children: [
                                   const Icon(Icons.barcode_reader),
                                   H(8),
                                   SizedBox(
-                                      width: 180,
+                                      width: 150,
                                       child: TextWidget(
                                         widget.data!["barcode"],
                                         fontWeight: FontWeight.bold,
@@ -223,9 +228,11 @@ class _DataBukuState extends State<DataBuku> {
                                         borderRadius: BorderRadius.circular(5),
                                         color: Colors.white,
                                       ),
-                                      child: Text(
-                                        widget.data!["sinopsis"],
-                                        style: const TextStyle(height: 1.5),
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          widget.data!["sinopsis"],
+                                          style: const TextStyle(height: 1.5),
+                                        ),
                                       ),
                                     ),
                                     Container(

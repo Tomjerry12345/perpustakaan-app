@@ -12,8 +12,9 @@ import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
 import 'package:perpustakaan_mobile/utils/warna.dart';
 import 'package:perpustakaan_mobile/widget/avatar/avatar_component.dart';
-import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
 import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
+import 'package:perpustakaan_mobile/widget/textfield/textfield_component.dart';
+import 'package:perpustakaan_mobile/widget/textfield/textfield_password_component.dart';
 
 class Registrasi extends StatefulWidget {
   const Registrasi({Key? key}) : super(key: key);
@@ -39,7 +40,6 @@ class _RegistrasiState extends State<Registrasi> {
 
   @override
   Widget build(BuildContext context) {
-    log("test");
     return Scaffold(
         body: ListView(padding: const EdgeInsets.all(8), children: <Widget>[
       Container(
@@ -66,69 +66,70 @@ class _RegistrasiState extends State<Registrasi> {
         },
       )),
       V(32),
-      FormCustom(
-        text: "nama",
+      TextfieldComponent(
+        label: "Nama",
         controller: namaController,
+        colorText: Colors.blue,
       ),
       const SizedBox(
         height: 12,
       ),
-      FormCustom(
-        text: "alamat",
+      TextfieldComponent(
+        label: "Alamat",
         controller: alamatController,
+        colorText: Colors.blue,
       ),
       const SizedBox(
         height: 12,
       ),
-      FormCustom(
-        text: "pekerjaan",
+      TextfieldComponent(
+        label: "Pekerjaan",
         controller: pekerjaanController,
+        colorText: Colors.blue,
       ),
       const SizedBox(
         height: 12,
       ),
-      FormCustom(
-          text: "nik",
-          controller: nikcontroller,
-          inputType: TextInputType.number),
-      const SizedBox(
-        height: 12,
-      ),
-      FormCustom(
-        text: "nama ibu kandung",
-        controller: namaIbuKandungController,
-      ),
-      const SizedBox(
-        height: 12,
-      ),
-      const SizedBox(
-        height: 12,
-      ),
-      FormCustom(
-        text: "no.hp ibu kandung",
-        controller: noHpIbuKandungController,
+      TextfieldComponent(
+        label: "Nik",
+        controller: nikcontroller,
         inputType: TextInputType.number,
+        colorText: Colors.blue,
       ),
       const SizedBox(
         height: 12,
       ),
-      FormCustom(
-        text: "email",
+      TextfieldComponent(
+          label: "Nama ibu kandung",
+          controller: namaIbuKandungController,
+          colorText: Colors.blue),
+      const SizedBox(
+        height: 12,
+      ),
+      TextfieldComponent(
+          label: "No.hp ibu kandung",
+          controller: noHpIbuKandungController,
+          inputType: TextInputType.number,
+          colorText: Colors.blue),
+      const SizedBox(
+        height: 12,
+      ),
+      TextfieldComponent(
+        label: "Email",
         controller: emailController,
         inputType: TextInputType.emailAddress,
+        colorText: Colors.blue,
       ),
       const SizedBox(
         height: 12,
       ),
-      FormCustom(
-        text: "password",
+      TextfieldPasswordComponent(
+        label: "Password",
+        colorText: Colors.blue,
         controller: passwordController,
       ),
       const SizedBox(
-        height: 12,
-      ),
-      const SizedBox(
-        height: 20,
+        height: 34,
       ),
       Container(
         margin: const EdgeInsets.symmetric(vertical: 10),

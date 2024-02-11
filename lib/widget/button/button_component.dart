@@ -8,6 +8,7 @@ class ButtonElevatedComponent extends StatelessWidget {
   final double? w;
   final double? h;
   final Color? cb;
+  final double radius;
   const ButtonElevatedComponent(this.title,
       {super.key,
       required this.onPressed,
@@ -15,7 +16,8 @@ class ButtonElevatedComponent extends StatelessWidget {
       this.fg = Colors.white,
       this.w,
       this.h,
-      this.cb});
+      this.cb,
+      this.radius = 8});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class ButtonElevatedComponent extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           minimumSize: const Size(120, 40),
           shape: RoundedRectangleBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              borderRadius: BorderRadius.all(Radius.circular(radius)),
               side: BorderSide(color: cb ?? bg, width: 1)),
         ),
         onPressed: onPressed,

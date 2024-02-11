@@ -58,6 +58,8 @@ class _HomeState extends State<Home> {
       listUnique.add(listKategori.firstWhere((i) => i.kategori == e));
     }
 
+    listUnique.insertAll(0, [ModelBuku(kategori: "All")]);
+
     log("list", v: listUnique);
     setState(() {
       listModelBuku = listUnique;
@@ -368,7 +370,7 @@ class _HomeState extends State<Home> {
                         .collection("books")
                         .where("judul_buku", isGreaterThanOrEqualTo: search)
                         .snapshots()
-                    : kategori != ""
+                    : kategori != "" && kategori != "All"
                         ? firestore
                             .collection("books")
                             .where("kategori", isEqualTo: kategori)
@@ -392,7 +394,7 @@ class _HomeState extends State<Home> {
                               SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 150,
                             childAspectRatio:
-                                MediaQuery.of(context).size.height / 1580,
+                                MediaQuery.of(context).size.height / 1700,
                           ),
                         );
                 }),
@@ -429,12 +431,12 @@ class _HomeState extends State<Home> {
                       V(16),
                       Image.network(
                         data["image"],
-                        height: 0.10.h,
+                        height: 0.14.h,
                         width: 150,
                       ),
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -469,7 +471,7 @@ class _HomeState extends State<Home> {
                           color: data["stok_buku"] == "0"
                               ? Colors.red
                               : Colors.blue,
-                          fontSize: 10,
+                          fontSize: 9,
                           fontWeight: FontWeight.bold,
                         ),
                         H(8),
@@ -480,7 +482,7 @@ class _HomeState extends State<Home> {
                           color: data["stok_buku"] == "0"
                               ? Colors.red
                               : Colors.blue,
-                          fontSize: 10,
+                          fontSize: 9,
                         ),
                       ],
                     ),

@@ -7,6 +7,8 @@ class TextfieldComponent extends StatelessWidget {
   final Color color;
   final TextInputType inputType;
   final String label;
+  final Color colorText;
+
   const TextfieldComponent(
       {super.key,
       this.hintText = "",
@@ -14,7 +16,8 @@ class TextfieldComponent extends StatelessWidget {
       this.controller,
       this.color = Colors.white70,
       this.inputType = TextInputType.text,
-      this.label = ""});
+      this.label = "",
+      this.colorText = Colors.black});
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +27,26 @@ class TextfieldComponent extends StatelessWidget {
       onChanged: onChanged,
       cursorColor: Colors.black,
       decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.blue,
+              width: 1.0,
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey, width: 2.0),
-            borderRadius: BorderRadius.circular(10.0),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              // color: HexColor("#019267"),
+              color: Colors.blue,
+              width: 1.0,
+            ),
           ),
           filled: true,
-          hintStyle: TextStyle(color: Colors.grey[800]),
+          hintStyle: const TextStyle(color: Color(0xff2BB1EB)),
           hintText: hintText,
-          label: Text(label),
+          label: Text(
+            label,
+            style: TextStyle(color: colorText),
+          ),
           fillColor: color),
     );
   }

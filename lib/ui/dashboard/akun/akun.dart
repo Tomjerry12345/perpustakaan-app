@@ -8,9 +8,9 @@ import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/akun/kartu_perpus/kartu_perpus.dart';
 import 'package:perpustakaan_mobile/ui/login/login.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
-import 'package:perpustakaan_mobile/utils/log_utils.dart';
 import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
+import 'package:perpustakaan_mobile/utils/screen_utils.dart';
 import 'package:printing/printing.dart';
 
 class Akun extends StatefulWidget {
@@ -229,9 +229,7 @@ class _AkunState extends State<Akun> {
                               const BorderRadius.all(Radius.circular(16.0)),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            width: 200,
-                            height: 320,
+                                vertical: 32, horizontal: 32),
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                   colors: [
@@ -253,25 +251,25 @@ class _AkunState extends State<Akun> {
                                 Data(
                                   title: "Email",
                                   value: data["email"],
-                                  x: 16,
+                                  x: 0.14.w,
                                 ),
                                 V(16),
                                 Data(
                                   title: "Alamat",
                                   value: data["alamat"],
-                                  x: 16,
+                                  x: 0.12.w,
                                 ),
                                 V(16),
                                 Data(
                                   title: "No.Hp",
                                   value: data["hp"],
-                                  x: 16,
+                                  x: 0.14.w,
                                 ),
                                 V(16),
                                 Data(
                                   title: "Pekerjaan",
                                   value: data["pekerjaan"],
-                                  x: 16,
+                                  x: 0.08.w,
                                 ),
                                 V(16),
                                 Data(
@@ -283,13 +281,13 @@ class _AkunState extends State<Akun> {
                                 Data(
                                   title: "No.Hp Ibu",
                                   value: data["no_hp_ibu_kandung"],
-                                  x: 16,
+                                  x: 0.09.w,
                                 ),
                                 V(16),
                                 Data(
                                   title: "Alamat Ibu",
                                   value: data["alamat_ibu_kandung"],
-                                  x: 16,
+                                  x: 0.08.w,
                                 ),
                                 V(16),
                               ],
@@ -312,7 +310,7 @@ class _AkunState extends State<Akun> {
         Text(
           title,
           style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         SizedBox(
           width: x,
@@ -320,7 +318,7 @@ class _AkunState extends State<Akun> {
         const Text(
           ":",
           style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const SizedBox(
           width: 8,
@@ -328,7 +326,7 @@ class _AkunState extends State<Akun> {
         Text(
           value,
           style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
         )
       ],
     );

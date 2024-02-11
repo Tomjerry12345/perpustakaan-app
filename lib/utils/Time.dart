@@ -3,22 +3,22 @@
 import 'package:intl/intl.dart';
 
 class Time {
-  final _now = DateTime.now();
+  final now = DateTime.now();
 
   String getTimeNow() {
     var formatter = DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(_now);
+    String formattedDate = formatter.format(now);
     return formattedDate;
   }
 
   String getTimeNowHour() {
     var formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
-    String formattedDate = formatter.format(_now);
+    String formattedDate = formatter.format(now);
     return formattedDate;
   }
 
   int getDate() {
-    return _now.day;
+    return now.day;
   }
 
   List<int> getDateByRange(int range) {
@@ -46,17 +46,25 @@ class Time {
   }
 
   int getMonth() {
-    return _now.month;
+    return now.month;
   }
 
   int getYear() {
-    return _now.year;
+    return now.year;
+  }
+
+  int getHour() {
+    return now.hour;
+  }
+
+  int getMinute() {
+    return now.minute;
   }
 
   int getLastDateInMonth() {
-    var lastDayDateTime = (_now.month < 12)
-        ? DateTime(_now.year, _now.month + 1, 0)
-        : DateTime(_now.year + 1, 1, 0);
+    var lastDayDateTime = (now.month < 12)
+        ? DateTime(now.year, now.month + 1, 0)
+        : DateTime(now.year + 1, 1, 0);
     return lastDayDateTime.day;
   }
 
@@ -72,5 +80,11 @@ class Time {
     DateTime targetDate = DateTime(year, month, date);
     Duration difference = targetDate.difference(currentDate);
     return difference.inDays;
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
   }
 }

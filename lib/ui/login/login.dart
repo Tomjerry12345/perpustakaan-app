@@ -2,13 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:perpustakaan_mobile/main.dart';
 import 'package:perpustakaan_mobile/services/FirebaseServices.dart';
+import 'package:perpustakaan_mobile/ui/autentikasi/face_autentikasi.dart';
 import 'package:perpustakaan_mobile/ui/registrasi/registrasi.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
+import 'package:perpustakaan_mobile/utils/log_utils.dart';
+import 'package:perpustakaan_mobile/utils/navigate_utils.dart';
 import 'package:perpustakaan_mobile/utils/position.dart';
-import 'package:perpustakaan_mobile/widget/form/FormCustom.dart';
 import 'package:perpustakaan_mobile/widget/text/text_widget.dart';
+import 'package:perpustakaan_mobile/widget/textfield/textfield_component.dart';
+import 'package:perpustakaan_mobile/widget/textfield/textfield_password_component.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -58,41 +61,44 @@ class _LoginState extends State<Login> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 60,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  const SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      "Email",
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  FormCustom(
-                    text: 'Email',
+                  // const SizedBox(
+                  //   width: double.infinity,
+                  //   child: Text(
+                  //     "Email",
+                  //     textAlign: TextAlign.left,
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  TextfieldComponent(
+                    label: 'Email',
                     controller: emailController,
+                    inputType: TextInputType.emailAddress,
+                    colorText: Colors.blue,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    width: double.infinity,
-                    child: const Text(
-                      "Password",
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  FormCustom(
-                    text: 'Password',
-                    controller: passwordController,
-                  )
+                  V(32),
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 20),
+                  //   width: double.infinity,
+                  //   child: const Text(
+                  //     "Password",
+                  //     textAlign: TextAlign.left,
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  TextfieldPasswordComponent(
+                      label: "Password",
+                      controller: passwordController,
+                      colorText: Colors.blue)
                 ],
               ),
             ),
@@ -182,11 +188,15 @@ class _LoginState extends State<Login> {
       final email = emailController.text.trim();
       final password = passwordController.text.trim();
 
+      log("email", v: email);
+      log("password", v: password);
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+      navigatePush(const FaceAutentikasi(), isRemove: true);
     } on FirebaseAuthException catch (e) {
       // ignore: use_build_context_synchronously
       Navigator.of(context, rootNavigator: true).pop('dialog');

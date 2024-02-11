@@ -29,8 +29,8 @@ class _PeminjamanState extends State<Peminjaman> {
   void onBacaBuku(DocumentSnapshot<Object?> documenSnapshot) {
     final data = documenSnapshot.data() as Map<String, dynamic>;
     log("data", v: data);
-    navigatePush(ViewPdf(
-        path: data["buku"], judul: data["judul_buku"], isPinjam: false));
+    navigatePush(
+        ViewPdf(path: data["buku"], judul: data["judul_buku"], isPinjam: true));
   }
 
   Future<void> onPerpanjangan(id, int day) async {
@@ -65,15 +65,16 @@ class _PeminjamanState extends State<Peminjaman> {
             "Konfirmasi",
             onPressed: () {
               final day = int.parse(hariController.text);
-              if (day <= 14) {
+              if (day <= 7) {
                 onPerpanjangan(id, day);
                 hariController.clear();
                 dialogClose(context);
                 showToast("Berhasil perpanjangan", Colors.green);
               } else {
-                showToast("Perpanjangan tidak boleh dari 14 hari", Colors.red);
+                showToast("Perpanjangan tidak boleh dari 7 hari", Colors.red);
               }
             },
+            bg: Colors.blue,
           )
         ]);
   }
@@ -203,7 +204,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 width: 0.2.h,
               ),
               V(16),
-              data['konfirmasi'] && data["type_peminjaman"] != "online"
+              data["type_peminjaman"] == "offline"
                   ? Container(
                       // width: 0.34.w,
                       color: data['konfirmasi'] ? Colors.green : Colors.red,
@@ -219,47 +220,51 @@ class _PeminjamanState extends State<Peminjaman> {
                       ),
                     )
                   : Container(),
-              ElevatedButton(
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-                  onPressed: () {
-                    AlertDialog alert = AlertDialog(
-                      title: const Text("Meminjam"),
-                      content: const Text(
-                          "Apakah anda yakin ingin mengembalikan buku?"),
-                      actions: [
-                        ElevatedButton(
-                            onPressed: () async {
-                              onPengembalian(data);
-                            },
-                            child: const Text("Ok")),
-                        ElevatedButton(
-                            onPressed: () {
-                              navigatePop();
-                            },
-                            child: const Text("Batal")),
-                      ],
-                    );
-                    dialogShow(context: context, widget: alert);
-                  },
-                  child: const Text(
-                    "Pengembalian",
-                    style: TextStyle(color: Colors.white),
-                  )),
+              data["type_peminjaman"] == "online"
+                  ? ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue),
+                      onPressed: () {
+                        AlertDialog alert = AlertDialog(
+                          title: const Text("Meminjam"),
+                          content: const Text(
+                              "Apakah anda yakin ingin mengembalikan buku?"),
+                          actions: [
+                            ElevatedButton(
+                                onPressed: () async {
+                                  onPengembalian(data);
+                                },
+                                child: const Text("Ok")),
+                            ElevatedButton(
+                                onPressed: () {
+                                  navigatePop();
+                                },
+                                child: const Text("Batal")),
+                          ],
+                        );
+                        dialogShow(context: context, widget: alert);
+                      },
+                      child: const Text(
+                        "Pengembalian",
+                        style: TextStyle(color: Colors.white),
+                      ))
+                  : Container(),
               V(16),
-              SizedBox(
-                width: 124,
-                child: ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    onPressed: () {
-                      onBacaBuku(data);
-                    },
-                    child: const Text(
-                      "Baca buku",
-                      style: TextStyle(color: Colors.white),
-                    )),
-              ),
+              data["type_peminjaman"] == "online"
+                  ? SizedBox(
+                      width: 124,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green),
+                          onPressed: () {
+                            onBacaBuku(data);
+                          },
+                          child: const Text(
+                            "Baca buku",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    )
+                  : Container(),
             ],
           ),
           Column(
@@ -368,12 +373,16 @@ class _PeminjamanState extends State<Peminjaman> {
                     )
                   : Container(),
               V(12),
-              data["konfirmasi"]! && sisaHariNow < 7
-                  ? ElevatedButton(
+              data["konfirmasi"]! && sisaHariNow < 3
+                  ? ButtonElevatedComponent(
+                      "Perpanjangan",
                       onPressed: () {
                         onClickPerpanjangan(context, data.id);
                       },
-                      child: const Text("Perpanjangan"))
+                      bg: Colors.purple,
+                      radius: 50,
+                      h: 48,
+                    )
                   : Container(),
             ],
           )

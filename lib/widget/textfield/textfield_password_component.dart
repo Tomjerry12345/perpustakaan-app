@@ -5,15 +5,25 @@ class TextfieldPasswordComponent extends StatefulWidget {
   final String label;
   final Function(String)? onChanged;
   final TextEditingController? controller;
+  final Color colorText;
+  final Color bg;
 
   const TextfieldPasswordComponent(
-      {super.key, this.hintText = "", this.onChanged, this.controller, this.label = ""});
+      {super.key,
+      this.hintText = "",
+      this.onChanged,
+      this.controller,
+      this.label = "",
+      this.colorText = Colors.black,
+      this.bg = Colors.white});
 
   @override
-  State<TextfieldPasswordComponent> createState() => _TextfieldPasswordComponentState();
+  State<TextfieldPasswordComponent> createState() =>
+      _TextfieldPasswordComponentState();
 }
 
-class _TextfieldPasswordComponentState extends State<TextfieldPasswordComponent> {
+class _TextfieldPasswordComponentState
+    extends State<TextfieldPasswordComponent> {
   bool _passwordVisible = false;
 
   @override
@@ -21,7 +31,6 @@ class _TextfieldPasswordComponentState extends State<TextfieldPasswordComponent>
     return TextField(
       onChanged: widget.onChanged,
       controller: widget.controller,
-      cursorColor: Colors.black,
       obscureText: !_passwordVisible,
       decoration: InputDecoration(
           suffixIcon: IconButton(
@@ -35,18 +44,27 @@ class _TextfieldPasswordComponentState extends State<TextfieldPasswordComponent>
               });
             },
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.blue,
+              width: 1.0,
+            ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey, width: 2.0),
-            borderRadius: BorderRadius.circular(10.0),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(
+              // color: HexColor("#019267"),
+              color: Colors.blue,
+              width: 1.0,
+            ),
           ),
           filled: true,
-          hintStyle: TextStyle(color: Colors.grey[800]),
+          hintStyle: const TextStyle(color: Color(0xff2BB1EB)),
           hintText: widget.hintText,
-          label: Text(widget.label),
-          fillColor: Colors.white70),
+          label: Text(
+            widget.label,
+            style: TextStyle(color: widget.colorText),
+          ),
+          fillColor: widget.bg),
     );
   }
 }
