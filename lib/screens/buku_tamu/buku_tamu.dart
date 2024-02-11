@@ -61,6 +61,11 @@ class _BukuTamuState extends State<BukuTamu> {
                                 DocumentSnapshot data =
                                     snapshot.data!.docs[index];
 
+                                final tanggal = data["tanggal"];
+                                final hari = tanggal["hari"];
+                                final bulan = tanggal["bulan"];
+                                final tahun = tanggal["tahun"];
+
                                 return DataRow(cells: [
                                   DataCell(SizedBox(
                                       width: sizeColumn,
@@ -73,7 +78,7 @@ class _BukuTamuState extends State<BukuTamu> {
                                       child: Text(data['alamat']))),
                                   DataCell(SizedBox(
                                       width: sizeColumn,
-                                      child: Text(data['tanggal']))),
+                                      child: Text("$hari/$bulan/$tahun"))),
                                   DataCell(SizedBox(
                                       width: sizeColumn,
                                       child: Text(data['pekerjaan']))),
