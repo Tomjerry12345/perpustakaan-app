@@ -1,5 +1,5 @@
 version: v0.0.5 ✅ ❌ 🔥
-- scan pengunjung cuman 1 kali setiap hari ❌
+- scan pengunjung cuman 1 kali setiap hari ✅
 
 
 version: v0.0.4 ✅ ❌ 🔥
