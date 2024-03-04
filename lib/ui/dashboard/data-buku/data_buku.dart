@@ -284,7 +284,8 @@ class _DataBukuState extends State<DataBuku> {
                                           backgroundColor:
                                               sisaPeminjaman == null
                                                   ? Colors.green
-                                                  : Colors.pink,
+                                                  : Color.fromARGB(
+                                                      255, 137, 136, 136),
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 20),
                                         ),
@@ -304,137 +305,160 @@ class _DataBukuState extends State<DataBuku> {
                                       ),
                                     ),
                                     // V(8),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 15),
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(3),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 20),
-                                        ),
-                                        child: const TextWidget(
-                                          "Pinjam Buku",
-                                          color: Colors.black,
-                                        ),
-                                        onPressed: () async {
-                                          AlertDialog alert = AlertDialog(
-                                            title: const Text("Meminjam"),
-                                            content: const Text(
-                                                "Apakah anda yakin ingin meminjam buku?"),
-                                            actions: [
-                                              ElevatedButton(
-                                                  onPressed: () async {
-                                                    final qUsers =
-                                                        await firebaseServices
-                                                            .queryFuture(
-                                                                "users", [
-                                                      ModelQuery(
-                                                          key: "email",
-                                                          value: firebaseServices
-                                                              .getCurrentUser()
-                                                              ?.email)
-                                                    ]);
-                                                    final dataUser =
-                                                        qUsers.docs[0].data();
+                                    sisaPeminjaman == null
+                                        ? Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 15),
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.all(3),
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 20),
+                                              ),
+                                              child: const TextWidget(
+                                                "Pinjam Buku",
+                                                color: Colors.black,
+                                              ),
+                                              onPressed: () async {
+                                                AlertDialog alert = AlertDialog(
+                                                  title: const Text("Meminjam"),
+                                                  content: const Text(
+                                                      "Apakah anda yakin ingin meminjam buku?"),
+                                                  actions: [
+                                                    ElevatedButton(
+                                                        onPressed: () async {
+                                                          final qUsers =
+                                                              await firebaseServices
+                                                                  .queryFuture(
+                                                                      "users", [
+                                                            ModelQuery(
+                                                                key: "email",
+                                                                value: firebaseServices
+                                                                    .getCurrentUser()
+                                                                    ?.email)
+                                                          ]);
+                                                          final dataUser =
+                                                              qUsers.docs[0]
+                                                                  .data();
 
-                                                    final dataPeminjaman =
-                                                        await firebaseServices
-                                                            .queryFuture(
-                                                                "peminjaman", [
-                                                      ModelQuery(
-                                                          key: "email",
-                                                          value:
-                                                              dataUser["email"])
-                                                    ]);
+                                                          final dataPeminjaman =
+                                                              await firebaseServices
+                                                                  .queryFuture(
+                                                                      "peminjaman",
+                                                                      [
+                                                                ModelQuery(
+                                                                    key:
+                                                                        "email",
+                                                                    value: dataUser[
+                                                                        "email"])
+                                                              ]);
 
-                                                    bool isDuplicated = false;
+                                                          bool isDuplicated =
+                                                              false;
 
-                                                    for (final dataP
-                                                        in dataPeminjaman
-                                                            .docs) {
-                                                      final dt = dataP.data();
-                                                      if (dt["barcode"] ==
-                                                          widget.data![
-                                                              "barcode"]) {
-                                                        isDuplicated = true;
-                                                        break;
-                                                      }
-                                                    }
+                                                          for (final dataP
+                                                              in dataPeminjaman
+                                                                  .docs) {
+                                                            final dt =
+                                                                dataP.data();
+                                                            if (dt["barcode"] ==
+                                                                widget.data![
+                                                                    "barcode"]) {
+                                                              isDuplicated =
+                                                                  true;
+                                                              break;
+                                                            }
+                                                          }
 
-                                                    if (!isDuplicated) {
-                                                      final sizeDataPeminjaman =
-                                                          dataPeminjaman.size;
+                                                          if (!isDuplicated) {
+                                                            final sizeDataPeminjaman =
+                                                                dataPeminjaman
+                                                                    .size;
 
-                                                      if (sizeDataPeminjaman <
-                                                          3) {
-                                                        var getDate = time
-                                                            .getDateByRange(14);
+                                                            if (sizeDataPeminjaman <
+                                                                3) {
+                                                              var getDate = time
+                                                                  .getDateByRange(
+                                                                      14);
 
-                                                        final tanggalPengembalian =
-                                                            "${time.getYear()}-${getDate[1]}-${getDate[0]}";
-                                                        final data =
-                                                            <String, dynamic>{
-                                                          "nama_peminjam":
-                                                              dataUser["nama"],
-                                                          "email":
-                                                              dataUser["email"],
-                                                          "judul_buku":
-                                                              widget.data![
-                                                                  "judul_buku"],
-                                                          "pengarang":
-                                                              widget.data![
-                                                                  "pengarang"],
-                                                          "image": widget
-                                                              .data!["image"],
-                                                          "rak": widget
-                                                              .data!["rak"],
-                                                          "konfirmasi": true,
-                                                          "type_peminjaman":
-                                                              "online",
-                                                          "barcode": widget
-                                                              .data!["barcode"],
-                                                          "tanggal_peminjaman":
-                                                              time.getTimeNow(),
-                                                          "tanggal_pengembalian":
-                                                              tanggalPengembalian,
-                                                          "buku": widget
-                                                              .data!["buku"]
-                                                        };
+                                                              final tanggalPengembalian =
+                                                                  "${time.getYear()}-${getDate[1]}-${getDate[0]}";
+                                                              final data =
+                                                                  <String,
+                                                                      dynamic>{
+                                                                "nama_peminjam":
+                                                                    dataUser[
+                                                                        "nama"],
+                                                                "email":
+                                                                    dataUser[
+                                                                        "email"],
+                                                                "judul_buku": widget
+                                                                        .data![
+                                                                    "judul_buku"],
+                                                                "pengarang": widget
+                                                                        .data![
+                                                                    "pengarang"],
+                                                                "image": widget
+                                                                        .data![
+                                                                    "image"],
+                                                                "rak": widget
+                                                                        .data![
+                                                                    "rak"],
+                                                                "konfirmasi":
+                                                                    true,
+                                                                "type_peminjaman":
+                                                                    "online",
+                                                                "barcode": widget
+                                                                        .data![
+                                                                    "barcode"],
+                                                                "tanggal_peminjaman":
+                                                                    time.getTimeNow(),
+                                                                "tanggal_pengembalian":
+                                                                    tanggalPengembalian,
+                                                                "buku": widget
+                                                                        .data![
+                                                                    "buku"]
+                                                              };
 
-                                                        firebaseServices.add(
-                                                            "peminjaman", data);
+                                                              firebaseServices.add(
+                                                                  "peminjaman",
+                                                                  data);
 
-                                                        Utils.showSnackBar(
-                                                            "Berhasil",
-                                                            Colors.green);
+                                                              Utils.showSnackBar(
+                                                                  "Berhasil",
+                                                                  Colors.green);
 
-                                                        navigatePop();
-                                                      } else {
-                                                        Utils.showSnackBar(
-                                                            "Batas peminjaman buku tidak boleh lebih dari 3",
-                                                            Colors.red);
-                                                      }
-                                                    } else {
-                                                      Utils.showSnackBar(
-                                                          "Buku sudah di pinjam",
-                                                          Colors.red);
-                                                    }
-                                                  },
-                                                  child: const Text("Ok")),
-                                              ElevatedButton(
-                                                  onPressed: () {
-                                                    navigatePop();
-                                                  },
-                                                  child: const Text("Batal")),
-                                            ],
-                                          );
-                                          dialogShow(
-                                              context: context, widget: alert);
-                                        },
-                                      ),
-                                    ),
+                                                              navigatePop();
+                                                            } else {
+                                                              Utils.showSnackBar(
+                                                                  "Batas peminjaman buku tidak boleh lebih dari 3",
+                                                                  Colors.red);
+                                                            }
+                                                          } else {
+                                                            Utils.showSnackBar(
+                                                                "Buku sudah di pinjam",
+                                                                Colors.red);
+                                                          }
+                                                        },
+                                                        child:
+                                                            const Text("Ok")),
+                                                    ElevatedButton(
+                                                        onPressed: () {
+                                                          navigatePop();
+                                                        },
+                                                        child: const Text(
+                                                            "Batal")),
+                                                  ],
+                                                );
+                                                dialogShow(
+                                                    context: context,
+                                                    widget: alert);
+                                              },
+                                            ),
+                                          )
+                                        : Container(),
                                   ],
                                 ),
                               ],

@@ -304,29 +304,36 @@ class _AkunState extends State<Akun> {
 
   // ignore: non_constant_identifier_names
   Row Data({String title = "", String value = "", double x = 0.0}) {
+    double fontSize = 50.0.f;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           title,
-          style: const TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
         SizedBox(
           width: x,
         ),
-        const Text(
+        Text(
           ":",
           style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         ),
         const SizedBox(
           width: 8,
         ),
         Text(
           value,
-          style: const TextStyle(
-              fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white),
         )
       ],
     );

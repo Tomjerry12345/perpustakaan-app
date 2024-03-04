@@ -334,7 +334,7 @@ class _PeminjamanState extends State<Peminjaman> {
                               ? Colors.grey
                               : sisaHariNow < 0
                                   ? Colors.red
-                                  : Colors.blue,
+                                  : Colors.grey,
                           child: Container(
                             margin: const EdgeInsets.all(8),
                             child: TextWidget(
@@ -373,13 +373,13 @@ class _PeminjamanState extends State<Peminjaman> {
                     )
                   : Container(),
               V(12),
-              data["konfirmasi"]! && sisaHariNow < 3
+              data["konfirmasi"]! && sisaHariNow < 100
                   ? ButtonElevatedComponent(
                       "Perpanjangan",
                       onPressed: () {
                         onClickPerpanjangan(context, data.id);
                       },
-                      bg: Colors.purple,
+                      bg: Colors.blue,
                       radius: 50,
                       h: 48,
                     )
