@@ -93,13 +93,17 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
                             fontSize: fontSizeDataCell,
                             fontWeight: FontWeight.bold)),
                     DataColumn(
-                        label: TextWidget("Rak Buku",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
+                        label: Container(
+                            width: 50,
+                            child: TextWidget("Rak Buku",
+                                fontSize: fontSizeDataCell,
+                                fontWeight: FontWeight.bold))),
                     DataColumn(
-                        label: TextWidget("Sisa hari",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
+                        label: Container(
+                            width: 50,
+                            child: TextWidget("Sisa hari",
+                                fontSize: fontSizeDataCell,
+                                fontWeight: FontWeight.bold))),
                     DataColumn(
                         label: TextWidget("Denda",
                             fontSize: fontSizeDataCell,
