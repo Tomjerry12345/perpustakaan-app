@@ -87,8 +87,8 @@ class _PeminjamanState extends State<Peminjaman> {
       "nama_peminjam": data["nama_peminjam"],
       "judul_buku": data["judul_buku"],
       "pengarang": data["pengarang"],
-      "tanggal_peminjaman": null,
-      "tanggal_pengembalian": null,
+      "tanggal_peminjaman": data["tanggal_peminjaman"],
+      "tanggal_pengembalian": time.getTimeNow(),
       "type_peminjaman": data["type_peminjaman"],
       "denda": null,
       "sisa_hari": null,
@@ -206,10 +206,12 @@ class _PeminjamanState extends State<Peminjaman> {
               V(16),
               data["type_peminjaman"] == "offline"
                   ? Container(
-                      // width: 0.34.w,
-                      color: data['konfirmasi'] ? Colors.green : Colors.red,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: data['konfirmasi'] ? Colors.green : Colors.red,
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Container(
-                        margin: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(12),
                         child: TextWidget(
                           data['konfirmasi']
                               ? "Konfirmasi"
@@ -255,7 +257,7 @@ class _PeminjamanState extends State<Peminjaman> {
                       width: 124,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green),
+                              backgroundColor: Colors.blue),
                           onPressed: () {
                             onBacaBuku(data);
                           },
@@ -267,6 +269,7 @@ class _PeminjamanState extends State<Peminjaman> {
                   : Container(),
             ],
           ),
+          H(8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -277,7 +280,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 fontWeight: FontWeight.bold,
               ),
               Container(
-                width: 0.5.w,
+                width: 0.48.w,
                 color: Colors.grey,
                 child: Container(
                   margin: const EdgeInsets.all(8),
@@ -293,7 +296,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 fontWeight: FontWeight.bold,
               ),
               Container(
-                width: 0.5.w,
+                width: 0.48.w,
                 color: Colors.grey,
                 child: Container(
                   margin: const EdgeInsets.all(8),
@@ -309,7 +312,7 @@ class _PeminjamanState extends State<Peminjaman> {
                 fontWeight: FontWeight.bold,
               ),
               Container(
-                width: 0.5.w,
+                width: 0.48.w,
                 color: Colors.grey,
                 child: Container(
                   margin: const EdgeInsets.all(8),
@@ -329,7 +332,7 @@ class _PeminjamanState extends State<Peminjaman> {
                           fontWeight: FontWeight.bold,
                         ),
                         Container(
-                          width: 0.5.w,
+                          width: 0.48.w,
                           color: sisaHariNow <= 3
                               ? Colors.grey
                               : sisaHariNow < 0
@@ -373,7 +376,7 @@ class _PeminjamanState extends State<Peminjaman> {
                     )
                   : Container(),
               V(12),
-              data["konfirmasi"]! && sisaHariNow < 100
+              data["konfirmasi"]! && sisaHariNow < 3
                   ? ButtonElevatedComponent(
                       "Perpanjangan",
                       onPressed: () {

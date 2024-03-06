@@ -283,7 +283,7 @@ class _DataBukuState extends State<DataBuku> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor:
                                               sisaPeminjaman == null
-                                                  ? Colors.green
+                                                  ? Colors.blue
                                                   : Color.fromARGB(
                                                       255, 137, 136, 136),
                                           padding: const EdgeInsets.symmetric(

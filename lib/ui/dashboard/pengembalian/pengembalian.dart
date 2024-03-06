@@ -79,10 +79,11 @@ class _PengembalianState extends State<Pengembalian> {
               Image.network(
                 data["image"],
                 height: 0.22.h,
-                width: 0.2.h,
+                width: 0.18.h,
               ),
             ],
           ),
+          H(8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -145,7 +146,7 @@ class _PengembalianState extends State<Pengembalian> {
                   ),
                   Container(
                     width: 0.5.w,
-                    color: Colors.blue,
+                    color: Colors.grey,
                     child: Container(
                       margin: const EdgeInsets.all(8),
                       child: TextWidget(
@@ -161,7 +162,7 @@ class _PengembalianState extends State<Pengembalian> {
                   ),
                   Container(
                     width: 0.5.w,
-                    color: Colors.blue,
+                    color: Colors.grey,
                     child: Container(
                       margin: const EdgeInsets.all(8),
                       child: TextWidget(
@@ -177,7 +178,7 @@ class _PengembalianState extends State<Pengembalian> {
                   ),
                   Container(
                     width: 0.5.w,
-                    color: Colors.blue,
+                    color: Colors.grey,
                     child: Container(
                       margin: const EdgeInsets.all(8),
                       child: TextWidget(

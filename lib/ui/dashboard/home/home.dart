@@ -201,7 +201,11 @@ class _HomeState extends State<Home> {
                             child: CustomDropdown<ModelBuku>.search(
                               decoration: const CustomDropdownDecoration(
                                   closedFillColor: Colors.white,
-                                  closedShadow: [BoxShadow(spreadRadius: 0.5)]),
+                                  closedShadow: [
+                                    BoxShadow(
+                                        spreadRadius: 1,
+                                        color: Color.fromARGB(255, 14, 61, 100))
+                                  ]),
                               hintText: 'Kategori',
                               items: listModelBuku,
                               excludeSelected: false,
@@ -355,9 +359,9 @@ class _HomeState extends State<Home> {
                     Text(
                       'Buku',
                       style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 16,
-                      ),
+                          color: Colors.blue,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 )),
