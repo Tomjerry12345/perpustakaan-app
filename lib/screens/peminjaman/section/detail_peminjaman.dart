@@ -1,3 +1,4 @@
+import 'package:admin_perpustakaan/utils/log_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:admin_perpustakaan/model/ModelQuery.dart';
@@ -68,6 +69,7 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
 
   @override
   Widget build(BuildContext context) {
+    log("id", v: widget.id);
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: fs
             .query("peminjaman", [ModelQuery(key: "email", value: widget.id)]),
