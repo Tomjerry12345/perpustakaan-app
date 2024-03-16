@@ -20,6 +20,8 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
 
   final double fontSizeDataCell = 10;
 
+  final scrollController = ScrollController();
+
   Future<void> onKonfirmasi(String id) async {
     var getDate = time.getDateByRange(14);
 
@@ -66,162 +68,194 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: fs.query(
-              "peminjaman", [ModelQuery(key: "email", value: widget.id)]),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final snapDocs = snapshot.data?.docs;
-              final size = snapshot.data!.size;
+    return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+        stream: fs
+            .query("peminjaman", [ModelQuery(key: "email", value: widget.id)]),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final snapDocs = snapshot.data?.docs;
+            final size = snapshot.data!.size;
 
-              return DataTable(
-                  headingRowColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.blue.shade200),
-                  columns: [
-                    DataColumn(
-                        label: TextWidget(
-                      "No.",
-                      fontSize: fontSizeDataCell,
-                    )),
-                    DataColumn(
-                        label: TextWidget("Judul Buku",
+            return InteractiveViewer(
+              scaleEnabled: false,
+              constrained: false,
+              child: Scrollbar(
+                controller: scrollController,
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                      headingRowColor: MaterialStateProperty.resolveWith(
+                          (states) => Colors.blue.shade200),
+                      columns: [
+                        DataColumn(
+                            label: Container(
+                          width: 20,
+                          child: TextWidget(
+                            "No.",
                             fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Pengarang",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: Container(
-                            width: 50,
-                            child: TextWidget("Rak Buku",
+                          ),
+                        )),
+                        DataColumn(
+                            label: TextWidget("Judul Buku",
                                 fontSize: fontSizeDataCell,
-                                fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: Container(
-                            width: 50,
-                            child: TextWidget("Sisa hari",
+                                fontWeight: FontWeight.bold)),
+                        DataColumn(
+                            label: TextWidget("Pengarang",
                                 fontSize: fontSizeDataCell,
-                                fontWeight: FontWeight.bold))),
-                    DataColumn(
-                        label: TextWidget("Denda",
+                                fontWeight: FontWeight.bold)),
+                        DataColumn(
+                            label: Container(
+                                width: 50,
+                                child: TextWidget("Rak Buku",
+                                    fontSize: fontSizeDataCell,
+                                    fontWeight: FontWeight.bold))),
+                        DataColumn(
+                            label: Container(
+                                width: 90,
+                                child: TextWidget("Tgl Peminjaman",
+                                    fontSize: fontSizeDataCell,
+                                    fontWeight: FontWeight.bold))),
+                        DataColumn(
+                            label: Container(
+                                width: 90,
+                                child: TextWidget("Tgl Pengembalian",
+                                    fontSize: fontSizeDataCell,
+                                    fontWeight: FontWeight.bold))),
+                        DataColumn(
+                            label: Container(
+                                width: 50,
+                                child: TextWidget("Sisa hari",
+                                    fontSize: fontSizeDataCell,
+                                    fontWeight: FontWeight.bold))),
+                        DataColumn(
+                            label: TextWidget("Denda",
+                                fontSize: fontSizeDataCell,
+                                fontWeight: FontWeight.bold)),
+                        DataColumn(
+                            label: TextWidget("Gambar",
+                                fontSize: fontSizeDataCell,
+                                fontWeight: FontWeight.bold)),
+                        const DataColumn(label: Text("")),
+                        const DataColumn(label: Text("")),
+                        // DataColumn(label: Text("")),
+                      ],
+                      rows: List<DataRow>.generate(size, (index) {
+                        Map<String, dynamic> data = snapDocs![index].data();
+                        String id = snapDocs[index].id;
+                        final number = index + 1;
+                        int sisaHariNow = 0;
+                        int denda = 0;
+                        bool isTenggat = false;
+
+                        if (data['tanggal_pengembalian'] != null) {
+                          final tanggalPeminjaman = data['tanggal_pengembalian']
+                              .toString()
+                              .split("-");
+                          final datePeminjaman =
+                              int.parse(tanggalPeminjaman[2]);
+                          final monthPeminjaman =
+                              int.parse(tanggalPeminjaman[1]);
+                          final yearPeminjaman =
+                              int.parse(tanggalPeminjaman[0]);
+
+                          sisaHariNow = time.getJumlahHariDate(
+                              yearPeminjaman, monthPeminjaman, datePeminjaman);
+
+                          if (sisaHariNow == 0) {
+                            sisaHariNow = 1;
+                            isTenggat = true;
+                            denda = sisaHariNow * 1000;
+                          } else if (sisaHariNow < 0) {
+                            sisaHariNow = sisaHariNow.abs();
+                            isTenggat = true;
+                            denda = sisaHariNow * 1000;
+                          }
+
+                          data.addAll({
+                            "denda": denda,
+                            "sisa_hari": sisaHariNow,
+                            "id": id,
+                            "isTenggat": isTenggat
+                          });
+                        }
+
+                        return DataRow(cells: [
+                          DataCell(Text(number.toString())),
+                          DataCell(TextWidget(
+                            data['judul_buku']!,
                             fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Gambar",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    const DataColumn(label: Text("")),
-                    const DataColumn(label: Text("")),
-                    // DataColumn(label: Text("")),
-                  ],
-                  rows: List<DataRow>.generate(size, (index) {
-                    Map<String, dynamic> data = snapDocs![index].data();
-                    String id = snapDocs[index].id;
-                    final number = index + 1;
-                    int sisaHariNow = 0;
-                    int denda = 0;
-                    bool isTenggat = false;
-
-                    if (data['tanggal_pengembalian'] != null) {
-                      final tanggalPeminjaman =
-                          data['tanggal_pengembalian'].toString().split("-");
-                      final datePeminjaman = int.parse(tanggalPeminjaman[2]);
-                      final monthPeminjaman = int.parse(tanggalPeminjaman[1]);
-                      final yearPeminjaman = int.parse(tanggalPeminjaman[0]);
-
-                      sisaHariNow = time.getJumlahHariDate(
-                          yearPeminjaman, monthPeminjaman, datePeminjaman);
-
-                      if (sisaHariNow == 0) {
-                        sisaHariNow = 1;
-                        isTenggat = true;
-                        denda = sisaHariNow * 1000;
-                      } else if (sisaHariNow < 0) {
-                        sisaHariNow = sisaHariNow.abs();
-                        isTenggat = true;
-                        denda = sisaHariNow * 1000;
-                      }
-
-                      data.addAll({
-                        "denda": denda,
-                        "sisa_hari": sisaHariNow,
-                        "id": id,
-                        "isTenggat": isTenggat
-                      });
-                    }
-
-                    return DataRow(cells: [
-                      DataCell(Text(number.toString())),
-                      DataCell(TextWidget(
-                        data['judul_buku']!,
-                        fontSize: fontSizeDataCell,
-                      )),
-                      DataCell(TextWidget(data['pengarang']!,
-                          fontSize: fontSizeDataCell)),
-                      DataCell(
-                          TextWidget(data['rak']!, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget(
-                          !isTenggat
-                              ? "$sisaHariNow"
-                              : "Lewat $sisaHariNow Hari",
-                          color: !isTenggat ? Colors.black : Colors.red,
-                          fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget(denda > 0 ? "$denda" : "-",
-                          fontSize: fontSizeDataCell)),
-                      DataCell(Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Image.network(
-                          data["image"]!,
-                          width: 50,
-                          height: 100,
-                        ),
-                      )),
-                      DataCell(data["konfirmasi"]!
-                          ? ButtonElevatedWidget(
-                              "Pengembalian",
-                              backgroundColor: Colors.cyan,
-                              fontSize: fontSizeDataCell,
-                              onPressed: () {
-                                onPengembalian(data);
-                              },
-                            )
-                          : data["type_peminjaman"] != "online"
+                          )),
+                          DataCell(TextWidget(data['pengarang']!,
+                              fontSize: fontSizeDataCell)),
+                          DataCell(TextWidget(data['rak']!,
+                              fontSize: fontSizeDataCell)),
+                          DataCell(TextWidget(data['tanggal_peminjaman']!,
+                              fontSize: fontSizeDataCell)),
+                          DataCell(TextWidget(data['tanggal_pengembalian']!,
+                              fontSize: fontSizeDataCell)),
+                          DataCell(TextWidget(
+                              !isTenggat
+                                  ? "$sisaHariNow"
+                                  : "Lewat $sisaHariNow Hari",
+                              color: !isTenggat ? Colors.black : Colors.red,
+                              fontSize: fontSizeDataCell)),
+                          DataCell(TextWidget(denda > 0 ? "$denda" : "-",
+                              fontSize: fontSizeDataCell)),
+                          DataCell(Container(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Image.network(
+                              data["image"]!,
+                              width: 50,
+                              height: 100,
+                            ),
+                          )),
+                          DataCell(data["konfirmasi"]!
                               ? ButtonElevatedWidget(
-                                  "Konfirmasi",
-                                  backgroundColor: Colors.green,
+                                  "Pengembalian",
+                                  backgroundColor: Colors.cyan,
                                   fontSize: fontSizeDataCell,
                                   onPressed: () {
-                                    onKonfirmasi(id);
+                                    onPengembalian(data);
                                   },
                                 )
-                              : Container()),
-                      DataCell(ButtonElevatedWidget(
-                        "Perpanjangan",
-                        backgroundColor: Colors.blue,
-                        fontSize: fontSizeDataCell,
-                        onPressed: data["konfirmasi"]! && sisaHariNow < 7
-                            ? () {
-                                onPerpanjangan(id);
-                              }
-                            : null,
-                      )),
-                      // DataCell(ButtonElevatedWidget(
-                      //   "Hapus",
-                      //   fontSize: fontSizeDataCell,
-                      //   backgroundColor: Colors.red,
-                      //   onPressed: () {
-                      //     oHapus(id);
-                      //   },
-                      // )),
-                    ]);
-                  }));
-            }
+                              : data["type_peminjaman"] != "online"
+                                  ? ButtonElevatedWidget(
+                                      "Konfirmasi",
+                                      backgroundColor: Colors.green,
+                                      fontSize: fontSizeDataCell,
+                                      onPressed: () {
+                                        onKonfirmasi(id);
+                                      },
+                                    )
+                                  : Container()),
+                          DataCell(ButtonElevatedWidget(
+                            "Perpanjangan",
+                            backgroundColor: Colors.blue,
+                            fontSize: fontSizeDataCell,
+                            onPressed: data["konfirmasi"]! && sisaHariNow < 7
+                                ? () {
+                                    onPerpanjangan(id);
+                                  }
+                                : null,
+                          )),
+                          // DataCell(ButtonElevatedWidget(
+                          //   "Hapus",
+                          //   fontSize: fontSizeDataCell,
+                          //   backgroundColor: Colors.red,
+                          //   onPressed: () {
+                          //     oHapus(id);
+                          //   },
+                          // )),
+                        ]);
+                      })),
+                ),
+              ),
+            );
+          }
 
-            return const Expanded(
-                child: Center(child: CircularProgressIndicator()));
-          }),
-    );
+          return const Expanded(
+              child: Center(child: CircularProgressIndicator()));
+        });
   }
 }

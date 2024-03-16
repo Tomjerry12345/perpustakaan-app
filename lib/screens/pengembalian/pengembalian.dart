@@ -87,23 +87,25 @@ class _PengembalianState extends State<Pengembalian> {
                         itemBuilder: (context, index) {
                           final data = listData[index];
 
-                          return Card(
-                            child: ListTile(
-                              onTap: () {
-                                onClickTap(true);
-                                setState(() {
-                                  nama = data["nama"];
-                                  email = data["email"];
-                                });
-                              },
-                              title: Text(data["nama"]),
-                              subtitle: Text(
-                                  "Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
-                              trailing: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.arrow_right)),
-                            ),
-                          );
+                          return data["jumlah_pengembalian"] > 0
+                              ? Card(
+                                  child: ListTile(
+                                    onTap: () {
+                                      onClickTap(true);
+                                      setState(() {
+                                        nama = data["nama"];
+                                        email = data["email"];
+                                      });
+                                    },
+                                    title: Text(data["nama"]),
+                                    subtitle: Text(
+                                        "Jumlah pengembalian : ${data["jumlah_pengembalian"]}"),
+                                    trailing: IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.arrow_right)),
+                                  ),
+                                )
+                              : null;
                         },
                       )
                     : const Center(child: CircularProgressIndicator())

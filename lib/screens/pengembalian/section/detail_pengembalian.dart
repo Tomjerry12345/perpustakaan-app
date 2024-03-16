@@ -18,7 +18,7 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
   final fs = FirebaseServices();
   final time = Time();
 
-  final double fontSizeDataCell = 18;
+  final double fontSizeDataCell = 12;
 
   void oHapus(String id) {
     fs.delete("pengembalian", id);
@@ -50,6 +50,14 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                             fontSize: fontSizeDataCell,
                             fontWeight: FontWeight.bold)),
                     DataColumn(
+                        label: TextWidget("Tgl Peminjaman",
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
+                    DataColumn(
+                        label: TextWidget("Tgl Pengembalian",
+                            fontSize: fontSizeDataCell,
+                            fontWeight: FontWeight.bold)),
+                    DataColumn(
                         label: TextWidget("Sisa hari",
                             fontSize: fontSizeDataCell,
                             fontWeight: FontWeight.bold)),
@@ -73,6 +81,15 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
                         data['judul_buku']!,
                         fontSize: fontSizeDataCell,
                       )),
+                      DataCell(TextWidget(
+                        data['tanggal_peminjaman']!,
+                        fontSize: fontSizeDataCell,
+                      )),
+                      DataCell(TextWidget(
+                        data['tanggal_pengembalian']!,
+                        fontSize: fontSizeDataCell,
+                      )),
+
                       DataCell(TextWidget(data['sisa_hari'] ?? "-",
                           color: Colors.black, fontSize: fontSizeDataCell)),
                       DataCell(TextWidget("${data['denda'] ?? "-"}",

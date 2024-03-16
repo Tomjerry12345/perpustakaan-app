@@ -485,160 +485,164 @@ class _DataBukuState extends State<DataBuku> {
                         child: SingleChildScrollView(
                           controller: _scrollController,
                           scrollDirection: Axis.vertical,
-                          child: DataTable(
-                              headingRowColor:
-                                  MaterialStateProperty.resolveWith(
-                                      (states) => Colors.blue.shade200),
-                              columns: const [
-                                DataColumn(label: Text("No.")),
-                                DataColumn(label: Text("Judul Buku")),
-                                DataColumn(label: Text("Pengarang")),
-                                DataColumn(label: Text("Penerbit")),
-                                // DataColumn(label: Text("Tahun terbit")),
-                                DataColumn(label: Text("Kategori")),
-                                DataColumn(label: Text("Rak Buku")),
-                                DataColumn(label: Text("Stok Buku")),
-                                DataColumn(label: Text("Halaman")),
-                                DataColumn(label: Text("Gambar")),
-                                DataColumn(label: Text("Aksi")),
-                              ],
-                              rows: List<DataRow>.generate(
-                                  snapshot.data!.docs.length, (index) {
-                                DocumentSnapshot data =
-                                    snapshot.data!.docs[index];
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                                headingRowColor:
+                                    MaterialStateProperty.resolveWith(
+                                        (states) => Colors.blue.shade200),
+                                columns: const [
+                                  DataColumn(label: Text("No.")),
+                                  DataColumn(label: Text("Judul Buku")),
+                                  DataColumn(label: Text("Pengarang")),
+                                  DataColumn(label: Text("Penerbit")),
+                                  // DataColumn(label: Text("Tahun terbit")),
+                                  DataColumn(label: Text("Kategori")),
+                                  DataColumn(label: Text("Rak Buku")),
+                                  DataColumn(label: Text("Stok Buku")),
+                                  DataColumn(label: Text("Halaman")),
+                                  DataColumn(label: Text("Gambar")),
+                                  DataColumn(label: Text("Aksi")),
+                                ],
+                                rows: List<DataRow>.generate(
+                                    snapshot.data!.docs.length, (index) {
+                                  DocumentSnapshot data =
+                                      snapshot.data!.docs[index];
 
-                                final number = index + 1;
+                                  final number = index + 1;
 
-                                return DataRow(cells: [
-                                  DataCell(Text(number.toString())),
-                                  DataCell(Text(data['judul_buku'])),
-                                  DataCell(Text(data['pengarang'])),
-                                  DataCell(SizedBox(
-                                      width: 150,
-                                      child: Text(data['penerbit']))),
-                                  // DataCell(SizedBox(
-                                  //     width: 150,
-                                  //     child: Text(data['tahun_terbit']))),
-                                  DataCell(Text(data['kategori'])),
-                                  DataCell(SizedBox(
-                                      width: 50, child: Text(data['rak']))),
-                                  DataCell(SizedBox(
+                                  return DataRow(cells: [
+                                    DataCell(Text(number.toString())),
+                                    DataCell(Text(data['judul_buku'])),
+                                    DataCell(Text(data['pengarang'])),
+                                    DataCell(SizedBox(
+                                        width: 150,
+                                        child: Text(data['penerbit']))),
+                                    // DataCell(SizedBox(
+                                    //     width: 150,
+                                    //     child: Text(data['tahun_terbit']))),
+                                    DataCell(Text(data['kategori'])),
+                                    DataCell(SizedBox(
+                                        width: 50, child: Text(data['rak']))),
+                                    DataCell(SizedBox(
+                                        width: 50,
+                                        child: Text(data['stok_buku']))),
+                                    // DataCell(Container(
+                                    //   constraints: BoxConstraints(
+                                    //     maxWidth: 100,
+                                    //   ),
+                                    //   child: Text(
+                                    //     data['sinopsis'],
+                                    //   ),
+                                    // )),
+                                    DataCell(Text(data['halaman'])),
+                                    DataCell(SizedBox(
                                       width: 50,
-                                      child: Text(data['stok_buku']))),
-                                  // DataCell(Container(
-                                  //   constraints: BoxConstraints(
-                                  //     maxWidth: 100,
-                                  //   ),
-                                  //   child: Text(
-                                  //     data['sinopsis'],
-                                  //   ),
-                                  // )),
-                                  DataCell(Text(data['halaman'])),
-                                  DataCell(SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    child: Image.network(data["image"]),
-                                  )),
-                                  DataCell(Row(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          editBuku(data);
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 1, bottom: 1),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                            color: Colors.amber,
-                                          ),
-                                          width: 30,
-                                          height: 30,
-                                          child: const Icon(
-                                            Icons.edit,
-                                            color: Colors.white,
+                                      height: 50,
+                                      child: Image.network(data["image"]),
+                                    )),
+                                    DataCell(Row(
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            editBuku(data);
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 1, bottom: 1),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.amber,
+                                            ),
+                                            width: 30,
+                                            height: 30,
+                                            child: const Icon(
+                                              Icons.edit,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      InkWell(
-                                        onTap: (() {
-                                          DialogHapusBuku(data);
-                                        }),
-                                        child: Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 1, bottom: 1),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                            color: Colors.red,
-                                          ),
-                                          width: 30,
-                                          height: 30,
-                                          child: const Icon(
-                                            Icons.delete,
-                                            color: Colors.white,
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        InkWell(
+                                          onTap: (() {
+                                            DialogHapusBuku(data);
+                                          }),
+                                          child: Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 1, bottom: 1),
+                                            decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              color: Colors.red,
+                                            ),
+                                            width: 30,
+                                            height: 30,
+                                            child: const Icon(
+                                              Icons.delete,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 8,
-                                      ),
-                                      // InkWell(
-                                      //   onTap: (() {
-                                      //     setFavorit(data['isRecomended'], data.id);
-                                      //   }),
-                                      //   child: Container(
-                                      //     margin:
-                                      //         EdgeInsets.only(top: 1, bottom: 1),
-                                      //     decoration: BoxDecoration(
-                                      //       borderRadius: BorderRadius.all(
-                                      //           Radius.circular(10.0)),
-                                      //       color: Colors.green,
-                                      //     ),
-                                      //     width: 50,
-                                      //     height: 50,
-                                      //     child: Icon(
-                                      //       Icons.favorite,
-                                      //       color: data['isFavorit'] == "1"
-                                      //           ? Colors.pink
-                                      //           : Colors.grey[600],
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                      // SizedBox(
-                                      //   width: 8,
-                                      // ),
-                                      // InkWell(
-                                      //   onTap: (() {
-                                      //     setRecommend(
-                                      //         data['isRecomended'], data.id);
-                                      //   }),
-                                      //   child: Container(
-                                      //     margin:
-                                      //         EdgeInsets.only(top: 1, bottom: 1),
-                                      //     decoration: BoxDecoration(
-                                      //       borderRadius: BorderRadius.all(
-                                      //           Radius.circular(10.0)),
-                                      //       color: Colors.blue,
-                                      //     ),
-                                      //     width: 50,
-                                      //     height: 50,
-                                      //     child: Icon(
-                                      //       Icons.recommend,
-                                      //       color: data['isRecomended'] == "1"
-                                      //           ? Colors.lightGreenAccent
-                                      //           : Colors.grey[600],
-                                      //     ),
-                                      //   ),
-                                      // ),
-                                    ],
-                                  )),
-                                ]);
-                              })),
+                                        const SizedBox(
+                                          width: 8,
+                                        ),
+                                        // InkWell(
+                                        //   onTap: (() {
+                                        //     setFavorit(data['isRecomended'], data.id);
+                                        //   }),
+                                        //   child: Container(
+                                        //     margin:
+                                        //         EdgeInsets.only(top: 1, bottom: 1),
+                                        //     decoration: BoxDecoration(
+                                        //       borderRadius: BorderRadius.all(
+                                        //           Radius.circular(10.0)),
+                                        //       color: Colors.green,
+                                        //     ),
+                                        //     width: 50,
+                                        //     height: 50,
+                                        //     child: Icon(
+                                        //       Icons.favorite,
+                                        //       color: data['isFavorit'] == "1"
+                                        //           ? Colors.pink
+                                        //           : Colors.grey[600],
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        // SizedBox(
+                                        //   width: 8,
+                                        // ),
+                                        // InkWell(
+                                        //   onTap: (() {
+                                        //     setRecommend(
+                                        //         data['isRecomended'], data.id);
+                                        //   }),
+                                        //   child: Container(
+                                        //     margin:
+                                        //         EdgeInsets.only(top: 1, bottom: 1),
+                                        //     decoration: BoxDecoration(
+                                        //       borderRadius: BorderRadius.all(
+                                        //           Radius.circular(10.0)),
+                                        //       color: Colors.blue,
+                                        //     ),
+                                        //     width: 50,
+                                        //     height: 50,
+                                        //     child: Icon(
+                                        //       Icons.recommend,
+                                        //       color: data['isRecomended'] == "1"
+                                        //           ? Colors.lightGreenAccent
+                                        //           : Colors.grey[600],
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    )),
+                                  ]);
+                                })),
+                          ),
                         ),
                       ),
                     ),
