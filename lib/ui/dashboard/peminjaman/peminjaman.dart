@@ -214,8 +214,8 @@ class _PeminjamanState extends State<Peminjaman> {
                         margin: const EdgeInsets.all(12),
                         child: TextWidget(
                           data['konfirmasi']
-                              ? "Konfirmasi"
-                              : "Belum konfirmasi",
+                              ? "Konfirmasi ✅"
+                              : "Belum konfirmasi ❎",
                           color: Colors.white,
                           fontSize: 14,
                         ),
@@ -223,7 +223,8 @@ class _PeminjamanState extends State<Peminjaman> {
                     )
                   : Container(),
               data["type_peminjaman"] == "online"
-                  ? ElevatedButton(
+                  ? ElevatedButton.icon(
+                      icon: Icon(Icons.assignment_return),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
                       onPressed: () {
@@ -246,7 +247,7 @@ class _PeminjamanState extends State<Peminjaman> {
                         );
                         dialogShow(context: context, widget: alert);
                       },
-                      child: const Text(
+                      label: const Text(
                         "Pengembalian",
                         style: TextStyle(color: Colors.white),
                       ))
@@ -255,13 +256,14 @@ class _PeminjamanState extends State<Peminjaman> {
               data["type_peminjaman"] == "online"
                   ? SizedBox(
                       width: 124,
-                      child: ElevatedButton(
+                      child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue),
                           onPressed: () {
                             onBacaBuku(data);
                           },
-                          child: const Text(
+                          icon: Icon(Icons.menu_book),
+                          label: const Text(
                             "Baca buku",
                             style: TextStyle(color: Colors.white),
                           )),

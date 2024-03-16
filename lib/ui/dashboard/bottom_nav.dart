@@ -96,47 +96,69 @@ class _BottomNavState extends State<BottomNav> {
       // DateTime tanggalPeminjaman = DateTime.now();
       // DateTime tanggalPengembalian = tanggalPeminjaman.add(const Duration(days: 14));
 
-      final doc = FirebaseFirestore.instance.collection("peminjaman");
+      final dataPeminjaman = await fs.queryFuture("peminjaman", [
+        ModelQuery(key: "email", value: user["email"]),
+        ModelQuery(key: "type_peminjaman", value: "offline"),
+        ModelQuery(key: "barcode", value: book["barcode"]),
+      ]);
 
-      final json = {
-        "nama_peminjam": user["nama"],
-        "email": currentUser!.email,
-        "judul_buku": book["judul_buku"],
-        "pengarang": book["pengarang"],
-        "image": book["image"],
-        "rak": book["rak"],
-        "konfirmasi": false,
-        "type_peminjaman": "offline",
-        // "email": currentUser!.email,
-        // "nama_peminjam": user["nama"],
-        // "tanggal_peminjaman": tanggalPeminjaman,
-        // "tanggal_pengembalian": tanggalPengembalian,
-        // "created_at": tanggalPeminjaman,
-        // "judul_buku": book["judul_buku"],
-        // "pengarang": book['pengarang'],
-        // "barcode": book['barcode'],
-        // "image": book['image'],
-        // "sinopsis": book['sinopsis'],
-        // "halaman": book['halaman'],
-        // "rak": book['rak'],
-        // "penerbit": book['penerbit'],
-        // "kategori": book['kategori'],
-        // "status": "active"
-      };
+      bool isDuplicated = dataPeminjaman.size > 0;
 
-      await doc.add(json);
+      // for (final dataP in dataPeminjaman.docs) {
+      //   final dt = dataP.data();
+      //   if (dt["barcode"] == book["barcode"]) {
+      //     isDuplicated = true;
+      //     break;
+      //   }
+      // }
 
-      final resBook = await fs.queryFuture(
-          "books", [ModelQuery(key: "judul_buku", value: book["judul_buku"])]);
-      final id = resBook.docs.first.id;
-      final data = resBook.docs.first.data();
-      final stokBuku = int.parse(data["stok_buku"]);
+      if (!isDuplicated) {
+        final doc = FirebaseFirestore.instance.collection("peminjaman");
 
-      if (stokBuku > 0) {
-        await fs.update("books", id, {"stok_buku": (stokBuku - 1).toString()});
+        final json = {
+          "barcode": book["barcode"],
+          "nama_peminjam": user["nama"],
+          "email": currentUser!.email,
+          "judul_buku": book["judul_buku"],
+          "pengarang": book["pengarang"],
+          "image": book["image"],
+          "rak": book["rak"],
+          "konfirmasi": false,
+          "type_peminjaman": "offline",
+          // "email": currentUser!.email,
+          // "nama_peminjam": user["nama"],
+          // "tanggal_peminjaman": tanggalPeminjaman,
+          // "tanggal_pengembalian": tanggalPengembalian,
+          // "created_at": tanggalPeminjaman,
+          // "judul_buku": book["judul_buku"],
+          // "pengarang": book['pengarang'],
+          // "barcode": book['barcode'],
+          // "image": book['image'],
+          // "sinopsis": book['sinopsis'],
+          // "halaman": book['halaman'],
+          // "rak": book['rak'],
+          // "penerbit": book['penerbit'],
+          // "kategori": book['kategori'],
+          // "status": "active"
+        };
+
+        await doc.add(json);
+
+        final resBook = await fs.queryFuture("books",
+            [ModelQuery(key: "judul_buku", value: book["judul_buku"])]);
+        final id = resBook.docs.first.id;
+        final data = resBook.docs.first.data();
+        final stokBuku = int.parse(data["stok_buku"]);
+
+        if (stokBuku > 0) {
+          await fs
+              .update("books", id, {"stok_buku": (stokBuku - 1).toString()});
+        }
+
+        Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
+      } else {
+        Utils.showSnackBar("Buku sudah di pinjam", Colors.red);
       }
-
-      Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
     } else {
       Utils.showSnackBar("Buku tidak ada dalam database", Colors.red);
     }
