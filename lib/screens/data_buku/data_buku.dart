@@ -265,7 +265,7 @@ class _DataBukuState extends State<DataBuku> {
       judul = data['judul_buku'];
       pengarang = data['pengarang'];
       penerbit = data['penerbit'];
-      tahunTerbit = "";
+      tahunTerbit = data["tahun_terbit"];
       rak = data['rak'];
       halaman = data['halaman'];
       sinopsis = data['sinopsis'];
@@ -290,7 +290,7 @@ class _DataBukuState extends State<DataBuku> {
                   children: [
                     Container(
                         width: double.infinity,
-                        height: 600,
+                        height: 620,
                         padding: const EdgeInsets.all(20),
                         child: Column(
                           children: [
@@ -449,7 +449,10 @@ class _DataBukuState extends State<DataBuku> {
                                           strokeWidth: 2.0,
                                           color: Colors.white,
                                         )
-                                      : const Text("Submit"),
+                                      : const Text(
+                                          "Submit",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                 ),
                               ],
                             )

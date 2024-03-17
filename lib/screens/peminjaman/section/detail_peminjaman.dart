@@ -69,7 +69,6 @@ class _DetailPeminjamanState extends State<DetailPeminjaman> {
 
   @override
   Widget build(BuildContext context) {
-    log("id", v: widget.id);
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: fs
             .query("peminjaman", [ModelQuery(key: "email", value: widget.id)]),

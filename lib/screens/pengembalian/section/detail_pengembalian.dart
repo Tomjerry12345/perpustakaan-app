@@ -15,6 +15,8 @@ class DetailPengembalian extends StatefulWidget {
 }
 
 class _DetailPengembalianState extends State<DetailPengembalian> {
+  final scrollController = ScrollController();
+
   final fs = FirebaseServices();
   final time = Time();
 
@@ -36,82 +38,94 @@ class _DetailPengembalianState extends State<DetailPengembalian> {
               final snapDocs = snapshot.data?.docs;
               final size = snapshot.data!.size;
 
-              return DataTable(
-                  headingRowColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.blue.shade200),
-                  columns: [
-                    DataColumn(
-                        label: TextWidget(
-                      "No.",
-                      fontSize: fontSizeDataCell,
-                    )),
-                    DataColumn(
-                        label: TextWidget("Judul Buku",
+              return InteractiveViewer(
+                scaleEnabled: false,
+                // constrained: false,
+                child: Scrollbar(
+                  controller: scrollController,
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                        headingRowColor: MaterialStateProperty.resolveWith(
+                            (states) => Colors.blue.shade200),
+                        columns: [
+                          DataColumn(
+                              label: TextWidget(
+                            "No.",
                             fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Tgl Peminjaman",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Tgl Pengembalian",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Sisa hari",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Denda",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    DataColumn(
-                        label: TextWidget("Gambar",
-                            fontSize: fontSizeDataCell,
-                            fontWeight: FontWeight.bold)),
-                    // DataColumn(label: Text("")),
-                  ],
-                  rows: List<DataRow>.generate(size, (index) {
-                    Map<String, dynamic> data = snapDocs![index].data();
-                    final number = index + 1;
+                          )),
+                          DataColumn(
+                              label: TextWidget("Judul Buku",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          DataColumn(
+                              label: TextWidget("Tgl Peminjaman",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          DataColumn(
+                              label: TextWidget("Tgl Pengembalian",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          DataColumn(
+                              label: TextWidget("Sisa hari",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          DataColumn(
+                              label: TextWidget("Denda",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          DataColumn(
+                              label: TextWidget("Gambar",
+                                  fontSize: fontSizeDataCell,
+                                  fontWeight: FontWeight.bold)),
+                          // DataColumn(label: Text("")),
+                        ],
+                        rows: List<DataRow>.generate(size, (index) {
+                          Map<String, dynamic> data = snapDocs![index].data();
+                          final number = index + 1;
 
-                    return DataRow(cells: [
-                      DataCell(Text(number.toString())),
-                      DataCell(TextWidget(
-                        data['judul_buku']!,
-                        fontSize: fontSizeDataCell,
-                      )),
-                      DataCell(TextWidget(
-                        data['tanggal_peminjaman']!,
-                        fontSize: fontSizeDataCell,
-                      )),
-                      DataCell(TextWidget(
-                        data['tanggal_pengembalian']!,
-                        fontSize: fontSizeDataCell,
-                      )),
+                          return DataRow(cells: [
+                            DataCell(Text(number.toString())),
+                            DataCell(TextWidget(
+                              data['judul_buku']!,
+                              fontSize: fontSizeDataCell,
+                            )),
+                            DataCell(TextWidget(
+                              data['tanggal_peminjaman']!,
+                              fontSize: fontSizeDataCell,
+                            )),
+                            DataCell(TextWidget(
+                              data['tanggal_pengembalian']!,
+                              fontSize: fontSizeDataCell,
+                            )),
 
-                      DataCell(TextWidget(data['sisa_hari'] ?? "-",
-                          color: Colors.black, fontSize: fontSizeDataCell)),
-                      DataCell(TextWidget("${data['denda'] ?? "-"}",
-                          fontSize: fontSizeDataCell)),
-                      DataCell(Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Image.network(
-                          data["image"]!,
-                          width: 50,
-                          height: 100,
-                        ),
-                      )),
-                      // DataCell(ButtonElevatedWidget(
-                      //   "Hapus",
-                      //   fontSize: fontSizeDataCell,
-                      //   backgroundColor: Colors.red,
-                      //   onPressed: () {
-                      //     oHapus(id);
-                      //   },
-                      // )),
-                    ]);
-                  }));
+                            DataCell(TextWidget(data['sisa_hari'] ?? "-",
+                                color: Colors.black,
+                                fontSize: fontSizeDataCell)),
+                            DataCell(TextWidget("${data['denda'] ?? "-"}",
+                                fontSize: fontSizeDataCell)),
+                            DataCell(Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Image.network(
+                                data["image"]!,
+                                width: 50,
+                                height: 100,
+                              ),
+                            )),
+                            // DataCell(ButtonElevatedWidget(
+                            //   "Hapus",
+                            //   fontSize: fontSizeDataCell,
+                            //   backgroundColor: Colors.red,
+                            //   onPressed: () {
+                            //     oHapus(id);
+                            //   },
+                            // )),
+                          ]);
+                        })),
+                  ),
+                ),
+              );
             }
 
             return const Expanded(

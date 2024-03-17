@@ -9,6 +9,7 @@ class BukuTamu extends StatefulWidget {
 }
 
 class _BukuTamuState extends State<BukuTamu> {
+  final scrollController = ScrollController();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   final double sizeColumn = 200;
@@ -40,9 +41,13 @@ class _BukuTamuState extends State<BukuTamu> {
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 10, right: 10, bottom: 40, top: 15),
-                    child: Column(
-                      children: [
-                        SingleChildScrollView(
+                    child: InteractiveViewer(
+                      scaleEnabled: false,
+                      // constrained: false,
+                      child: Scrollbar(
+                        controller: scrollController,
+                        child: SingleChildScrollView(
+                          controller: scrollController,
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
                               headingRowColor:
@@ -88,11 +93,7 @@ class _BukuTamuState extends State<BukuTamu> {
                                 ]);
                               })),
                         ),
-                        //Now let's set the pagination
-                        const SizedBox(
-                          height: 40.0,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
