@@ -24,7 +24,7 @@ class Login extends StatelessWidget {
         child: Center(
           child: SizedBox(
             width: 0.3.w,
-            height: 0.5.h,
+            height: 0.6.h,
             child: Card(
               elevation: 8,
               child: Padding(
