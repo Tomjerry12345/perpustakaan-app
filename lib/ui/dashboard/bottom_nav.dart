@@ -11,6 +11,7 @@ import 'package:perpustakaan_mobile/ui/dashboard/akun/akun.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/home/home.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/peminjaman/peminjaman.dart';
 import 'package:perpustakaan_mobile/ui/dashboard/pengembalian/pengembalian.dart';
+import 'package:perpustakaan_mobile/utils/Time.dart';
 import 'package:perpustakaan_mobile/utils/Utils.dart';
 import 'package:perpustakaan_mobile/utils/show_utils.dart';
 
@@ -25,6 +26,8 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   final currentUser = FirebaseAuth.instance.currentUser;
   String page = 'Home';
+
+  final time = Time();
 
   final fs = FirebaseServices();
 
@@ -93,8 +96,10 @@ class _BottomNavState extends State<BottomNav> {
 
     if (books.size > 0) {
       var book = books.docs[0];
-      // DateTime tanggalPeminjaman = DateTime.now();
-      // DateTime tanggalPengembalian = tanggalPeminjaman.add(const Duration(days: 14));
+      String tanggalPeminjaman = time.getTimeNow();
+      var getDate = time.getDateByRange(14);
+      final tanggalPengembalian =
+          "${time.getYear()}-${getDate[1]}-${getDate[0]}";
 
       final dataPeminjaman = await fs.queryFuture("peminjaman", [
         ModelQuery(key: "email", value: user["email"]),
@@ -127,8 +132,8 @@ class _BottomNavState extends State<BottomNav> {
           "type_peminjaman": "offline",
           // "email": currentUser!.email,
           // "nama_peminjam": user["nama"],
-          // "tanggal_peminjaman": tanggalPeminjaman,
-          // "tanggal_pengembalian": tanggalPengembalian,
+          "tanggal_peminjaman": tanggalPeminjaman,
+          "tanggal_pengembalian": tanggalPengembalian,
           // "created_at": tanggalPeminjaman,
           // "judul_buku": book["judul_buku"],
           // "pengarang": book['pengarang'],
@@ -155,7 +160,7 @@ class _BottomNavState extends State<BottomNav> {
               .update("books", id, {"stok_buku": (stokBuku - 1).toString()});
         }
 
-        Utils.showSnackBar("Peminjaman Berhasil.", Colors.green);
+        Utils.showSnackBar("Scan buku berhasil", Colors.green);
       } else {
         Utils.showSnackBar("Buku sudah di pinjam", Colors.red);
       }

@@ -211,25 +211,40 @@ class _PeminjamanState extends State<Peminjaman> {
                           color: data['konfirmasi'] ? Colors.green : Colors.red,
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Container(
-                        margin: const EdgeInsets.all(12),
-                        child: TextWidget(
-                          data['konfirmasi']
-                              ? "Konfirmasi ✅"
-                              : "Belum konfirmasi ❎",
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
+                          margin: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              TextWidget(
+                                data['konfirmasi']
+                                    ? "Konfirmasi"
+                                    : "Belum konfirmasi",
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                              data['konfirmasi']
+                                  ? Icon(
+                                      Icons.done,
+                                      color: Colors.white,
+                                    )
+                                  : Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    )
+                            ],
+                          )),
                     )
                   : Container(),
               data["type_peminjaman"] == "online"
                   ? ElevatedButton.icon(
-                      icon: Icon(Icons.assignment_return),
+                      icon: Icon(
+                        Icons.assignment_return,
+                        color: Colors.white,
+                      ),
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue),
                       onPressed: () {
                         AlertDialog alert = AlertDialog(
-                          title: const Text("Meminjam"),
+                          title: const Text("Pengembalian"),
                           content: const Text(
                               "Apakah anda yakin ingin mengembalikan buku?"),
                           actions: [
@@ -255,14 +270,17 @@ class _PeminjamanState extends State<Peminjaman> {
               V(16),
               data["type_peminjaman"] == "online"
                   ? SizedBox(
-                      width: 124,
+                      // width: 124,
                       child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue),
                           onPressed: () {
                             onBacaBuku(data);
                           },
-                          icon: Icon(Icons.menu_book),
+                          icon: Icon(
+                            Icons.menu_book,
+                            color: Colors.white,
+                          ),
                           label: const Text(
                             "Baca buku",
                             style: TextStyle(color: Colors.white),
